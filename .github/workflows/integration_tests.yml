@@ -1,9 +1,10 @@
 name: Integration tests
 on:
   pull_request:
-    paths:
-      - macros/
-      - integration_tests/models/
+# TODO uncomment when the workflow gets stable.
+#    paths:
+#      - macros/
+#      - integration_tests/models/
 
 jobs:
   bigquery:
