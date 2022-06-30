@@ -1,0 +1,18 @@
+#
+# The workflow is used to automatically labels to a pull request.
+#
+# `.github/labeler.yml` is the file to define rules to label.
+name: "Pull Request Labeler"
+on:
+  - pull_request_target
+
+jobs:
+  triage:
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@v4
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
