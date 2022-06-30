@@ -1,5 +1,8 @@
 name: Integration tests
 on:
+  push:
+    branches:
+      - main
   pull_request:
 # TODO uncomment when the workflow gets stable.
 #    paths:
