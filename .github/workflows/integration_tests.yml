@@ -15,6 +15,7 @@ jobs:
     env:
       DBT_DATA_PRIVACY_TEST_PROJECT: "${{ secrets.DBT_DATA_PRIVACY_TEST_PROJECT }}"
     strategy:
+      fail-fast: false
       matrix:
         python-version: ["3.8", "3.9", "3.10"]
         pip-requirements: ["requirements-1.1.txt"]
