@@ -41,10 +41,10 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: save-logs-and-target
-          retention-days: 7
+          name: save-logs-and-target-${{ matrix.python-version }}-${{ matrix.pip-requirements }}
+          retention-days: 3
           path: |
-            logs
-            target
+            integration_tests/logs
+            integration_tests/target
       - id: exit
         run: exit ${{ steps.apply.outputs.exitcode }}
