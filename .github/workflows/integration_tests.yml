@@ -12,6 +12,8 @@ on:
 jobs:
   bigquery:
     runs-on: ubuntu-latest
+    env:
+      DBT_DATA_PRIVACY_TEST_PROJECT: "${{ secrets.DBT_DATA_PRIVACY_TEST_PROJECT }}"
     strategy:
       matrix:
         python-version: ["3.8", "3.9", "3.10"]
