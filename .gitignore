@@ -1,7 +1,7 @@
 # dbt
-dbt_packages/
-logs/
-target/
+./dbt_packages/
+./logs/
+./target/
 
 # integration_tests
 integration_tests/dbt_packages/

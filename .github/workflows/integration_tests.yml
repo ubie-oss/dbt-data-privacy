@@ -1,0 +1,31 @@
+name: Integration tests
+on:
+  pull_request:
+    paths:
+      - macros/
+      - integration_tests/models/
+
+jobs:
+  bigquery:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+        pip-requirements: ["requirements-1.1.txt"]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: Install dbt
+        working-directory: "${{ github.workspace }}/integration_tests"
+        run: |
+          pip install --no-cache -r "requirements/${{ matrix.pip-requirements }}"
+      - uses: Run unit tests
+        working-directory: "${{ github.workspace }}/integration_tests"
+        run: |
+          bash run_tests.sh --target bigquery
