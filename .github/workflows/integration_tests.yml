@@ -36,3 +36,15 @@ jobs:
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
           bash run_tests.sh --target bigquery
+      # Save artifacts for debug
+      - name: Save logs and artifacts if failed
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: save-logs-and-target
+          retention-days: 7
+          path: |
+            logs
+            target
+      - id: exit
+        run: exit ${{ steps.apply.outputs.exitcode }}
