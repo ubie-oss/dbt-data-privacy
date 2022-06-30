@@ -25,11 +25,11 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: Install dbt
+      - name: Install dbt
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
           pip install --no-cache -r "requirements/${{ matrix.pip-requirements }}"
-      - uses: Run unit tests
+      - name: Run unit tests
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
           bash run_tests.sh --target bigquery
