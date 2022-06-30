@@ -1,0 +1,28 @@
+# SEE ./github/workflows/labeler.yml
+# SEE https://github.com/actions/labeler
+
+# Related to CI
+CI:
+  - ci/*
+  - ci/**/*
+  - .github/*
+  - .github/**/*
+
+# Related to dbt analysis
+integration-tests:
+  - integration_tests/*
+  - integration_tests/**/*
+
+# Related to dbt models
+macros:
+  - macros/*
+  - macros/**/*
+# Foundational changes
+core:
+  - dbt_project.yml
+
+# Related to documentations
+docs:
+  - docs/*.md
+  - docs/**/*.md
+  - README.md
