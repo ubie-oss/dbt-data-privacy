@@ -3,7 +3,7 @@ on:
   pull_request:
 
 jobs:
-  check_pr:
+  check-style:
     runs-on: ubuntu-latest
     defaults:
       run:
