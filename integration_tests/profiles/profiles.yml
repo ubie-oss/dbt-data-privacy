@@ -1,0 +1,16 @@
+---
+config:
+  send_anonymous_usage_stats: false
+  use_colors: true
+
+default:
+  outputs:
+    bigquery:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('DBT_DATA_PRIVACY_TEST_PROJECT') }}"
+      dataset: "dbt_data_privacy"
+      priority: "{{ env_var('DBT_BIGQUERY_PRIORITY', 'interactive') }}"
+      threads: |
+        {{ env_var("DBT_THREADS", 5) }}
+      location: "US"
