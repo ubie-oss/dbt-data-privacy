@@ -6,9 +6,10 @@
 {% macro _get_system_config(system_config_vars={}) %}
   {% set system_config = dbt_data_privacy.get_default_system_config() %}
 
-  {% for k, v in system_config_vars %}
+  {% for k, v in system_config_vars.items() %}
     {% if k in system_config %}
-      system_config[k] = v
+      {# Update the value of the key #}
+      {% do system_config.update({k: v}) %}
     {% endif %}
   {% endfor %}
 
@@ -16,7 +17,7 @@
 {% endmacro %}
 
 {% macro get_system_config_vars_block(dbt_vars={}) %}
-  {% set system_config_vars = var('data_privacy', {}) %}
+  {% set system_config_vars = dbt_vars.get("data_privacy") | default({}, true) %}
   {{ return(system_config_vars) }}
 {% endmacro %}
 
