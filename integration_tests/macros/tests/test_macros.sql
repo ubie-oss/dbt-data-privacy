@@ -5,14 +5,10 @@
 {% macro bigquery__test_macros() %}
 
   {#
-    system
-  #}
-  {% do test_get_system_config() %}
-
-  {#
     codegen
   #}
   {% do test_generate_privacy_protected_model_sql() %}
+  {% do test_extract_model_configurations() %}
 
   {#
     pseudonymization
@@ -24,5 +20,6 @@
     utils
   #}
   {% do test_get_nodes() %}
+  {% do test_get_system_config() %}
 
 {% endmacro %}

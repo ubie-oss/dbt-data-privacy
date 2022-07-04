@@ -25,9 +25,9 @@
 {% macro assert_dict_equals(value, expected_value) %}
   {% for k, v in value.items() %}
     {% if k not in expected_value.keys() %}
-      {% do exceptions.raise_compiler_error("FAILED: key " ~ k ~ " does not exist in " ~ expected_value) %}
+      {% do exceptions.raise_compiler_error("FAILED: key " ~ k ~ " from " ~ value ~ " does not exist in " ~ expected_value) %}
     {% elif v != expected_value[k] %}
-      {% do exceptions.raise_compiler_error("FAILED: value " ~ x ~ " does not equal to " ~ expected_value[k]) %}
+      {% do exceptions.raise_compiler_error("FAILED: value " ~ x ~ " from " ~ value ~ " does not equal to " ~ expected_value[k]) %}
     {% endif %}
   {% endfor %}
 

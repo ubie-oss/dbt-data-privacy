@@ -1,46 +1,61 @@
-{% macro generate_privacy_protected_model_sql() %}
-  {{- return(adapter.dispatch('generate_privacy_protected_model_sql', 'dbt_data_privacy')(**kwargs)) -}}
+{% macro generate_privacy_protected_model_sql(
+    config,
+    reference,
+    columns,
+    where=none,
+    relationships=none
+  ) %}
+  {{- return(adapter.dispatch('generate_privacy_protected_model_sql', 'dbt_data_privacy')(
+      config=config,
+      reference=reference,
+      columns=columns,
+      where=where,
+      relationships=relationships,
+      **kwargs )) -}}
 {% endmacro %}
 
 {% macro bigquery__generate_privacy_protected_model_sql(
+    config,
     reference,
-    materialized,
-    database,
-    schema,
-    alias,
-    columns=[],
-    relationships=none,
+    columns,
     where=none,
-    grant_access_to={},
-    tags=[],
-    labels={},
-    persist_docs={"relation": true, "columns": true},
-    partition_by=none,
-    cluster_by=none,
-    full_refresh=none,
-    enabled=true
+    relationships=none
   ) %}
 
   {% if columns | length == 0 %}
     {# TODO raise an error #}
   {% endif %}
 
+  {# Extract model configurations #}
+  {% set model_configurations = dbt_data_privacy.extract_model_configurations(**config) %}
+  {% set enabled = model_configurations["enables"] | default(True, True) %}
+  {% set full_refresh = model_configurations["full_refresh"] | default(none, True) %}
+  {% set materialized = dbt_data_privacy.safe_quote(model_configurations["materialized"]) %}
+  {% set database = dbt_data_privacy.safe_quote(model_configurations["database"]) %}
+  {% set schema = dbt_data_privacy.safe_quote(model_configurations["schema"]) %}
+  {% set alias = dbt_data_privacy.safe_quote(model_configurations["alias"]) %}
+  {% set tags = model_configurations["tags"] | default([], True) %}
+  {% set labels = model_configurations["labels"] | default({}, True) %}
+  {% set persist_docs = model_configurations["persist_docs"] | default({}, True) %}
+  {% set extra_configurations = model_configurations["extra_configurations"] %}
+
+  {# Generate a model SQL #}
   {%- set model_sql %}
 {{'{{'}}
   config(
-    materialized={{- dbt_data_privacy.safe_quote(materialized) -}},
-    database={{- dbt_data_privacy.safe_quote(database) -}},
-    schema={{- dbt_data_privacy.safe_quote(schema) -}},
-    alias={{- dbt_data_privacy.safe_quote(alias) -}},
-    {% if grant_access_to -%}
+    materialized={{- materialized -}},
+    database={{- database -}},
+    database={{- schema -}},
+    alias={{- alias -}},
+    {% if "grant_access_to" in model_configurations -%}
     grant_access_to=[
-      {% for x in grant_access_to -%}
+      {% for x in model_configurations["grant_access_to"] -%}
       {"project": {{ x.get("project") }}, "dataset": {{ x.get("dataset") }}},
       {% endfor -%}
     ],{%- endif %}
     tags={{ tags }},
     labels={{ labels }},
-    {% for k, v in kwargs.items() -%}
+    {% for k, v in extra_configurations.items() -%}
     {{ k -}}={{- dbt_data_privacy.safe_quote(v) -}},
     {%- endfor %}
     persist_docs={{ persist_docs }},
@@ -72,31 +87,20 @@ WITH privacy_protected_model AS (
 )
 
 SELECT
-  s.*,
-FROM privacy_protected_model AS s
+  source.*,
+FROM privacy_protected_model AS source
 {% if relationships is not none and dbt_data_privacy.validate_relationships(relationships)  -%}
-JOIN {{ '{{ ' ~ relationships["to"] ~ ' }}' }} AS r
+JOIN {{ '{{ ' ~ relationships["to"] ~ ' }}' }} AS target
   ON {% for k, v in relationships["fields"].items() -%}
     {%- if not loop.first -%}AND {% endif -%}
-    s.{{ k }} = r.{{ v }}
+    source.{{ k }} = target.{{ v }}
   {% endfor -%}
-{%- endif %}
-{% if "where" in relationships -%}
+{% if "where" in relationships and relationships["where"] | length > 0 -%}
 WHERE
   {{ relationships["where"] }}
+{%- endif %}
 {%- endif %}
   {% endset %}
 
   {{- return(model_sql) -}}
-{% endmacro %}
-
-{% macro validate_relationships(relationships) %}
-  {% if 'to' not in relationships %}
-    {% do exceptions.raise_compiler_error("Invalid relationships: 'to' doesn't exist in " ~ relationships) %}
-  {% elif 'fields' not in relationships %}
-    {% do exceptions.raise_compiler_error("Invalid relationships: 'fieldw' doesn't exist in " ~ relationships) %}
-  {% elif relationships["fields"] is not mapping %}
-    {% do exceptions.raise_compiler_error("Invalid relationships: 'fields' is not a dict" ~ relationships) %}
-  {% endif %}
-  {{ return(true) }}
 {% endmacro %}

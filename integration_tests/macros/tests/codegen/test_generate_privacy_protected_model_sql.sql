@@ -4,11 +4,17 @@
 
 {% macro bigquery__test_generate_privacy_protected_model_sql() %}
   {%- set result = dbt_data_privacy.generate_privacy_protected_model_sql(
+      config={
+        "materialized": "view",
+        "database": "data-analysis-project",
+        "schema": "test_dataset",
+        "alias": "test_privacy_protected_users",
+        "grant_access_to": [
+          {"project": "test-project1", "dataset": "test_dataset1"},
+          {"project": "test-project2", "dataset": "test_dataset2"},
+        ],
+      },
       reference="ref('test_restricted_users')",
-      materialized="view",
-      database="data-analysis-project",
-      schema="test_dataset",
-      alias="test_privacy_protected_users",
       columns={
         "id": {
           "meta": {
@@ -25,16 +31,12 @@
           },
         },
       },
+      where="1 = 1",
       relationships={
         "to": "ref('test_consents')",
         "fields": {"user_id": "user_id"},
         "where": "agree is TRUE",
-      },
-      where="1 = 1",
-      grant_access_to=[
-        {"project": "test-project1", "dataset": "test_dataset1"},
-        {"project": "test-project2", "dataset": "test_dataset2"},
-      ],
+      }
     ) -%}
 
   {%- set expected %}
@@ -43,7 +45,7 @@
   config(
     materialized="view",
     database="data-analysis-project",
-    schema="test_dataset",
+    database="test_dataset",
     alias="test_privacy_protected_users",
     grant_access_to=[
       {"project": test-project1, "dataset": test_dataset1},
@@ -69,12 +71,11 @@ WITH privacy_protected_model AS (
   )
 
 SELECT
-  s.*,
-FROM privacy_protected_model AS s
-JOIN {{ ref('test_consents') }} AS r
-  ON s.user_id = r.user_id
-
-WHERE
+  source.*,
+FROM privacy_protected_model AS source
+JOIN {{ ref('test_consents') }} AS target
+  ON source.user_id = target.user_id
+  WHERE
   agree is TRUE
 {%- endraw -%}
   {%- endset %}
