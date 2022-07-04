@@ -4,8 +4,25 @@
 
 {% macro bigquery__test_macros() %}
 
-  {# pseudonymization #}
+  {#
+    system
+  #}
+  {% do test_get_system_config() %}
+
+  {#
+    codegen
+  #}
+  {% do test_generate_privacy_protected_model_sql() %}
+
+  {#
+    pseudonymization
+  #}
   {% do test_sha256() %}
   {% do test_sha512() %}
+
+  {#
+    utils
+  #}
+  {% do test_get_nodes() %}
 
 {% endmacro %}
