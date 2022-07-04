@@ -36,8 +36,8 @@
 
 {% macro get_default_data_handling_standard() %}
   {% set default_data_handling_standard = {
-    'public': 'NO_STRATEGY',
-    'internal': 'NO_STRATEGY',
+    'public': 'RAW',
+    'internal': 'RAW',
     'confidential': 'SHA256',
     'restricted': 'DROPPED',
     } %}

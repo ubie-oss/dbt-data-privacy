@@ -7,18 +7,20 @@ models:
       This is the truth of single source of consent agreements.
     meta:
       data_privacy:
-        - config:
+        - id: data_analysis_layer
+          config:
             enabled: true
+            materialized: view
             database: var('data_analysis_layer')
             schema: "dbt_data_privacy_data_analysis_layer"
             alias: "consents"
-          grant_access_to:
-            - project: var('restricted_layer_project')
-              dataset: "demo_source_data"
-          tags: []
-          labels:
-            modeled_by: dbt
-          extra:
+            grant_access_to:
+              - project: var('restricted_layer_project')
+                dataset: "demo_source_data"
+            tags: []
+            labels:
+              modeled_by: dbt
+          extra_meta:
             project_alias: data_analysis_project
 
     columns:

@@ -35,7 +35,7 @@ jobs:
       - name: Run unit tests
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
-          bash run_tests.sh --target bigquery
+          bash run_unit_tests.sh --target bigquery
       # Save artifacts for debug
       - name: Save logs and artifacts if failed
         if: always()
