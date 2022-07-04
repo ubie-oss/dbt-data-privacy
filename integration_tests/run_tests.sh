@@ -21,6 +21,14 @@ done
 
 dbt deps --profiles-dir "${INTEGRATION_TESTS_DIR}/profiles" --target "${dbt_target:?}"
 
+# Unit tests
 dbt run-operation test_macros \
     --profiles-dir "${dbt_profiles_dir}" \
-    --target "${dbt_target:?}"
+    --target "${dbt_target:?}" \
+    --vars "$(cat "${INTEGRATION_TESTS_DIR}/resources/vars/vars-${dbt_target}.yml")"
+
+# Integration tests
+dbt build --profiles-dir "${INTEGRATION_TESTS_DIR}/profiles" \
+    --target "${dbt_target:?}" \
+    --vars "$(cat "${INTEGRATION_TESTS_DIR}/resources/vars/vars-${dbt_target}.yml")" \
+    --full-refresh

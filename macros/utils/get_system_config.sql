@@ -1,5 +1,5 @@
 {% macro get_system_config() %}
-  {% set system_config_vars = dbt_data_privacy.get_system_config_block() %}
+  {% set system_config_vars = dbt_data_privacy.get_system_config_vars_block() %}
   {{- return(dbt_data_privacy._get_system_config(system_config_vars)) -}}
 {% endmacro %}
 
@@ -24,6 +24,22 @@
 {% macro get_default_system_config() %}
   {% set system_config = {
       "default_materialization": "view",
+      "data_handling_standard": dbt_data_privacy.get_default_data_handling_standard(),
     } %}
   {{ return(system_config) }}
+{% endmacro %}
+
+{% macro get_data_handling_standard() %}
+  {% set system_config = dbt_data_privacy.get_system_config() %}
+  {{ return(system_config["data_handling_standard"]) }}
+{% endmacro %}
+
+{% macro get_default_data_handling_standard() %}
+  {% set default_data_handling_standard = {
+    'public': 'NO_STRATEGY',
+    'internal': 'NO_STRATEGY',
+    'confidential': 'SHA256',
+    'restricted': 'DROPPED',
+    } %}
+  {{ return(default_data_handling_standard) }}
 {% endmacro %}

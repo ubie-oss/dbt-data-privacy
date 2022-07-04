@@ -1,0 +1,58 @@
+---
+version: 2
+
+models:
+  - name: restricted_layer__dbt_data_privacy_restricted_layer__orders
+    description: |
+      Orders' table
+    meta:
+      data_privacy:
+        - config:
+            enabled: true
+            database: var('data_analysis_layer')
+            schema: "dbt_data_privacy_data_analysis_layer"
+            alias: "consents"
+          grant_access_to:
+            - project: var('restricted_layer_project')
+              dataset: "demo_source_data"
+          tags: []
+          labels:
+            modeled_by: dbt
+          extra:
+            project_alias: data_analysis_project
+
+    columns:
+      - name: id
+        description: "Order ID"
+        meta:
+          data_privacy:
+            level: internal
+        tests:
+          - not_null
+      - name: user_id
+        description: "User ID"
+        meta:
+          data_privacy:
+            level: confidential
+        tests:
+          - not_null
+          - relationships:
+              to: ref("restricted_layer__dbt_data_privacy_restricted_layer__users")
+              field: "user_id"
+      - name: item_id
+        description: "Item ID"
+        meta:
+          data_privacy:
+            level: public
+        tests:
+          - not_null
+          - relationships:
+              to: ref("restricted_layer__dbt_data_privacy_restricted_layer__items")
+              field: "id"
+      - name: created_at
+        description: "Order timestamp"
+        meta:
+          data_privacy:
+            level: internal
+        tests:
+          - not_null
