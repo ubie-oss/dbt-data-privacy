@@ -2,7 +2,7 @@
   {{- return(adapter.dispatch("test_extract_model_configurations", "dbt_data_privacy_integration_tests")()) -}}
 {% endmacro %}
 
-{% macro bigquery__test_extract_model_configurations() %}
+{% macro default__test_extract_model_configurations() %}
   {% set model_configurations = {
       "materialized": "view",
       "database": "test-project",

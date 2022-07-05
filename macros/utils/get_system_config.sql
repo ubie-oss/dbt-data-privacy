@@ -25,6 +25,7 @@
   {% set system_config = {
       "default_materialization": "view",
       "data_handling_standard": dbt_data_privacy.get_default_data_handling_standard(),
+      "attached_tags": dbt_data_privacy.get_default_attached_tags(),
     } %}
   {{ return(system_config) }}
 {% endmacro %}
@@ -42,4 +43,16 @@
     'restricted': 'DROPPED',
     } %}
   {{ return(default_data_handling_standard) }}
+{% endmacro %}
+
+{% macro get_attached_tags() %}
+  {% set system_config = dbt_data_privacy.get_system_config() %}
+  {{ return(system_config["default_attached_tags"]) }}
+{% endmacro %}
+
+{% macro get_default_attached_tags() %}
+  {% set attached_tags = [
+      "created_by_dbt_data_privacy",
+    ] %}
+  {{ return(attached_tags) }}
 {% endmacro %}

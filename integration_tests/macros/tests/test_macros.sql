@@ -7,8 +7,9 @@
   {#
     codegen
   #}
-  {% do test_generate_privacy_protected_model_sql() %}
   {% do test_extract_model_configurations() %}
+  {% do test_generate_secured_model_schema_v2() %}
+  {% do test_generate_privacy_protected_model_sql() %}
 
   {#
     pseudonymization

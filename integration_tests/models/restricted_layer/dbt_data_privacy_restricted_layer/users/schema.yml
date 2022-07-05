@@ -21,11 +21,11 @@ models:
             labels:
               modeled_by: dbt
           relationships:
-            - to: ref("restricted_layer__dbt_data_privacy_restricted_layer__consents")
-              fields:
-                user_id: user_id
-              where: |
-                data_analysis_agree IS TRUE
+            to: ref("restricted_layer__dbt_data_privacy_restricted_layer__consents")
+            fields:
+              user_id: user_id
+            where: |
+              data_analysis_agree IS TRUE
           extra_meta:
             database_alias: data_analysis_layer
 
