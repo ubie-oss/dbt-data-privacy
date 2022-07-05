@@ -43,13 +43,9 @@ version: 2
 
 models:
   - name: test_project__test_dataset__test_table
-
     description: |
       Sample description
-
-
     tags: ['tag1']
-
     meta:
       key1: value1
       key2: value2

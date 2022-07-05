@@ -45,13 +45,13 @@ version: 2
 
 models:
   - name: {{ name }}
-    {% if description is not none %}
+    {% if description is not none -%}
     description: |
       {{ description }}
-    {% endif %}
-    {% if tags | length > 0 %}
+    {%- endif %}
+    {% if tags | length > 0 -%}
     tags: {{ tags | unique | list }}
-    {% endif %}
+    {%- endif %}
     {% if labels | length > 0 -%}
     meta: {% for k, v in labels.items() %}
       {{ k }}: {{ v }}
