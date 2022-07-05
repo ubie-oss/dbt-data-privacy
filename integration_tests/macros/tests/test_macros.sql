@@ -16,6 +16,7 @@
   #}
   {% do test_sha256() %}
   {% do test_sha512() %}
+  {% do test_extract_email_domain() %}
 
   {#
     utils
