@@ -11,7 +11,11 @@
     ) %}
   {#- Append the default tags -#}
   {% set attached_tags = dbt_data_privacy.get_attached_tags() %}
-  {% do tags.extend(attached_tags) %}
+  {% if tags is iterable %}
+    {% do tags.extend(attached_tags) %}
+  {% else %}
+    {% set tags = attached_tags %}
+  {% endif %}
 
   {{- return(adapter.dispatch('generate_secured_model_schema_v2', 'dbt_data_privacy')(
       id=id,

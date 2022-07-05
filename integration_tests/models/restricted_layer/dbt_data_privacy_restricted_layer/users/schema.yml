@@ -13,7 +13,7 @@ models:
             materialized: view
             database: var('data_analysis_layer')
             schema: "dbt_data_privacy_data_analysis_layer"
-            alias: "consents"
+            alias: "users"
             grant_access_to:
               - project: var('restricted_layer_project')
                 dataset: "dbt_data_privacy_restricted_layer"
