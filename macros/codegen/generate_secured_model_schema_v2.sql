@@ -60,12 +60,12 @@ models:
         meta:
           data_privacy:
             level: {{ column.meta.data_privacy.level }}
-        {%- endif -%}
+        {%- endif %}
         {% if 'data_privacy' in column.meta
             and name in column.meta.data_privacy
-            and 'tests' in column.meta.data_privacy.id
-            and column.meta.data_privacy.id.tests | length > 0 -%}
-        tests: {% for test in column.meta.data_privacy.tests %}
+            and 'tests' in column.meta.data_privacy[name]
+            and column.meta.data_privacy[name].tests | length > 0 -%}
+        tests: {% for test in column.meta.data_privacy[name].tests %}
           - {{ test }}
         {%- endfor %}
         {%- endif %}
