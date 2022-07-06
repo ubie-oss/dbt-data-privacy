@@ -47,12 +47,11 @@ dbt ls --profiles-dir "$dbt_profiles_dir" \
   | xargs -I% bash -c 'if [[ -d "%" ]] ; then rm "%"; fi' || :
 
 # Generate dbt models.
-dbt --quiet run-operation "dbt_data_privacy.generate_privacy_protected_models" \
-    --profiles-dir "$dbt_profiles_dir" \
-    --profile "$dbt_profile" \
-    --target "$dbt_target" \
-    --vars "$(cat "${vars_path}")"
-
+#dbt --quiet run-operation "dbt_data_privacy.generate_privacy_protected_models" \
+#    --profiles-dir "$dbt_profiles_dir" \
+#    --profile "$dbt_profile" \
+#    --target "$dbt_target" \
+#    --vars "$(cat "${vars_path}")"
 generated_models="$(dbt --quiet run-operation "dbt_data_privacy.generate_privacy_protected_models" \
     --profiles-dir "$dbt_profiles_dir" \
     --profile "$dbt_profile" \

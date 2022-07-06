@@ -15,7 +15,7 @@ models:
             schema: "dbt_data_privacy_data_analysis_layer"
             alias: "consents"
             grant_access_to:
-              - project: var('restricted_layer_project')
+              - project: var('restricted_layer')
                 dataset: "dbt_data_privacy_restricted_layer"
             tags: []
             labels:

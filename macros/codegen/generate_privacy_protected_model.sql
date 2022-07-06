@@ -21,12 +21,12 @@
     {% set where = data_privacy_meta.get("where") | default(none, True) %}
 
     {% set model_config = dbt_data_privacy.format_model_config(**config) %}
-    {% set enabled = model_config["enables"] %}
+    {% set enabled = model_config["enabled"] %}
     {% set full_refresh = model_config["full_refresh"] %}
-    {% set materialized = dbt_data_privacy.safe_quote(model_config["materialized"]) %}
-    {% set database = dbt_data_privacy.safe_quote(model_config["database"]) %}
-    {% set schema = dbt_data_privacy.safe_quote(model_config["schema"]) %}
-    {% set alias = dbt_data_privacy.safe_quote(model_config["alias"]) %}
+    {% set materialized = model_config["materialized"] %}
+    {% set database = model_config["database"] %}
+    {% set schema = model_config["schema"] %}
+    {% set alias = model_config["alias"] %}
     {% set tags = model_config["tags"] %}
     {% set labels = model_config["labels"] %}
     {% set persist_docs = model_config["persist_docs"] %}
