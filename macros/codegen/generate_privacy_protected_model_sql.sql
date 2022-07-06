@@ -27,17 +27,17 @@
   {% endif %}
 
   {# Extract model configurations #}
-  {% set model_configurations = dbt_data_privacy.extract_model_configurations(**config) %}
-  {% set enabled = model_configurations["enables"] | default(True, True) %}
-  {% set full_refresh = model_configurations["full_refresh"] | default(none, True) %}
-  {% set materialized = dbt_data_privacy.safe_quote(model_configurations["materialized"]) %}
-  {% set database = dbt_data_privacy.safe_quote(model_configurations["database"]) %}
-  {% set schema = dbt_data_privacy.safe_quote(model_configurations["schema"]) %}
-  {% set alias = dbt_data_privacy.safe_quote(model_configurations["alias"]) %}
-  {% set tags = model_configurations["tags"] | default([], True) %}
-  {% set labels = model_configurations["labels"] | default({}, True) %}
-  {% set persist_docs = model_configurations["persist_docs"] | default({}, True) %}
-  {% set extra_configurations = model_configurations["extra_configurations"] %}
+  {% set enabled = config["enables"] | default(True, True) %}
+  {% set full_refresh = config["full_refresh"] | default(none, True) %}
+  {% set materialized = dbt_data_privacy.safe_quote(config["materialized"]) %}
+  {% set database = dbt_data_privacy.safe_quote(config["database"]) %}
+  {% set schema = dbt_data_privacy.safe_quote(config["schema"]) %}
+  {% set alias = dbt_data_privacy.safe_quote(config["alias"]) %}
+  {% set tags = config["tags"] | default([], True) %}
+  {% set labels = config["labels"] | default({}, True) %}
+  {% set persist_docs = config["persist_docs"] | default({}, True) %}
+  {% set adapter_config = config["adapter_config"] %}
+  {% set unknown_config = config["unknown_config"] %}
 
   {# Generate a model SQL #}
   {%- set model_sql %}
@@ -48,16 +48,16 @@
     database={{- database -}},
     database={{- schema -}},
     alias={{- alias -}},
-    {% if "grant_access_to" in model_configurations -%}
+    {% if "grant_access_to" in adapter_config -%}
     grant_access_to=[
-      {% for x in model_configurations["grant_access_to"] -%}
+      {% for x in adapter_config["grant_access_to"] -%}
       {"project": {{ x.get("project") }}, "dataset": {{ x.get("dataset") }}},
       {% endfor -%}
     ],{%- endif %}
     tags={{ tags }},
     labels={{ labels }},
-    {% for k, v in extra_configurations.items() -%}
-    {{ k -}}={{- dbt_data_privacy.safe_quote(v) -}},
+    {%- for k, v in unknown_config.items() -%}
+    {{ k }}={{ dbt_data_privacy.safe_quote(v) }},
     {%- endfor %}
     persist_docs={{ persist_docs }},
     full_refresh={{ full_refresh }},

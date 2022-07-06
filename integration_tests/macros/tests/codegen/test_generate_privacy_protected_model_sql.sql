@@ -3,17 +3,25 @@
 {% endmacro %}
 
 {% macro bigquery__test_generate_privacy_protected_model_sql() %}
-  {%- set result = dbt_data_privacy.generate_privacy_protected_model_sql(
-      config={
-        "materialized": "view",
-        "database": "data-analysis-project",
-        "schema": "test_dataset",
-        "alias": "test_privacy_protected_users",
-        "grant_access_to": [
+  {% set model_config = dbt_data_privacy.format_model_config(
+        materialized="view",
+        database="data-analysis-project",
+        schema="test_dataset",
+        alias="test_privacy_protected_users",
+        grant_access_to=[
           {"project": "test-project1", "dataset": "test_dataset1"},
           {"project": "test-project2", "dataset": "test_dataset2"},
         ],
-      },
+        tags=["tag1"],
+        labels={
+          "key1": "value1",
+          "key2": "value2",
+        },
+        require_partition_filter=true,
+        partition_expiration_days=7
+    ) %}
+  {%- set result = dbt_data_privacy.generate_privacy_protected_model_sql(
+      config=model_config,
       reference="ref('test_restricted_users')",
       columns={
         "id": {
@@ -52,9 +60,8 @@
       {"project": test-project1, "dataset": test_dataset1},
       {"project": test-project2, "dataset": test_dataset2},
       ],
-    tags=[],
-    labels={},
-
+    tags=['tag1', 'generated_by_dbt_data_privacy'],
+    labels={'key1': 'value1', 'key2': 'value2'},partition_expiration_days="7",
     persist_docs={'relation': True, 'columns': True},
     full_refresh=None,
     enabled=True

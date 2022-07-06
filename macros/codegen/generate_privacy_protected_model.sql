@@ -20,8 +20,10 @@
     {% set relationships = data_privacy_meta.get("relationships") | default(none, True) %}
     {% set where = data_privacy_meta.get("where") | default(none, True) %}
 
+    {% set model_config = dbt_data_privacy.format_model_config(**config) %}
+
     {% set model_sql = dbt_data_privacy.generate_privacy_protected_model_sql(
-        config=config,
+        config=model_config,
         reference=reference,
         columns=columns,
         where=where,
@@ -30,13 +32,13 @@
 
     {% set schema_yaml = dbt_data_privacy.generate_secured_model_schema_v2(
         name=name,
-        database=config.get("database"),
-        schema=config.get("schema"),
-        alias=config.get("alias"),
+        database=model_config.get("database"),
+        schema=model_config.get("schema"),
+        alias=model_config.get("alias"),
         description=node.get("description"),
         columns=columns,
-        tags=config.get("tags"),
-        labels=config.get("labels"),
+        tags=model_config.get("tags"),
+        labels=model_config.get("labels"),
       ) %}
 
     {# NOTE: I tried to use the continue expression, but it doesn't work. #}
