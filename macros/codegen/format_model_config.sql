@@ -43,13 +43,16 @@
     partition_by=none,
     cluster_by=none,
     require_partition_filter=none,
-    grant_access_to=[]
+    partition_expiration_days=none,
+    grant_access_to=none
   ) %}
 
   {% set extra_config = {
       "adapter_config": {
         "partition_by": partition_by,
         "cluster_by": cluster_by,
+        "require_partition_filter": require_partition_filter,
+        "partition_expiration_days": partition_expiration_days,
         "grant_access_to": grant_access_to,
       },
       "unknown_config": kwargs,

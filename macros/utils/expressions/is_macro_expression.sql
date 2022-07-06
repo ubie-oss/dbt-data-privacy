@@ -3,9 +3,9 @@
     Check if the expression seems to be a macro.
   -#}
 
-  {% if '(' in text and ')' in text %}
-    {% do return(true) %}
+  {% if expression is string and '(' in expression and ')' in expression %}
+    {% do return(True) %}
   {% else %}
-    {% do return(false) %}
+    {% do return(False) %}
   {% endif %}
 {% endmacro %}

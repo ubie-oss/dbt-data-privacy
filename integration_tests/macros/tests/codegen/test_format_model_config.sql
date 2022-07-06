@@ -37,6 +37,8 @@
       'adapter_config': {
         'partition_by': None,
         'cluster_by': None,
+        "require_partition_filter": true,
+        "partition_expiration_days": None,
         'grant_access_to': [
           {'project': 'test-project1', 'database': 'test_dataset1'},
           {'project': 'test-project2', 'database': 'test_dataset2'},

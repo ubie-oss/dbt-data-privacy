@@ -21,9 +21,30 @@
     {% set where = data_privacy_meta.get("where") | default(none, True) %}
 
     {% set model_config = dbt_data_privacy.format_model_config(**config) %}
+    {% set enabled = model_config["enables"] %}
+    {% set full_refresh = model_config["full_refresh"] %}
+    {% set materialized = dbt_data_privacy.safe_quote(model_config["materialized"]) %}
+    {% set database = dbt_data_privacy.safe_quote(model_config["database"]) %}
+    {% set schema = dbt_data_privacy.safe_quote(model_config["schema"]) %}
+    {% set alias = dbt_data_privacy.safe_quote(model_config["alias"]) %}
+    {% set tags = model_config["tags"] %}
+    {% set labels = model_config["labels"] %}
+    {% set persist_docs = model_config["persist_docs"] %}
+    {% set adapter_config = model_config["adapter_config"] %}
+    {% set unknown_config = model_config["unknown_config"] %}
 
     {% set model_sql = dbt_data_privacy.generate_privacy_protected_model_sql(
-        config=model_config,
+        enabled=enabled,
+        full_refresh=full_refresh,
+        materialized=materialized,
+        database=database,
+        schema=schema,
+        alias=alias,
+        tags=tags,
+        labels=labels,
+        persist_docs=persist_docs,
+        adapter_config=adapter_config,
+        unknown_config=unknown_config,
         reference=reference,
         columns=columns,
         where=where,
@@ -32,13 +53,13 @@
 
     {% set schema_yaml = dbt_data_privacy.generate_secured_model_schema_v2(
         name=name,
-        database=model_config.get("database"),
-        schema=model_config.get("schema"),
-        alias=model_config.get("alias"),
+        database=database,
+        schema=schema,
+        alias=alias,
         description=node.get("description"),
         columns=columns,
-        tags=model_config.get("tags"),
-        labels=model_config.get("labels"),
+        tags=tags,
+        labels=labels,
       ) %}
 
     {# NOTE: I tried to use the continue expression, but it doesn't work. #}

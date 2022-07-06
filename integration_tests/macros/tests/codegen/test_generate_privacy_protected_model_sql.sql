@@ -21,7 +21,26 @@
         partition_expiration_days=7
     ) %}
   {%- set result = dbt_data_privacy.generate_privacy_protected_model_sql(
-      config=model_config,
+      materialized="view",
+      database="data-analysis-project",
+      schema="test_dataset",
+      alias="test_privacy_protected_users",
+      tags=["tag1"],
+      labels={
+        "key1": "value1",
+        "key2": "value2",
+      },
+      adapter_config={
+        "grant_access_to": [
+          {"project": "test-project1", "dataset": "test_dataset1"},
+          {"project": "test-project2", "dataset": "test_dataset2"},
+        ],
+        "require_partition_filter": true,
+        "partition_expiration_days": 7,
+      },
+      unknown_config={
+        "re_data_monitored": true,
+      },
       reference="ref('test_restricted_users')",
       columns={
         "id": {
@@ -57,11 +76,20 @@
     database="test_dataset",
     alias="test_privacy_protected_users",
     grant_access_to=[
-      {"project": test-project1, "dataset": test_dataset1},
-      {"project": test-project2, "dataset": test_dataset2},
+      {
+        "project": "test-project1",
+        "dataset": "test_dataset1"
+      },
+      {
+        "project": "test-project2",
+        "dataset": "test_dataset2"
+      },
       ],
-    tags=['tag1', 'generated_by_dbt_data_privacy'],
-    labels={'key1': 'value1', 'key2': 'value2'},partition_expiration_days="7",
+    tags=['tag1'],
+    labels={
+      "key1": "value1","key2": "value2",
+    },
+    re_data_monitored="True",
     persist_docs={'relation': True, 'columns': True},
     full_refresh=None,
     enabled=True
@@ -73,7 +101,8 @@ WITH privacy_protected_model AS (
         id AS `id`,
         TO_BASE64(SHA256(CAST(user_id AS STRING))) AS `user_id`,
   FROM
-    ref('test_restricted_users')
+    {{ ref('test_restricted_users') }}
+
   WHERE
     1 = 1
   )

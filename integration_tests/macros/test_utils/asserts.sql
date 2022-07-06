@@ -1,3 +1,19 @@
+{% macro assert_true(value) %}
+  {% if value is boolean and value is not true %}
+    {% do exceptions.raise_compiler_error("FAILED: value " ~ value ~ " is not true.") %}
+  {% else %}
+    {% do log("SUCCESS") %}
+  {% endif %}
+{% endmacro %}
+
+{% macro assert_false(value) %}
+  {% if value is boolean and value is not false %}
+    {% do exceptions.raise_compiler_error("FAILED: value " ~ value ~ " is not false.") %}
+  {% else %}
+    {% do log("SUCCESS") %}
+  {% endif %}
+{% endmacro %}
+
 {% macro assert_equals(value, expected_value) %}
   {% if value != expected_value %}
     {% do exceptions.raise_compiler_error("FAILED: value " ~ value ~ " does not equal to " ~ expected_value) %}
