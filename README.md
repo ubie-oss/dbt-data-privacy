@@ -7,15 +7,14 @@ This dbt package enables us to protect out customers' privacy on warehouse.
 - [Installation Instructions](#installation-instructions)
 - [Requirements](#requirements)
 - [Supported warehouses](#supported-warehouses)
-- [Generic tests and macros](#generic-tests-and-macros)
-  - [Generic tests](#generic-tests)
-    - [Data Loss Prevention](#data-loss-prevention)
-  - [Macros](#macros)
-    - [Pseudonymization](#pseudonymization)
-      - [`sha256`](#sha256)
-      - [`sha512`](#sha512)
-      - [`extract_email_domain`](#extract_email_domain)
-    - [Code generation](#code-generation)
+- [Generic tests](#generic-tests)
+  - [Data Loss Prevention](#data-loss-prevention)
+- [Macros](#macros)
+  - [Pseudonymization](#pseudonymization)
+    - [`sha256`](#sha256)
+    - [`sha512`](#sha512)
+    - [`extract_email_domain`](#extract_email_domain)
+  - [Code generation](#code-generation)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
