@@ -20,6 +20,8 @@ models:
             tags: []
             labels:
               modeled_by: dbt
+          where: |
+            data_analysis_agree IS TRUE
           extra_meta:
             database_alias: data_analysis_layer
 
