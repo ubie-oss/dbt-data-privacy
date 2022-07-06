@@ -23,6 +23,11 @@
           "meta": {
             "data_privacy": {
               "level": "confidential",
+              "test_project__test_dataset__test_table": {
+                "tests": [
+                  "not_null"
+                ],
+              },
             },
           },
         },
@@ -56,12 +61,15 @@ models:
         meta:
           data_privacy:
             level: internal
+
       - name:
         description: |
           User ID
         meta:
           data_privacy:
             level: confidential
+        tests:
+          - not_null
 {%- endraw -%}
   {%- endset %}
 
