@@ -15,9 +15,7 @@ jobs:
         with:
           TARGET_PATHS: "README.md,docs/*.md"
           TOC_TITLE: ""
-          MAX_HEADER_LEVEL: 5
+          MAX_HEADER_LEVEL: 4
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           COMMIT_MESSAGE: |
             Generate Table of Contents in markdown files with GitHub Actions
-            
-            Signed-off-by: ${{ github.actor }} <${{ github.actor }}@github-actions.com>
