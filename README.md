@@ -2,7 +2,10 @@
 This dbt package enables us to protect out customers' privacy on warehouse.
 
 ## Installation Instructions
-Check [dbt Hub](https://hub.getdbt.com/dbt-labs/dbt_utils/latest/) for the latest installation instructions, or [read the docs](https://docs.getdbt.com/docs/package-management) for more information on installing packages.
+COMING SOON
+
+## Requirements
+- dbt-core: 1.1.0 or later
 
 ## Supported warehouses
 We support only BigQuery at the moment.
