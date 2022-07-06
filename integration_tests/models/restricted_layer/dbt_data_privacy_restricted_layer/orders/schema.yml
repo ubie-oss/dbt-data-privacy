@@ -21,7 +21,7 @@ models:
             labels:
               modeled_by: dbt
           relationships:
-            to: ref("restricted_layer__dbt_data_privacy_restricted_layer__users")
+            to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__users")
             fields:
               user_id: user_id
           extra_meta:
