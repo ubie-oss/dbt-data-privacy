@@ -1,0 +1,68 @@
+---
+version: 2
+
+models:
+  - name: restricted_layer__dbt_data_privacy_restricted_layer__users
+    description: |
+      Users' table
+    meta:
+      data_privacy:
+        - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer__users
+          config:
+            enabled: true
+            materialized: view
+            database: var('data_analysis_layer')
+            schema: "dbt_data_privacy_data_analysis_layer"
+            alias: "users"
+            grant_access_to:
+              - project: var('restricted_layer')
+                dataset: "dbt_data_privacy_restricted_layer"
+            tags: []
+            labels:
+              modeled_by: dbt
+          relationships:
+            to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents")
+            fields:
+              user_id: user_id
+            where: |
+              data_analysis_agree IS TRUE
+          extra_meta:
+            database_alias: data_analysis_layer
+
+    columns:
+      - name: id
+        description: "Raw number"
+        meta:
+          data_privacy:
+            level: internal
+        tests:
+          - not_null
+      - name: user_id
+        description: "User ID"
+        meta:
+          data_privacy:
+            level: confidential
+            data_analysis_layer__dbt_data_privacy_data_analysis_layer__users:
+              tests:
+                - relationships:
+                    to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents")
+                    field: "user_id"
+        tests:
+          - not_null
+          - relationships:
+              to: ref("restricted_layer__dbt_data_privacy_seed__users")
+              field: "user_id"
+      - name: name
+        description: "User's name"
+        meta:
+          data_privacy:
+            level: restricted
+        tests:
+          - not_null
+      - name: email
+        description: "User's email"
+        meta:
+          data_privacy:
+            level: restricted
+        tests:
+          - not_null

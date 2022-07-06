@@ -19,8 +19,11 @@ while (($# > 0)); do
   fi
 done
 
+# Install the `dbt-data-privacy` package
 dbt deps --profiles-dir "${INTEGRATION_TESTS_DIR}/profiles" --target "${dbt_target:?}"
 
-dbt run-operation test_macros \
-    --profiles-dir "${dbt_profiles_dir}" \
-    --target "${dbt_target:?}"
+# Integration tests
+dbt build --profiles-dir "${INTEGRATION_TESTS_DIR}/profiles" \
+    --target "${dbt_target:?}" \
+    --vars "$(cat "${INTEGRATION_TESTS_DIR}/resources/vars/vars-${dbt_target}.yml")" \
+    --full-refresh
