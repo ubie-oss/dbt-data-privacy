@@ -1,5 +1,4 @@
 {% macro generate_secured_model_schema_v2(
-      id,
       name,
       database,
       schema,
@@ -18,7 +17,6 @@
   {% endif %}
 
   {{- return(adapter.dispatch('generate_secured_model_schema_v2', 'dbt_data_privacy')(
-      id=id,
       name=name,
       database=database,
       schema=schema,
@@ -31,7 +29,6 @@
 {% endmacro %}
 
 {% macro default__generate_secured_model_schema_v2(
-      id,
       name,
       database,
       schema,
@@ -73,7 +70,7 @@ models:
             level: {{ column.meta.data_privacy.level }}
         {%- endif -%}
         {% if 'data_privacy' in column.meta
-            and 'id' in column.meta.data_privacy
+            and name in column.meta.data_privacy
             and 'tests' in column.meta.data_privacy.id
             and column.meta.data_privacy.id.tests | length > 0 -%}
         tests: {% for test in column.meta.data_privacy.tests %}

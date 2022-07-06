@@ -3,8 +3,8 @@
     {% do exceptions.raise_compiler_error("The data_privacy_block param is not a dict.") %}
   {% endif %}
 
-  {% if 'id' not in data_privacy_block %}
-    {% do exceptions.raise_compiler_error("id doesn't exit in " ~ data_privacy_block) %}
+  {% if 'name' not in data_privacy_block %}
+    {% do exceptions.raise_compiler_error("name doesn't exit in " ~ data_privacy_block) %}
   {% endif %}
 
   {% if 'config' not in data_privacy_block %}

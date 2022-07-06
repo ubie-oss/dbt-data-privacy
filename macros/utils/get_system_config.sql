@@ -52,7 +52,7 @@
 
 {% macro get_default_attached_tags() %}
   {% set attached_tags = [
-      "created_by_dbt_data_privacy",
+      "generated_by_dbt_data_privacy",
     ] %}
   {{ return(attached_tags) }}
 {% endmacro %}

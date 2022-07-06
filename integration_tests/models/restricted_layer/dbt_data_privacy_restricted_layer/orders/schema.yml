@@ -7,7 +7,7 @@ models:
       Orders' table
     meta:
       data_privacy:
-        - id: data_analysis_layer
+        - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer__orders
           config:
             enabled: true
             materialized: view
@@ -40,6 +40,11 @@ models:
         meta:
           data_privacy:
             level: confidential
+            data_analysis_layer__dbt_data_privacy_data_analysis_layer__orders:
+              tests:
+                - relationships:
+                    to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__users")
+                    field: "user_id"
         tests:
           - not_null
           - relationships:

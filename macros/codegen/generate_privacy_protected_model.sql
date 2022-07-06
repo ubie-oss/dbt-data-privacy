@@ -11,12 +11,11 @@
   {% endif %}
 
   {% set resource_type = node.resource_type %}
-  {% set model_name = node.name %}
   {% set reference = dbt_data_privacy.get_reference_from_node(node) %}
   {% set columns = node.get("columns") | default({}, True) %}
 
   {% for data_privacy_meta in node.meta.data_privacy %}
-    {% set id = data_privacy_meta.get("id") %}
+    {% set name = data_privacy_meta.get("name") %}
     {% set config = data_privacy_meta.get("config") %}
     {% set relationships = data_privacy_meta.get("relationships") | default(none, True) %}
     {% set where = data_privacy_meta.get("where") | default(none, True) %}
@@ -30,8 +29,7 @@
       ) %}
 
     {% set schema_yaml = dbt_data_privacy.generate_secured_model_schema_v2(
-        id=id,
-        name=model_name,
+        name=name,
         database=config.get("database"),
         schema=config.get("schema"),
         alias=config.get("alias"),
@@ -44,6 +42,7 @@
     {# NOTE: I tried to use the continue expression, but it doesn't work. #}
     {% if data_privacy_meta.enabled is not false %}
       {{ generated_models.append({
+          "name": name,
           "meta": data_privacy_meta,
           "model_sql": model_sql,
           "schema_yaml": schema_yaml,

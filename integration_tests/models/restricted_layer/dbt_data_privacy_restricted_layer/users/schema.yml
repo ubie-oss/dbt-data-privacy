@@ -7,7 +7,7 @@ models:
       Users' table
     meta:
       data_privacy:
-        - id: data_analysis_layer
+        - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer__users
           config:
             enabled: true
             materialized: view
@@ -42,7 +42,7 @@ models:
         meta:
           data_privacy:
             level: confidential
-            data_analysis_layer:
+            data_analysis_layer__dbt_data_privacy_data_analysis_layer__users:
               tests:
                 - relationships:
                     to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents")
