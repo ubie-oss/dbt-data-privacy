@@ -3,6 +3,14 @@ This dbt package enables us to protect out customers' privacy on warehouse.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [Installation Instructions](#installation-instructions)
+- [Requirements](#requirements)
+- [Supported warehouses](#supported-warehouses)
+- [Generic tests and macros](#generic-tests-and-macros)
+  - [Generic tests](#generic-tests)
+  - [Macros](#macros)
+
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Installation Instructions
