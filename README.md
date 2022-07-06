@@ -31,18 +31,16 @@ But, the implementation can be extended to other warehouses by following the man
 
 - BigQuery
 
-## Generic tests and macros
+## Generic tests
 
-### Generic tests
-
-#### Data Loss Prevention
+### Data Loss Prevention
 COMING SOON
 
-### Macros
+## Macros
 
-#### Pseudonymization
+### Pseudonymization
 
-##### `sha256`
+#### `sha256`
 Computes the hash of the input using the SHA-256 algorithm. 
 
 **Usage:**
@@ -51,7 +49,7 @@ SELECT
   {{ dbt_data_privacy.sha256("column_a") }} AS column_a,
 ```
 
-##### `sha512`
+#### `sha512`
 Computes the hash of the input using the SHA-512 algorithm. 
 
 **Usage:**
@@ -60,7 +58,7 @@ SELECT
   {{ dbt_data_privacy.sha512("column_a") }} AS column_a,
 ```
 
-##### `extract_email_domain`
+#### `extract_email_domain`
 Computes the hash of the input using the SHA-512 algorithm.
 
 **Usage:**
@@ -69,5 +67,5 @@ SELECT
   {{ dbt_data_privacy.extract_email_domain("email_column") }} AS email_column,
 ```
 
-#### Code generation
+### Code generation
 COMING SOON
