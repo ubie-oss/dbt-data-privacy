@@ -1,6 +1,10 @@
 # dbt-data-privacy
 This dbt package enables us to protect out customers' privacy on warehouse.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Installation Instructions
 COMING SOON
 
@@ -24,7 +28,7 @@ COMING SOON
 
 #### Pseudonymization
 
-#### `sha256`
+##### `sha256`
 Computes the hash of the input using the SHA-256 algorithm. 
 
 **Usage:**
@@ -33,7 +37,7 @@ SELECT
   {{ dbt_data_privacy.sha256("column_a") }} AS column_a,
 ```
 
-#### `sha512`
+##### `sha512`
 Computes the hash of the input using the SHA-512 algorithm. 
 
 **Usage:**
@@ -42,7 +46,7 @@ SELECT
   {{ dbt_data_privacy.sha512("column_a") }} AS column_a,
 ```
 
-#### `extract_email_domain`
+##### `extract_email_domain`
 Computes the hash of the input using the SHA-512 algorithm.
 
 **Usage:**
