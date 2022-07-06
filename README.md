@@ -1,22 +1,22 @@
 # dbt-data-privacy
 This dbt package enables us to protect out customers' privacy on warehouse.
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<!-- toc -->
 
 - [Installation Instructions](#installation-instructions)
 - [Requirements](#requirements)
 - [Supported warehouses](#supported-warehouses)
 - [Generic tests](#generic-tests)
-  - [Data Loss Prevention](#data-loss-prevention)
+  * [Data Loss Prevention](#data-loss-prevention)
 - [Macros](#macros)
-  - [Pseudonymization](#pseudonymization)
-    - [`sha256`](#sha256)
-    - [`sha512`](#sha512)
-    - [`extract_email_domain`](#extract_email_domain)
-  - [Code generation](#code-generation)
+  * [Pseudonymization](#pseudonymization)
+    + [`sha256`](#sha256)
+    + [`sha512`](#sha512)
+    + [`extract_email_domain`](#extract_email_domain)
+  * [Code generation](#code-generation)
+    + [`generate_privacy_protected_models`](#generate_privacy_protected_models)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- tocstop -->
 
 ## Installation Instructions
 COMING SOON

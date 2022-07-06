@@ -5,3 +5,6 @@ lint-yaml:
 
 lint-bash:
 	bash ./ci/lint_bash.sh
+
+generate-toc:
+	markdown-toc --maxdepth 5 -i README.md
