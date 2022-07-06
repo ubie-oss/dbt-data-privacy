@@ -8,9 +8,10 @@ default:
     bigquery:
       type: bigquery
       method: oauth
-      project: "{{ env_var('DBT_DATA_PRIVACY_TEST_PROJECT') }}"
+      project: "ubie-oss-data-engineering"
       dataset: "dbt_data_privacy"
       priority: "{{ env_var('DBT_BIGQUERY_PRIORITY', 'interactive') }}"
       threads: |
         {{ env_var("DBT_THREADS", 5) }}
       location: "US"
+      impersonate_service_account: "dbt-data-privacy@ubie-oss-data-engineering.iam.gserviceaccount.com"

@@ -1,0 +1,17 @@
+version: 2
+
+seeds:
+  - name: restricted_layer__dbt_data_privacy_seed__data_analysis_consents
+    config:
+      quote_columns: false
+      enabled: true
+      full_refresh: true
+      database: "{{ var('restricted_layer') }}"
+      schema: dbt_data_privacy_seed
+      alias: data_analysis_consents
+      tags: ["bigquery"]
+      meta: {}
+      column_types:
+        id: INTEGER
+        user_id: INTEGER
+        agree: BOOL
