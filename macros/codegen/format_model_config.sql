@@ -11,11 +11,11 @@
   ) %}
 
    {#- Append the default tags -#}
-   {% set attached_tags = dbt_data_privacy.get_attached_tags() %}
+   {% set attached_tag = dbt_data_privacy.get_attached_tag() %}
    {% if tags is iterable %}
-     {% do tags.extend(attached_tags) %}
+     {% do tags.append(attached_tag) %}
    {% else %}
-     {% set tags = attached_tags %}
+     {% set tags = [attached_tag] %}
    {% endif %}
 
   {% set configurations = {
