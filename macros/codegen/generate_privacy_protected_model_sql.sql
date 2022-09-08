@@ -89,11 +89,14 @@
   )
 {{'}}'}}
 
+{% set column_conditions = dbt_data_privacy.analyze_column_conditions(columns) %}
+
 WITH privacy_protected_model AS (
   SELECT
     {%- for column_name, column_info in columns.items() -%}
       {%- if "data_privacy" in column_info.meta and column_info.meta.data_privacy.level %}
-        {% set expression = dbt_data_privacy.get_secured_expression(column_name, column_info.meta.data_privacy.level) %}
+        {% set expression = dbt_data_privacy.get_secured_expression_by_level(
+            column_name, column_info.meta.data_privacy.level, column_conditions=column_conditions) %}
         {%- if expression is not none -%}
           {{ expression }} AS `{{- column_name -}}`,
         {%- endif -%}

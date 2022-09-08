@@ -1,0 +1,16 @@
+---
+restricted_layer: "ubie-oss-data-engineering"
+data_analysis_layer: "ubie-oss-data-engineering"
+
+
+data_privacy:
+  data_handling_standard:
+    public:
+      method: RAW
+    internal:
+      method: RAW
+    confidential:
+      converted_level: internal
+      method: SHA256
+    highly_restricted:
+      method: DROPPED

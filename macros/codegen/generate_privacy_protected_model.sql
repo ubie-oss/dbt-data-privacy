@@ -16,6 +16,7 @@
 
   {% for data_privacy_meta in node.meta.data_privacy %}
     {% set name = data_privacy_meta.get("name") %}
+    {% set target_tag = data_privacy_meta.get("target_tag") %}
     {% set config = data_privacy_meta.get("config") %}
     {% set relationships = data_privacy_meta.get("relationships") | default(none, True) %}
     {% set where = data_privacy_meta.get("where") | default(none, True) %}
@@ -32,6 +33,9 @@
     {% set persist_docs = model_config["persist_docs"] %}
     {% set adapter_config = model_config["adapter_config"] %}
     {% set unknown_config = model_config["unknown_config"] %}
+
+    {# Append the target tag #}
+    {% do tags.append(target_tag) %}
 
     {% set model_sql = dbt_data_privacy.generate_privacy_protected_model_sql(
         enabled=enabled,

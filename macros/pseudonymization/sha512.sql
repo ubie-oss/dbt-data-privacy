@@ -3,6 +3,6 @@
 {%- endmacro %}
 
 {%- macro bigquery__sha512(column) -%}
-  {%- set expression = "TO_BASE64(SHA512(CAST(" ~  column ~ " AS STRING)))" -%}
-  {%- do return(expression) -%}
+  {%- set secured_expression = "TO_BASE64(SHA512(CAST(" ~  column ~ " AS STRING)))" -%}
+  {%- do return(secured_expression) -%}
 {%- endmacro -%}

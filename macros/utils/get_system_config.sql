@@ -32,17 +32,56 @@
 
 {% macro get_data_handling_standard() %}
   {% set system_config = dbt_data_privacy.get_system_config() %}
+  {% if "data_handling_standard" not in system_config %}
+    {{ exceptions.raise_compiler_error("data_handling_standard isn't set.") }}
+  {% endif %}
   {{ return(system_config["data_handling_standard"]) }}
 {% endmacro %}
 
 {% macro get_default_data_handling_standard() %}
   {% set default_data_handling_standard = {
-    'public': 'RAW',
-    'internal': 'RAW',
-    'confidential': 'SHA256',
-    'restricted': 'DROPPED',
+    'public': {
+      'method': 'RAW',
+      },
+    'internal': {
+     'method': 'RAW',
+      },
+    'confidential': {
+      'method': 'SHA256',
+      },
+    'restricted': {
+      'method': 'DROPPED',
+      },
     } %}
   {{ return(default_data_handling_standard) }}
+{% endmacro %}
+
+{% macro get_data_handling_standard_definition(data_handling_standard, level) %}
+  {% if level in data_handling_standard %}
+    {# method #}
+    {% if "method" not in data_handling_standard[level] %}
+      {{ exceptions.raise_compiler_error("'method' isn't set in level {} of {}".format(level, data_handling_standard)) }}
+    {% endif %}
+    {% set method = data_handling_standard[level]["method"] %}
+
+    {# with #}
+    {% if "with" in data_handling_standard[level] %}
+      {% set with = data_handling_standard[level]["with"] %}
+    {% else %}
+      {% set with = none %}
+    {% endif %}
+
+    {# converted_level #}
+    {% if "converted_level" in data_handling_standard[level] %}
+      {% set converted_level = data_handling_standard[level]["converted_level"] %}
+    {% else %}
+      {% set converted_level = none %}
+    {% endif %}
+
+    {{ return((method, with, converted_level)) }}
+  {% else %}
+    {{ exceptions.raise_compiler_error("No such level {} in {}".format(level, data_handling_standard)) }}
+  {% endif %}
 {% endmacro %}
 
 {% macro get_attached_tag() %}

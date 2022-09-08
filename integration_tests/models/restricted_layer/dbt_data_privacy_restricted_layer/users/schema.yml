@@ -42,6 +42,8 @@ models:
         meta:
           data_privacy:
             level: confidential
+            policy_tags:
+              - unique_identifiers
             data_analysis_layer__dbt_data_privacy_data_analysis_layer__users:
               tests:
                 - relationships:
