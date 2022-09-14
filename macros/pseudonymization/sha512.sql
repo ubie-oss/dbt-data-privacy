@@ -1,8 +1,8 @@
-{% macro sha512(column) -%}
-  {{- return(adapter.dispatch('sha512', 'dbt_data_privacy')(column)) -}}
+{% macro sha512(expression) -%}
+  {{- return(adapter.dispatch('sha512', 'dbt_data_privacy')(expression)) -}}
 {%- endmacro %}
 
-{%- macro bigquery__sha512(column) -%}
-  {%- set secured_expression = "TO_BASE64(SHA512(CAST(" ~  column ~ " AS STRING)))" -%}
+{%- macro bigquery__sha512(expression) -%}
+  {%- set secured_expression = "TO_BASE64(SHA512(CAST(" ~  expression ~ " AS STRING)))" -%}
   {%- do return(secured_expression) -%}
 {%- endmacro -%}

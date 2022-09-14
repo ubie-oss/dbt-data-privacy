@@ -7,5 +7,10 @@
 {% endmacro %}
 
 {% macro contains_pseudonymized_unique_identifiers(columns) %}
-  {{ return(true) }}
+  {% set columns_with_policy_tags = dbt_data_privacy.get_columns_by_policy_tag(columns, "unique_identifier") %}
+  {% if columns_with_policy_tags | length > 0 %}
+    {{ return(true) }}
+  {% else %}
+    {{ return(false) }}
+  {% endif %}
 {% endmacro %}

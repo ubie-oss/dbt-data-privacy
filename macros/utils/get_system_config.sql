@@ -24,22 +24,22 @@
 {% macro get_default_system_config() %}
   {% set system_config = {
       "default_materialization": "view",
-      "data_handling_standard": dbt_data_privacy.get_default_data_handling_standard(),
+      "data_handling_standards": dbt_data_privacy.get_default_data_handling_standards(),
       "tag": dbt_data_privacy.get_default_attached_tag(),
     } %}
   {{ return(system_config) }}
 {% endmacro %}
 
-{% macro get_data_handling_standard() %}
+{% macro get_data_handling_standards() %}
   {% set system_config = dbt_data_privacy.get_system_config() %}
-  {% if "data_handling_standard" not in system_config %}
-    {{ exceptions.raise_compiler_error("data_handling_standard isn't set.") }}
+  {% if "data_handling_standards" not in system_config %}
+    {{ exceptions.raise_compiler_error("data_handling_standards isn't set.") }}
   {% endif %}
-  {{ return(system_config["data_handling_standard"]) }}
+  {{ return(system_config["data_handling_standards"]) }}
 {% endmacro %}
 
-{% macro get_default_data_handling_standard() %}
-  {% set default_data_handling_standard = {
+{% macro get_default_data_handling_standards() %}
+  {% set default_data_handling_standards = {
     'public': {
       'method': 'RAW',
       },
@@ -53,34 +53,34 @@
       'method': 'DROPPED',
       },
     } %}
-  {{ return(default_data_handling_standard) }}
+  {{ return(default_data_handling_standards) }}
 {% endmacro %}
 
-{% macro get_data_handling_standard_definition(data_handling_standard, level) %}
-  {% if level in data_handling_standard %}
+{% macro get_data_handling_standard_by_level(data_handling_standards, level) %}
+  {% if level in data_handling_standards %}
     {# method #}
-    {% if "method" not in data_handling_standard[level] %}
-      {{ exceptions.raise_compiler_error("'method' isn't set in level {} of {}".format(level, data_handling_standard)) }}
+    {% if "method" not in data_handling_standards[level] %}
+      {{ exceptions.raise_compiler_error("'method' isn't set in level {} of {}".format(level, data_handling_standards)) }}
     {% endif %}
-    {% set method = data_handling_standard[level]["method"] %}
+    {% set method = data_handling_standards[level]["method"] %}
 
     {# with #}
-    {% if "with" in data_handling_standard[level] %}
-      {% set with = data_handling_standard[level]["with"] %}
+    {% if "with" in data_handling_standards[level] %}
+      {% set with = data_handling_standards[level]["with"] %}
     {% else %}
       {% set with = none %}
     {% endif %}
 
     {# converted_level #}
-    {% if "converted_level" in data_handling_standard[level] %}
-      {% set converted_level = data_handling_standard[level]["converted_level"] %}
+    {% if "converted_level" in data_handling_standards[level] %}
+      {% set converted_level = data_handling_standards[level]["converted_level"] %}
     {% else %}
       {% set converted_level = none %}
     {% endif %}
 
     {{ return((method, with, converted_level)) }}
   {% else %}
-    {{ exceptions.raise_compiler_error("No such level {} in {}".format(level, data_handling_standard)) }}
+    {{ exceptions.raise_compiler_error("No such level {} in {}".format(level, data_handling_standards)) }}
   {% endif %}
 {% endmacro %}
 
