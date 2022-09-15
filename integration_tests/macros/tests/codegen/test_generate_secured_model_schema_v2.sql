@@ -53,6 +53,10 @@ models:
     meta:
       key1: value1
       key2: value2
+    tests:
+      # The test enables us to show the schema YAML file to delete before re-generating the file.
+      # A schema YAML file doesn't appear by `dbt ls --output path`, when it contains no tests.
+      - dbt_data_privacy.dummy_test
 
     columns:
       - name:

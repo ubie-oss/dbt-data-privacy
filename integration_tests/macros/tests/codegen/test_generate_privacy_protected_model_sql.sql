@@ -100,7 +100,7 @@
 WITH privacy_protected_model AS (
   SELECT
     id AS `id`
-    TO_BASE64(SHA256(CAST(user_id AS STRING))) AS `user_id`
+    SHA256(CAST(user_id AS STRING)) AS `user_id`
   FROM
     {{ ref('test_restricted_users') }}
 

@@ -8,11 +8,11 @@
   {{ assert_equals(result, expected) }}
 
   {%- set result = dbt_data_privacy.get_secured_expression_by_method("column_a", "SHA256") -%}
-  {%- set expected = 'TO_BASE64(SHA256(CAST(column_a AS STRING)))' -%}
+  {%- set expected = 'SHA256(CAST(column_a AS STRING))' -%}
   {{ assert_equals(result, expected) }}
 
   {%- set result = dbt_data_privacy.get_secured_expression_by_method("column_a", "SHA512") -%}
-  {%- set expected = 'TO_BASE64(SHA512(CAST(column_a AS STRING)))' -%}
+  {%- set expected = 'SHA512(CAST(column_a AS STRING))' -%}
   {{ assert_equals(result, expected) }}
 
   {%- set result = dbt_data_privacy.get_secured_expression_by_method("column_a", "DROPPED") -%}
