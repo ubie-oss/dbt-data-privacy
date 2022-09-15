@@ -4,6 +4,7 @@
 
 {% macro default__test_generate_secured_model_schema_v2() %}
   {%- set result = dbt_data_privacy.generate_secured_model_schema_v2(
+      target="data_analysis",
       name="test_project__test_dataset__test_table",
       database="test-project",
       schema="test_dataset",
@@ -11,6 +12,7 @@
       description="Sample description",
       columns={
         "id": {
+          "name": "id",
           "description": "Raw ID",
           "meta": {
             "data_privacy": {
@@ -19,6 +21,7 @@
           },
         },
         "user_id": {
+          "name": "user_id",
           "description": "User ID",
           "meta": {
             "data_privacy": {
@@ -59,19 +62,19 @@ models:
       - dbt_data_privacy.dummy_test
 
     columns:
-      - name:
+      - name: id
         description: |
           Raw ID
         meta:
           data_privacy:
             level: internal
 
-      - name:
+      - name: user_id
         description: |
           User ID
         meta:
           data_privacy:
-            level: confidential
+            level: internal
         tests:
           - not_null
 {%- endraw -%}

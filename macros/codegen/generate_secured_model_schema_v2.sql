@@ -1,4 +1,5 @@
 {% macro generate_secured_model_schema_v2(
+      target,
       name,
       database,
       schema,
@@ -9,6 +10,7 @@
       labels={}
     ) %}
   {{- return(adapter.dispatch('generate_secured_model_schema_v2', 'dbt_data_privacy')(
+      target=target,
       name=name,
       database=database,
       schema=schema,
@@ -21,6 +23,7 @@
 {% endmacro %}
 
 {% macro default__generate_secured_model_schema_v2(
+      target,
       name,
       database,
       schema,
@@ -30,6 +33,14 @@
       tags=[],
       labels={}
     ) %}
+
+  {% if columns | length == 0 %}
+    {{ exceptions.raise_compiler_error("No columns for {}".format(name)) }}
+  {% endif %}
+
+  {%- set config = dbt_data_privacy.get_data_privacy_config_by_target(target) %}
+  {%- set data_handling_standards = config.get('data_handling_standards') %}
+  {%- set secured_columns = dbt_data_privacy.get_secured_columns(data_handling_standards, columns) %}
 
   {%- set schema_yaml -%}
 ---
@@ -60,10 +71,12 @@ models:
       - name: {{ column.name }}
         description: |
           {{ column.description | default('', true) }}
-        {% if 'data_privacy' in column.meta and column.meta.data_privacy.level -%}
+        {%- if 'data_privacy' in column.meta and column.meta.data_privacy.level %}
+        {%- set data_privacy_level = column.meta.data_privacy.level %}
         meta:
           data_privacy:
-            level: {{ column.meta.data_privacy.level }}
+            {#- Think of the downgraded data security level #}
+            level: {{ secured_columns.get(column_name, {}).get("level", column.meta.data_privacy.level) }}
         {%- endif %}
         {% if 'data_privacy' in column.meta
             and name in column.meta.data_privacy

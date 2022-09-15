@@ -56,7 +56,7 @@
   ) %}
 
   {% if columns | length == 0 %}
-    {# TODO raise an error #}
+    {{ exceptions.raise_compiler_error("No columns for {}.{}.{}".format(database, schema, alias)) }}
   {% endif %}
 
   {%- set config = dbt_data_privacy.get_data_privacy_config_by_target(target) %}

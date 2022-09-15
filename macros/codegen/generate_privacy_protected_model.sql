@@ -60,6 +60,7 @@
       ) %}
 
     {% set schema_yaml = dbt_data_privacy.generate_secured_model_schema_v2(
+        target=target,
         name=name,
         database=database,
         schema=schema,
