@@ -1,4 +1,5 @@
 {% macro generate_privacy_protected_model_sql(
+    target,
     materialized,
     database,
     schema,
@@ -16,6 +17,7 @@
     full_refresh=none
   ) %}
   {{- return(adapter.dispatch('generate_privacy_protected_model_sql', 'dbt_data_privacy')(
+      target=target,
       materialized=materialized,
       database=database,
       schema=schema,

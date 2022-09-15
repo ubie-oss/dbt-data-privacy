@@ -38,10 +38,7 @@
       "full_refresh": none,
       "enabled": true,
       "adapter_config": {
-        "partition_by": none,
-        "cluster_by": none,
         "require_partition_filter": true,
-        "partition_expiration_days": none,
         "grant_access_to": [
           { "project": "test-project1", "database": "test_dataset1" },
           { "project": "test-project2", "database": "test_dataset2" }
