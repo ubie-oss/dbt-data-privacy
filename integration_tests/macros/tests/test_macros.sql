@@ -8,7 +8,6 @@
   #}
   {% do test_is_macro_expression() %}
   {% do test_get_nodes() %}
-  {% do test_get_system_config() %}
 
   {#
     pseudonymization

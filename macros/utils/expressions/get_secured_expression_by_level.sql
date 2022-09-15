@@ -1,6 +1,5 @@
-{% macro get_secured_expression_by_level(column_name, level, column_conditions=none) %}
+{% macro get_secured_expression_by_level(data_handling_standards, column_name, level, column_conditions=none) %}
   {% set expression = "" %}
-  {% set data_handling_standards = dbt_data_privacy.get_data_handling_standards() %}
 
   {% if level in data_handling_standards %}
     {% set method, with, converted_level = dbt_data_privacy.get_data_handling_standard_by_level(data_handling_standards, level) %}

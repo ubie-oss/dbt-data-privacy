@@ -35,6 +35,7 @@
 {% endmacro %}
 
 {% macro bigquery__generate_privacy_protected_model_sql(
+    target,
     materialized,
     database,
     schema,
@@ -56,7 +57,9 @@
     {# TODO raise an error #}
   {% endif %}
 
-  {%- set secured_columns = dbt_data_privacy.get_secured_columns(columns) %}
+  {%- set config = dbt_data_privacy.get_data_privacy_config_by_target(target) %}
+  {%- set data_handling_standards = config.get('data_handling_standards') %}
+  {%- set secured_columns = dbt_data_privacy.get_secured_columns(data_handling_standards, columns) %}
 
   {# Generate a model SQL #}
   {%- set model_sql -%}
@@ -93,14 +96,8 @@
 
 WITH privacy_protected_model AS (
   SELECT
-    {%- for column_name, column_info in secured_columns.items() -%}
-      {%- if "data_privacy" in column_info.meta and column_info.meta.data_privacy.level %}
-        {% set expression = dbt_data_privacy.get_secured_expression_by_level(
-            column_name, column_info.meta.data_privacy.level, column_conditions=column_conditions) %}
-        {%- if expression is not none -%}
-          {{ expression }} AS `{{- column_name -}}`,
-        {%- endif -%}
-      {%- endif -%}
+    {%- for column_name, column_info in secured_columns.items() %}
+    {{ '{} AS `{}`'.format(column_info.get('secured_expression'), column_name) }}
     {%- endfor %}
   FROM
     {% if dbt_data_privacy.is_macro_expression(reference) -%}
@@ -108,7 +105,7 @@ WITH privacy_protected_model AS (
     {% else -%}
     {{ reference }}
     {%- endif %}
-  {% if where is not none -%}
+  {%- if where is not none %}
   WHERE
     {{ where }}
   {% endif -%}

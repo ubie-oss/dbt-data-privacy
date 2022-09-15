@@ -5,7 +5,7 @@
 
 {% macro get_data_security_level(column) %}
   {% set level = none %}
-  {% if not column.meta.data_privacy or none column.meta.data_privacy.level  %}
+  {% if column.meta.data_privacy is none or column.meta.data_privacy.level is none  %}
     {{  log("column {} doesn't have the data security level.".format(column.name)) }}
   {% else %}
     {% set level = column.meta.data_privacy.level %}

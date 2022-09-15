@@ -8,6 +8,7 @@ models:
     meta:
       data_privacy:
         - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents
+          target: data_analysis
           config:
             enabled: true
             materialized: view

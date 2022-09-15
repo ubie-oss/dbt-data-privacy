@@ -10,14 +10,6 @@
     enabled=true
   ) %}
 
-   {#- Append the default tags -#}
-   {% set attached_tag = dbt_data_privacy.get_attached_tag() %}
-   {% if tags is iterable %}
-     {% do tags.append(attached_tag) %}
-   {% else %}
-     {% set tags = [attached_tag] %}
-   {% endif %}
-
   {% set configurations = {
       "materialized": materialized,
       "database": database,

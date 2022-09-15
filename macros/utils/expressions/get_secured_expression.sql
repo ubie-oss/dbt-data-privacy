@@ -1,6 +1,5 @@
-{% macro get_secured_secured_expression(expression, level) %}
+{% macro get_secured_secured_expression(data_handling_standards, expression, level) %}
   {%- set secured_expression = none -%}
-  {%- set data_handling_standards = get_data_handling_standards() -%}
 
   {#
   {% if level in data_handling_standards %}

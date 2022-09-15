@@ -4,19 +4,20 @@ data_analysis_layer: "ubie-oss-data-engineering"
 
 
 data_privacy:
-  data_handling_standard:
-    public:
-      method: RAW
-    internal:
-      method: RAW
-    confidential:
-      converted_level: internal
-      method: SHA256
-    restricted:
-      converted_level: internal
-      method: CONDITIONAL_HASH
-      with:
-        default_method: SHA256
-        condition: contains_pseudonymized_unique_identifiers
-    highly_restricted:
-      method: DROPPED
+  data_analysis:
+    data_handling_standards:
+      public:
+        method: RAW
+      internal:
+        method: RAW
+      confidential:
+        converted_level: internal
+        method: SHA256
+      restricted:
+        converted_level: internal
+        method: CONDITIONAL_HASH
+        with:
+          default_method: SHA256
+          condition: contains_pseudonymized_unique_identifiers
+      highly_restricted:
+        method: DROPPED
