@@ -17,25 +17,28 @@
   {% for data_privacy_meta in node.meta.data_privacy %}
     {% set name = data_privacy_meta.get("name") %}
     {% set target = data_privacy_meta.get("target") %}
-    {% set config = data_privacy_meta.get("config") %}
+    {% set model_config = data_privacy_meta.get("config") %}
     {% set relationships = data_privacy_meta.get("relationships") | default(none, True) %}
     {% set where = data_privacy_meta.get("where") | default(none, True) %}
 
-    {% set model_config = dbt_data_privacy.format_model_config(**config) %}
-    {% set enabled = model_config["enabled"] %}
-    {% set full_refresh = model_config["full_refresh"] %}
-    {% set materialized = model_config["materialized"] %}
-    {% set database = model_config["database"] %}
-    {% set schema = model_config["schema"] %}
-    {% set alias = model_config["alias"] %}
-    {% set tags = model_config["tags"] %}
-    {% set labels = model_config["labels"] %}
-    {% set persist_docs = model_config["persist_docs"] %}
-    {% set adapter_config = model_config["adapter_config"] %}
-    {% set unknown_config = model_config["unknown_config"] %}
+    {% set data_privacy_config = dbt_data_privacy.get_data_privacy_config_by_target(target) %}
+    {% set default_materialization = dbt_data_privacy.get_default_materialization(data_privacy_config) %}
+
+    {% set model_config = dbt_data_privacy.format_model_config(**model_config) %}
+    {% set enabled = model_config.get("enabled") %}
+    {% set full_refresh = model_config.get("full_refresh", none) %}
+    {% set materialized = model_config.get("materialized", default_materialization) %}
+    {% set database = model_config.get("database") %}
+    {% set schema = model_config.get("schema") %}
+    {% set alias = model_config.get("alias") %}
+    {% set tags = model_config.get("tags") %}
+    {% set labels = model_config.get("labels") %}
+    {% set persist_docs = model_config.get("persist_docs") %}
+    {% set adapter_config = model_config.get("adapter_config") %}
+    {% set unknown_config = model_config.get("unknown_config") %}
 
     {# Append the target tag #}
-    {% do tags.append(target_tag) %}
+    {% do tags.extend([dbt_data_privacy.get_default_tag(data_privacy_config), target]) %}
 
     {% set model_sql = dbt_data_privacy.generate_privacy_protected_model_sql(
         target=target,

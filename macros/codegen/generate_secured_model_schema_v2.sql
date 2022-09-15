@@ -50,6 +50,10 @@ models:
       {{ k }}: {{ v }}
     {%- endfor %}
     {%- endif %}
+    tests:
+      # The test enables us to show the schema YAML file to delete before re-generating the file.
+      # A schema YAML file doesn't appear by `dbt ls --output path`, when it contains no tests.
+      - dbt_data_privacy.dummy_test
 
     {% if columns | length > 0 -%}
     columns: {%- for column_name, column in columns.items() %}
