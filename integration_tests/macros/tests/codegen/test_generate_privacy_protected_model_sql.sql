@@ -58,6 +58,20 @@
             },
           },
         },
+        "consents.data_analysis": {
+          "meta": {
+            "data_privacy": {
+              "level": "internal",
+            },
+          },
+        },
+        "consents.data_sharing": {
+          "meta": {
+            "data_privacy": {
+              "level": "internal",
+            },
+          },
+        }
       },
       where="1 = 1",
       relationships={
@@ -101,6 +115,11 @@ WITH privacy_protected_model AS (
   SELECT
     id AS `id`
     SHA256(CAST(user_id AS STRING)) AS `user_id`
+    STRUCT(
+      consents.data_analysis AS `data_analysis`
+
+      consents.data_sharing AS `data_sharing`
+      ) AS `consents`
   FROM
     {{ ref('test_restricted_users') }}
 

@@ -8,6 +8,9 @@
   #}
   {% do test_is_macro_expression() %}
   {% do test_get_nodes() %}
+  {% do test_create_deep_dict() %}
+  {% do test_deep_merge_dicts() %}
+  {% do test_restructure_secured_columns() %}
 
   {#
     pseudonymization
