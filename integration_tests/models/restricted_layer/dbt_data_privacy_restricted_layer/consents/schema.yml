@@ -8,6 +8,7 @@ models:
     meta:
       data_privacy:
         - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents
+          target: data_analysis
           config:
             enabled: true
             materialized: view
@@ -21,7 +22,7 @@ models:
             labels:
               modeled_by: dbt
           where: |
-            data_analysis_agree IS TRUE
+            consent.data_analysis IS TRUE
           extra_meta:
             database_alias: data_analysis_layer
 
@@ -40,15 +41,21 @@ models:
         description: "Pseudonymized user ID"
         tests:
           - not_null
-      - name: data_analysis_agree
+      - name: consent.data_analysis
         description: "Consent agree of data analysis"
         meta:
           data_privacy:
             level: internal
-      - name: data_sharing_agree
+      - name: consent.data_sharing
         description: "Consent agree of data sharing"
         tests:
           - not_null
         meta:
           data_privacy:
-            level: internal
+            level: confidential
+      - name: dummy_array
+        data_type: ARRAY
+        description: "Test array"
+        meta:
+          data_privacy:
+            level: confidential

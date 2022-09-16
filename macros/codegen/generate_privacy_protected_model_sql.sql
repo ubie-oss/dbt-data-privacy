@@ -1,4 +1,5 @@
 {% macro generate_privacy_protected_model_sql(
+    target,
     materialized,
     database,
     schema,
@@ -16,6 +17,7 @@
     full_refresh=none
   ) %}
   {{- return(adapter.dispatch('generate_privacy_protected_model_sql', 'dbt_data_privacy')(
+      target=target,
       materialized=materialized,
       database=database,
       schema=schema,
@@ -35,6 +37,7 @@
 {% endmacro %}
 
 {% macro bigquery__generate_privacy_protected_model_sql(
+    target,
     materialized,
     database,
     schema,
@@ -53,8 +56,15 @@
   ) %}
 
   {% if columns | length == 0 %}
-    {# TODO raise an error #}
+    {{ exceptions.raise_compiler_error("No columns for {}.{}.{}".format(database, schema, alias)) }}
   {% endif %}
+
+  {%- set config = dbt_data_privacy.get_data_privacy_config_by_target(target) %}
+  {%- set data_handling_standards = config.get('data_handling_standards') %}
+  {%- set secured_columns = dbt_data_privacy.get_secured_columns(data_handling_standards, columns) %}
+
+  {% set restructured_secured_columns = dbt_data_privacy.restructure_secured_columns(secured_columns) %}
+  {% set restructured_secured_expressions = dbt_data_privacy.convert_secured_columns_to_expressions(restructured_secured_columns) %}
 
   {# Generate a model SQL #}
   {%- set model_sql -%}
@@ -80,7 +90,7 @@
       {{ '"' ~ k ~ '"' }}: {{ dbt_data_privacy.safe_quote(v) }},
       {%- endfor %}
     },
-    {% for k, v in unknown_config.items() -%}
+    {%- for k, v in unknown_config.items() %}
     {{ k }}={{ dbt_data_privacy.safe_quote(v) }},
     {%- endfor %}
     persist_docs={{ persist_docs }},
@@ -91,21 +101,16 @@
 
 WITH privacy_protected_model AS (
   SELECT
-    {%- for column_name, column_info in columns.items() -%}
-      {%- if "data_privacy" in column_info.meta and column_info.meta.data_privacy.level %}
-        {% set expression = dbt_data_privacy.get_secured_expression(column_name, column_info.meta.data_privacy.level) %}
-        {%- if expression is not none -%}
-          {{ expression }} AS `{{- column_name -}}`,
-        {%- endif -%}
-      {%- endif -%}
+    {%- for column_name, restructured_secured_expression in restructured_secured_expressions.items() %}
+    {{ restructured_secured_expression }} AS `{{- column_name -}}`,
     {%- endfor %}
   FROM
-    {% if dbt_data_privacy.is_macro_expression(reference) -%}
+    {%- if dbt_data_privacy.is_macro_expression(reference) %}
     {{ '{{ ' ~ reference ~ ' }}'}}
-    {% else -%}
+    {%- else %}
     {{ reference }}
     {%- endif %}
-  {% if where is not none -%}
+  {%- if where is not none %}
   WHERE
     {{ where }}
   {% endif -%}

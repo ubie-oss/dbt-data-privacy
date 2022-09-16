@@ -4,6 +4,7 @@
 
 {% macro default__test_generate_secured_model_schema_v2() %}
   {%- set result = dbt_data_privacy.generate_secured_model_schema_v2(
+      target="data_analysis",
       name="test_project__test_dataset__test_table",
       database="test-project",
       schema="test_dataset",
@@ -11,6 +12,7 @@
       description="Sample description",
       columns={
         "id": {
+          "name": "id",
           "description": "Raw ID",
           "meta": {
             "data_privacy": {
@@ -19,6 +21,7 @@
           },
         },
         "user_id": {
+          "name": "user_id",
           "description": "User ID",
           "meta": {
             "data_privacy": {
@@ -28,6 +31,24 @@
                   "not_null"
                 ],
               },
+            },
+          },
+        },
+        "consents.data_analysis": {
+          "name": "consents.data_analysis",
+          "description": "Agree on data analysis",
+          "meta": {
+            "data_privacy": {
+              "level": "internal",
+            },
+          },
+        },
+        "consents.data_sharing": {
+          "name": "consents.data_sharing",
+          "description": "Agree on data sharing",
+          "meta": {
+            "data_privacy": {
+              "level": "internal",
             },
           },
         },
@@ -53,23 +74,40 @@ models:
     meta:
       key1: value1
       key2: value2
+    tests:
+      # The test enables us to show the schema YAML file to delete before re-generating the file.
+      # A schema YAML file doesn't appear by `dbt ls --output path`, when it contains no tests.
+      - dbt_data_privacy.dummy_test
 
     columns:
-      - name:
+      - name: id
         description: |
           Raw ID
         meta:
           data_privacy:
             level: internal
 
-      - name:
+      - name: user_id
         description: |
           User ID
         meta:
           data_privacy:
-            level: confidential
+            level: internal
         tests:
           - not_null
+      - name: consents.data_analysis
+        description: |
+          Agree on data analysis
+        meta:
+          data_privacy:
+            level: internal
+
+      - name: consents.data_sharing
+        description: |
+          Agree on data sharing
+        meta:
+          data_privacy:
+            level: internal
 {%- endraw -%}
   {%- endset %}
 

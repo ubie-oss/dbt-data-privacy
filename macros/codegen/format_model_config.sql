@@ -10,14 +10,6 @@
     enabled=true
   ) %}
 
-   {#- Append the default tags -#}
-   {% set attached_tag = dbt_data_privacy.get_attached_tag() %}
-   {% if tags is iterable %}
-     {% do tags.append(attached_tag) %}
-   {% else %}
-     {% set tags = [attached_tag] %}
-   {% endif %}
-
   {% set configurations = {
       "materialized": materialized,
       "database": database,
@@ -48,15 +40,29 @@
   ) %}
 
   {% set extra_config = {
-      "adapter_config": {
-        "partition_by": partition_by,
-        "cluster_by": cluster_by,
-        "require_partition_filter": require_partition_filter,
-        "partition_expiration_days": partition_expiration_days,
-        "grant_access_to": grant_access_to,
-      },
-      "unknown_config": kwargs,
+      "adapter_config": {},
+      "unknown_config": {},
     } %}
+
+  {% if partition_by is not none %}
+    {% do extra_config["adapter_config"].update({"partition_by": partition_by}) %}
+  {% endif %}
+  {% if cluster_by is not none %}
+    {% do extra_config["adapter_config"].update({"cluster_by": cluster_by}) %}
+  {% endif %}
+  {% if require_partition_filter is not none %}
+    {% do extra_config["adapter_config"].update({"require_partition_filter": require_partition_filter}) %}
+  {% endif %}
+  {% if partition_expiration_days is not none %}
+    {% do extra_config["adapter_config"].update({"partition_expiration_days": partition_expiration_days}) %}
+  {% endif %}
+  {% if grant_access_to is not none %}
+    {% do extra_config["adapter_config"].update({"grant_access_to": grant_access_to}) %}
+  {% endif %}
+
+  {% if kwargs is not none and kwargs is mapping %}
+    {% do extra_config.update({"unknown_config": kwargs}) %}
+  {% endif %}
 
   {{ return(extra_config) }}
 {% endmacro %}

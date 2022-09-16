@@ -22,31 +22,32 @@
     } %}
   {% set result = dbt_data_privacy.format_model_config(**model_config) %}
   {% set expected = {
-      'materialized': 'view',
-      'database': 'test-project',
-      'schema': 'test_dataset',
-      'alias': 'test_alias',
-      'tags': ['tag1', 'tag1', 'generated_by_dbt_data_privacy'],
-      'labels': {
-        'key1': 'value1',
-        'key2': 'value2',
+      "materialized": "view",
+      "database": "test-project",
+      "schema": "test_dataset",
+      "alias": "test_alias",
+      "tags": [ "tag1", "tag1" ],
+      "labels": {
+        "key1": "value1",
+        "key2": "value2"
       },
-      'persist_docs': {'relation': True, 'columns': True},
-      'full_refresh': None,
-      'enabled': True,
-      'adapter_config': {
-        'partition_by': None,
-        'cluster_by': None,
+      "persist_docs": {
+        "relation": true,
+        "columns": true
+      },
+      "full_refresh": none,
+      "enabled": true,
+      "adapter_config": {
         "require_partition_filter": true,
-        "partition_expiration_days": None,
-        'grant_access_to': [
-          {'project': 'test-project1', 'database': 'test_dataset1'},
-          {'project': 'test-project2', 'database': 'test_dataset2'},
-        ],
+        "grant_access_to": [
+          { "project": "test-project1", "database": "test_dataset1" },
+          { "project": "test-project2", "database": "test_dataset2" }
+        ]
       },
-      'unknown_config': {
-        'no_such_config': 1,
-      },
-    } %}
+      "unknown_config": {
+        "no_such_config": 1
+      }
+    }
+    %}
   {{ assert_dict_equals(result, expected) }}
 {% endmacro %}

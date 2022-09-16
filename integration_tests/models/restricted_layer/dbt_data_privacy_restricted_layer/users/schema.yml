@@ -8,6 +8,7 @@ models:
     meta:
       data_privacy:
         - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer__users
+          target: data_analysis
           config:
             enabled: true
             materialized: view
@@ -25,7 +26,7 @@ models:
             fields:
               user_id: user_id
             where: |
-              data_analysis_agree IS TRUE
+              consent.data_analysis IS TRUE
           extra_meta:
             database_alias: data_analysis_layer
 
@@ -42,6 +43,8 @@ models:
         meta:
           data_privacy:
             level: confidential
+            policy_tags:
+              - unique_identifiers
             data_analysis_layer__dbt_data_privacy_data_analysis_layer__users:
               tests:
                 - relationships:

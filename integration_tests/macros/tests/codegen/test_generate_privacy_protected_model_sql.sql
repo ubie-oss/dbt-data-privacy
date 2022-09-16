@@ -21,6 +21,7 @@
         partition_expiration_days=7
     ) %}
   {%- set result = dbt_data_privacy.generate_privacy_protected_model_sql(
+      target="data_analysis",
       materialized="view",
       database="data-analysis-project",
       schema="test_dataset",
@@ -57,6 +58,28 @@
             },
           },
         },
+        "consents.data_analysis": {
+          "meta": {
+            "data_privacy": {
+              "level": "internal",
+            },
+          },
+        },
+        "consents.data_sharing": {
+          "meta": {
+            "data_privacy": {
+              "level": "internal",
+            },
+          },
+        },
+        "dummy_array": {
+          "data_type": "ARRAY",
+          "meta": {
+            "data_privacy": {
+              "level": "confidential",
+            },
+          },
+        }
       },
       where="1 = 1",
       relationships={
@@ -98,11 +121,15 @@
 
 WITH privacy_protected_model AS (
   SELECT
-        id AS `id`,
-        TO_BASE64(SHA256(CAST(user_id AS STRING))) AS `user_id`,
+    id AS `id`,
+    SHA256(CAST(user_id AS STRING)) AS `user_id`,
+    STRUCT(
+      consents.data_analysis AS `data_analysis`,
+      consents.data_sharing AS `data_sharing`
+    ) AS `consents`,
+    ARRAY(SELECT SHA256(CAST(e AS STRING)) FROM UNNEST(dummy_array) AS e) AS `dummy_array`,
   FROM
     {{ ref('test_restricted_users') }}
-
   WHERE
     1 = 1
   )

@@ -1,4 +1,4 @@
-{% macro generate_privacy_protected_models(do_print=true) %}
+{% macro generate_privacy_protected_models(verbose=true) %}
   {% set generated_models = [] %}
 
   {# Generate dbt models and sources #}
@@ -21,7 +21,7 @@
     {% endfor %}
   {% endif %}
 
-  {% if do_print is true %}
+  {% if verbose is true %}
     {% do print(tojson(generated_models)) %}
   {% endif %}
 
