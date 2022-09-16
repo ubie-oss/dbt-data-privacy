@@ -22,7 +22,7 @@ models:
             labels:
               modeled_by: dbt
           where: |
-            data_analysis_agree IS TRUE
+            consent.data_analysis IS TRUE
           extra_meta:
             database_alias: data_analysis_layer
 
@@ -41,12 +41,12 @@ models:
         description: "Pseudonymized user ID"
         tests:
           - not_null
-      - name: consents.data_analysis
+      - name: consent.data_analysis
         description: "Consent agree of data analysis"
         meta:
           data_privacy:
             level: internal
-      - name: consents.data_sharing
+      - name: consent.data_sharing
         description: "Consent agree of data sharing"
         tests:
           - not_null

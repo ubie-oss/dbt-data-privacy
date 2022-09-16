@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 
 # Constants
@@ -16,6 +16,9 @@ while (($# > 0)); do
   elif [[ "$1" == "--target" ]]; then
     dbt_target="${2}"
     shift 2
+  elif [[ "$1" == "--vars-path" ]]; then
+    vars_path="${2}"
+    shift 2
   fi
 done
 
@@ -23,7 +26,7 @@ done
 dbt deps --profiles-dir "${INTEGRATION_TESTS_DIR}/profiles" --target "${dbt_target:?}"
 
 # Integration tests
-dbt build --profiles-dir "${INTEGRATION_TESTS_DIR}/profiles" \
+dbt build --profiles-dir "${dbt_profiles_dir:?}" \
     --target "${dbt_target:?}" \
-    --vars "$(cat "${INTEGRATION_TESTS_DIR}/resources/vars/vars-${dbt_target}.yml")" \
+    --vars "$(cat "${vars_path:?}")" \
     --full-refresh

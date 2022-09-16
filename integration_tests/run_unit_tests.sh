@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 
 # Constants
@@ -16,7 +16,7 @@ while (($# > 0)); do
   elif [[ "$1" == "--target" ]]; then
     dbt_target="${2}"
     shift 2
-  elif [[ "$1" == "--vars" ]]; then
+  elif [[ "$1" == "--vars-path" ]]; then
     vars_path="${2}"
     shift 2
   fi

@@ -26,9 +26,9 @@ SELECT
   u.user_id AS `user_id`,
   {{ dbt_data_privacy.get_secured_expression_by_level(data_handling_standards, "u.user_id", "confidential") }} AS `pseudonymized_user_id`,
   STRUCT(
-    data_analysis_consents.agree AS `data_analysis_agree`,
-    data_sharing_consents.agree AS `data_sharing_agree`,
-  ) AS consents,
+    data_analysis_consents.agree AS `data_analysis`,
+    data_sharing_consents.agree AS `data_sharing`
+  ) AS consent,
   [1, 2, 3] AS dummy_array,
 FROM {{ ref("restricted_layer__dbt_data_privacy_seed__users") }} AS u
 LEFT OUTER JOIN {{ ref("restricted_layer__dbt_data_privacy_seed__data_analysis_consents") }} AS data_analysis_consents
