@@ -1,4 +1,4 @@
-{% macro conditional_hash(expression, with_params, column_conditions) -%}
+{% macro conditional_hash(expression, with_params, column_conditions, data_type=none) -%}
   {# Validate inputs #}
   {% if with_params is none %}
     {{ exceptions.raise_compiler_error("'with_params' is none") }}
@@ -12,12 +12,13 @@
     {{ exceptions.raise_compiler_error("No matched condition {} in column_conditions {}".format(with_params['condition'], column_conditions)) }}
   {% endif %}
 
-  {{- return(adapter.dispatch('conditional_hash', 'dbt_data_privacy')(expression, with_params, column_conditions)) -}}
+  {{- return(adapter.dispatch('conditional_hash', 'dbt_data_privacy')(
+      expression, with_params, column_conditions, data_type=data_type)) -}}
 {%- endmacro %}
 
-{%- macro bigquery__conditional_hash(expression, with_params, conditions) -%}
+{%- macro bigquery__conditional_hash(expression, with_params, conditions, data_type=none) -%}
   {% if column_conditions[with_params['condition']] is true  %}
-    {%- set secured_expression = dbt_data_privacy.get_secured_expression_by_method(expression, default_method) -%}
+    {%- set secured_expression = dbt_data_privacy.get_secured_expression_by_method(expression, default_method, data_type=data_type) -%}
     {%- do return(secured_expression) -%}
   {% else %}
     {%- do return(expression) -%}

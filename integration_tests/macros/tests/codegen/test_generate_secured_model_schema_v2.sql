@@ -34,6 +34,24 @@
             },
           },
         },
+        "consents.data_analysis": {
+          "name": "consents.data_analysis",
+          "description": "Agree on data analysis",
+          "meta": {
+            "data_privacy": {
+              "level": "internal",
+            },
+          },
+        },
+        "consents.data_sharing": {
+          "name": "consents.data_sharing",
+          "description": "Agree on data sharing",
+          "meta": {
+            "data_privacy": {
+              "level": "internal",
+            },
+          },
+        },
       },
       tags=["tag1"],
       labels={
@@ -77,6 +95,19 @@ models:
             level: internal
         tests:
           - not_null
+      - name: consents.data_analysis
+        description: |
+          Agree on data analysis
+        meta:
+          data_privacy:
+            level: internal
+
+      - name: consents.data_sharing
+        description: |
+          Agree on data sharing
+        meta:
+          data_privacy:
+            level: internal
 {%- endraw -%}
   {%- endset %}
 

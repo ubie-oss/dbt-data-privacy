@@ -41,15 +41,21 @@ models:
         description: "Pseudonymized user ID"
         tests:
           - not_null
-      - name: data_analysis_agree
+      - name: consents.data_analysis
         description: "Consent agree of data analysis"
         meta:
           data_privacy:
             level: internal
-      - name: data_sharing_agree
+      - name: consents.data_sharing
         description: "Consent agree of data sharing"
         tests:
           - not_null
         meta:
           data_privacy:
-            level: internal
+            level: confidential
+      - name: dummy_array
+        data_type: ARRAY
+        description: "Test array"
+        meta:
+          data_privacy:
+            level: confidential

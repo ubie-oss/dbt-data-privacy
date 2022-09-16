@@ -4,10 +4,13 @@
 
   {% for column_name, column_info in columns.items() %}
     {% if "data_privacy" in column_info.meta and column_info.meta.data_privacy.level %}
+      {% set data_type = column_info.get("data_type", none) %}
+
       {% set secured_expression = dbt_data_privacy.get_secured_expression_by_level(
           data_handling_standards,
           column_name,
           column_info.meta.data_privacy.level,
+          data_type=data_type,
           column_conditions=column_conditions) %}
 
       {% set level = column_info.meta.data_privacy.level %}

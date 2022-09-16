@@ -28,7 +28,8 @@ SELECT
   STRUCT(
     data_analysis_consents.agree AS `data_analysis_agree`,
     data_sharing_consents.agree AS `data_sharing_agree`,
-  ) AS consents
+  ) AS consents,
+  [1, 2, 3] AS dummy_array,
 FROM {{ ref("restricted_layer__dbt_data_privacy_seed__users") }} AS u
 LEFT OUTER JOIN {{ ref("restricted_layer__dbt_data_privacy_seed__data_analysis_consents") }} AS data_analysis_consents
   ON u.user_id = data_analysis_consents.user_id

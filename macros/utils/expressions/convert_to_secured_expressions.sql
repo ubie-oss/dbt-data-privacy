@@ -22,10 +22,10 @@
     {%- set structured_secured_expression -%}
     STRUCT(
       {%- for sub_k, sub_v in restructured_secured_column.items() %}
-      {{ dbt_data_privacy.convert_secured_column_to_expression(sub_v) }} AS `{{- sub_k -}}`
-      {% endfor -%}
+      {{ dbt_data_privacy.convert_secured_column_to_expression(sub_v) }} AS `{{- sub_k -}}`{%- if not loop.last %},{%- endif %}
+      {%- endfor %}
     )
-    {%- endset -%}
+    {%- endset %}
   {% elif restructured_secured_column is mapping and "secured_expression" in restructured_secured_column %}
     {% set structured_secured_expression = restructured_secured_column.get("secured_expression") %}
   {% else %}

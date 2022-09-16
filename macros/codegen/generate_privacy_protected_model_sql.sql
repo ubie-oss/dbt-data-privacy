@@ -90,7 +90,7 @@
       {{ '"' ~ k ~ '"' }}: {{ dbt_data_privacy.safe_quote(v) }},
       {%- endfor %}
     },
-    {% for k, v in unknown_config.items() -%}
+    {%- for k, v in unknown_config.items() %}
     {{ k }}={{ dbt_data_privacy.safe_quote(v) }},
     {%- endfor %}
     persist_docs={{ persist_docs }},
@@ -102,12 +102,12 @@
 WITH privacy_protected_model AS (
   SELECT
     {%- for column_name, restructured_secured_expression in restructured_secured_expressions.items() %}
-    {{ restructured_secured_expression }} AS `{{- column_name -}}`
+    {{ restructured_secured_expression }} AS `{{- column_name -}}`,
     {%- endfor %}
   FROM
-    {% if dbt_data_privacy.is_macro_expression(reference) -%}
+    {%- if dbt_data_privacy.is_macro_expression(reference) %}
     {{ '{{ ' ~ reference ~ ' }}'}}
-    {% else -%}
+    {%- else %}
     {{ reference }}
     {%- endif %}
   {%- if where is not none %}
