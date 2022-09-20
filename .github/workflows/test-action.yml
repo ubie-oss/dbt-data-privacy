@@ -9,9 +9,15 @@ on:
 
 jobs:
   test-action:
+    permissions:
+      contents: write
+      pull-requests: write
     runs-on: ubuntu-latest
     env:
       DBT_DATA_PRIVACY_TEST_PROJECT: "${{ secrets.DBT_DATA_PRIVACY_TEST_PROJECT }}"
+    concurrency:
+      group: ${{ github.ref }}
+      cancel-in-progress: true
     strategy:
       fail-fast: false
       matrix:

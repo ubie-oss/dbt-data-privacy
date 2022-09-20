@@ -57,7 +57,7 @@ if [[ "$delete_before" == "1" ]] ; then
       $(if [[ -n "${dbt_profiles_dir+x}" ]]; then echo "--profiles-dir ${dbt_profiles_dir:?}"; fi) \
       $(if [[ -n "${dbt_profile+x}" ]]; then echo "--profile ${dbt_profile:?}"; fi) \
       $(if [[ -n "${dbt_target+x}" ]]; then echo "--target ${dbt_target:?}"; fi) \
-      $(if [[ -n "${dbt_vars_path+x}" ]]; then echo "--target ${dbt_vars_path:?}"; fi) \
+      $(if [[ -n "${dbt_vars_path+x}" ]]; then echo "--vars ${dbt_vars_path:?}"; fi) \
       --select "tag:${default_tag:?}" \
       --output path)"
   for generated_file in $generated_files
