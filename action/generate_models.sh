@@ -54,11 +54,11 @@ if [[ "$delete_before" == "1" ]] ; then
   cat "${dbt_profiles_dir}/profiles.yml"
   # shellcheck disable=SC2046
   generated_files="$(dbt --quiet ls \
-      $(if [[ -n "${dbt_profiles_dir+x}" ]]; then echo "--profiles-dir ${dbt_profiles_dir:?}"; fi) \
-      $(if [[ -n "${dbt_profile+x}" ]]; then echo "--profile ${dbt_profile:?}"; fi) \
-      $(if [[ -n "${dbt_target+x}" ]]; then echo "--target ${dbt_target:?}"; fi) \
-      $(if [[ -n "${dbt_vars_path+x}" ]]; then echo "--vars ${dbt_vars_path:?}"; fi) \
-      --select "tag:${default_tag:?}" \
+      $(if [[ -n "${dbt_profiles_dir+x}" ]]; then echo "--profiles-dir \"${dbt_profiles_dir:?}\""; fi) \
+      $(if [[ -n "${dbt_profile+x}" ]]; then echo "--profile \"${dbt_profile:?}\""; fi) \
+      $(if [[ -n "${dbt_target+x}" ]]; then echo "--target \"${dbt_target:?}\""; fi) \
+      $(if [[ -n "${dbt_vars_path+x}" ]]; then echo "--vars \"$(car ${dbt_vars_path:?})\""; fi) \
+      --select "\"tag:${default_tag:?}\"" \
       --output path)"
   for generated_file in $generated_files
   do
