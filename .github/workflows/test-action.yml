@@ -67,12 +67,12 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           # Push the generated models
+          git fetch && git pull origin "${{ github.head_ref }}"
           git add "${{ github.workspace }}/integration_tests/models"
           git commit --signoff -m 'Generate dbt models by dbt-data-privacy'
           git push --set-upstream origin "HEAD:${{ github.head_ref }}"
-          # Pull the branch
-          git pull origin "${{ github.head_ref }}"
           # Revert the commit
+          git fetch && git pull origin "${{ github.head_ref }}"
           git reset --soft HEAD^
           git add .
           git push --set-upstream origin "HEAD:${{ github.head_ref }}"
