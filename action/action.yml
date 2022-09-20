@@ -57,6 +57,8 @@ runs:
           --verbose "${{ inputs.verbose }}"
     - id: git-push
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
         git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
