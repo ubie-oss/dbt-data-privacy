@@ -57,11 +57,11 @@ set +Eeuo pipefail
 if [[ "$delete_before" == "1" ]] ; then
   # shellcheck disable=SC2046
   generated_files="$(dbt --quiet ls \
-      $(if [[ -n "${dbt_profiles_dir+x}" ]]; then echo "--profiles-dir \'${dbt_profiles_dir:?}\'"; fi) \
-      $(if [[ -n "${dbt_profile+x}" ]]; then echo "--profile \'${dbt_profile:?}\'"; fi) \
-      $(if [[ -n "${dbt_target+x}" ]]; then echo "--target \'${dbt_target:?}\'"; fi) \
-      $(if [[ -n "${dbt_vars+x}" ]]; then echo "--vars \'${dbt_vars:?}\'"; fi) \
-      --select "\'tag:${default_tag:?}\'" \
+      $(if [[ -n "${dbt_profiles_dir+x}" ]]; then echo "--profiles-dir \"${dbt_profiles_dir:?}\""; fi) \
+      $(if [[ -n "${dbt_profile+x}" ]]; then echo "--profile \"${dbt_profile:?}\""; fi) \
+      $(if [[ -n "${dbt_target+x}" ]]; then echo "--target \"${dbt_target:?}\""; fi) \
+      $(if [[ -n "${dbt_vars+x}" ]]; then echo "--vars \"${dbt_vars:?}\""; fi) \
+      --select "\"tag:${default_tag:?}\"" \
       --output path)"
   for generated_file in $generated_files
   do
@@ -82,10 +82,10 @@ set +Eeuo pipefail
 # Get information about generated models
 # shellcheck disable=SC2046
 generated_models_json="$(dbt --quiet run-operation "dbt_data_privacy.generate_privacy_protected_models" \
-      $(if [[ -n "${dbt_profiles_dir+x}" ]]; then echo "--profiles-dir \'${dbt_profiles_dir:?}\'"; fi) \
-      $(if [[ -n "${dbt_profile+x}" ]]; then echo "--profile \'${dbt_profile:?}\'"; fi) \
-      $(if [[ -n "${dbt_target+x}" ]]; then echo "--target \'${dbt_target:?}\'"; fi) \
-      $(if [[ -n "${dbt_vars+x}" ]]; then echo "--vars \'${dbt_vars:?}\'"; fi))"
+      $(if [[ -n "${dbt_profiles_dir+x}" ]]; then echo "--profiles-dir \"${dbt_profiles_dir:?}\""; fi) \
+      $(if [[ -n "${dbt_profile+x}" ]]; then echo "--profile \"${dbt_profile:?}\""; fi) \
+      $(if [[ -n "${dbt_target+x}" ]]; then echo "--target \"${dbt_target:?}\""; fi) \
+      $(if [[ -n "${dbt_vars+x}" ]]; then echo "--vars \"${dbt_vars:?}\""; fi))"
 echo "::set-output name=generated-models-json::${generated_models_json}"
 
 # Generate models
