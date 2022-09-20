@@ -9,3 +9,5 @@ PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 
 yamllint -s "${PROJECT_DIR}/dbt_project.yml"
 yamllint -s "${PROJECT_DIR}/macros/"
+yamllint -s "${PROJECT_DIR}/action/"
+yamllint -s "${PROJECT_DIR}/.github/"
