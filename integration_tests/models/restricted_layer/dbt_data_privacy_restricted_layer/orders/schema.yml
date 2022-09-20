@@ -55,7 +55,7 @@ models:
         description: "Item ID"
         meta:
           data_privacy:
-            level: public
+            level: internal
         tests:
           - not_null
           - relationships:
