@@ -6,7 +6,8 @@ on:
   pull_request:
     paths:
       - macros/**/*
-      - integration_tests/models/**/*
+      - integration_tests/macros/**/*.sql
+      - integration_tests/models/**/*.sql
   workflow_run:
     workflows:
       - "Test the GitHub Actions"
