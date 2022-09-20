@@ -17,8 +17,11 @@ jobs:
       max-parallel: 1
       fail-fast: true
       matrix:
-        python-version: ["3.9", "3.10"]
-        pip-requirements: ["requirements-1.1.txt", "requirements-1.2.txt"]
+        include:
+          - python-version: "3.9"
+            pip-requirements: "requirements-1.1.txt"
+          - python-version: "3.10"
+            pip-requirements: "requirements-1.2.txt"
     defaults:
       run:
         shell: bash
@@ -57,7 +60,7 @@ jobs:
         shell: bash
         run: |
           rm -f "${{ github.workspace }}/integration_tests/models/.gitignore"
-      - name: Push and reset the generated models
+      - name: Push and revert the generated models
         shell: bash
         if: ${{ steps.test-action.generated-models-count }} != '0'
         run: |
@@ -68,10 +71,8 @@ jobs:
           git add "${{ github.workspace }}/integration_tests/models"
           git commit --signoff -m 'Generate dbt models by dbt-data-privacy'
           git push --set-upstream origin "HEAD:${{ github.head_ref }}"
-          # Reset the commit
-          git reset --soft HEAD~1
-          git add .
-          git commit --signoff -m 'Revert: Generate dbt models by dbt-data-privacy'
+          # Revert the commit
+          git revert HEAD
           git push --force --set-upstream origin "HEAD:${{ github.head_ref }}"
       # SEE https://github.com/stefanzweifel/git-auto-commit-action
 #      - uses: stefanzweifel/git-auto-commit-action@v4
