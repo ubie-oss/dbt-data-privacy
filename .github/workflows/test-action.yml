@@ -40,6 +40,10 @@ jobs:
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
           dbt deps --target bigquery
+      - name: debug
+        run: |
+          pwd
+          git status
       - name: Test the action
         id: test-action
         uses: ./action
