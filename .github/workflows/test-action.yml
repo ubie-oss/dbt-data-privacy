@@ -42,6 +42,7 @@ jobs:
           dbt deps --target bigquery
       - name: debug
         run: |
+          touch test.txt
           pwd
           git status
       - name: Test the action
