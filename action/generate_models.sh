@@ -61,15 +61,15 @@ if [[ "$delete_before" == "1" ]] ; then
   if [[ -n "${dbt_target+x}" ]]; then dbt_ls_options+=("--target" "${dbt_target:?}"); fi
   if [[ -n "${dbt_vars_path+x}" ]]; then dbt_ls_options+=("--vars" "$(cat "${dbt_vars_path:?}")"); fi
   # shellcheck disable=SC2046
-  generated_files="$(dbt --quiet ls \
+  deleted_files="$(dbt --quiet ls \
       --select "\"tag:${default_tag:?}\"" \
       --output path \
       "${dbt_ls_options[@]}")"
-  for generated_file in $generated_files
+  for deleted_file in $deleted_files
   do
-    if [[ -e "$generated_file" ]] ; then
-      rm -f "$generated_file"
-      echo "delete ${generated_file}"
+    if [[ -e "$deleted_file" ]] ; then
+      rm -f "$deleted_file"
+      echo "delete ${deleted_file}"
     fi
   done
 fi
@@ -111,12 +111,24 @@ echo "$generated_models_json" \
       model_path="${dbt_models_dir:?}/${database_alias:?}/${schema:?}/${alias:?}"
       model_file="${name}.sql"
       schema_file="schema.yml"
-      echo "create ${model_path}"
-      echo "create ${model_file}"
       mkdir -p "$model_path"
       echo "$model_sql" > "${model_path}/${model_file}"
       echo "$schema_yaml" > "${model_path}/${schema_file}"
+      echo "create ${model_path}/${model_file}"
+      echo "create ${model_file}/${schema_file}"
     done
+
+set -Eeuo pipefail
+echo '::endgroup::'
+
+# Show generated dbt models
+echo '::group::Show generated dbt models'
+set +Eeuo pipefail
+
+dbt ls \
+    --select "tag:${default_tag:?}" \
+    --output path \
+    "${dbt_ls_options[@]}"
 
 set -Eeuo pipefail
 echo '::endgroup::'

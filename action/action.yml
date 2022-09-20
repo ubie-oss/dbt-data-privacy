@@ -9,8 +9,7 @@ inputs:
     required: true
   dbt_models_dir:
     description: "Path for models from the working directory"
-    required: false
-    default: "models"
+    required: true
   dbt_profiles_dir:
     description: "Which directory to look in for the profiles.yml file."
     required: false
