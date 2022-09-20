@@ -120,13 +120,3 @@ echo "$generated_models_json" \
 
 set -Eeuo pipefail
 echo '::endgroup::'
-
-# Show generated dbt models
-echo '::group::Show generated dbt models'
-set +Eeuo pipefail
-
-git status -s
-find "${dbt_models_dir}"
-
-set -Eeuo pipefail
-echo '::endgroup::'

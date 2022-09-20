@@ -40,11 +40,6 @@ jobs:
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
           dbt deps --target bigquery
-      - name: debug
-        run: |
-          touch test.txt
-          pwd
-          git status
       - name: Test the action
         id: test-action
         uses: ./action
@@ -58,3 +53,30 @@ jobs:
           dbt_vars_path: "${{ github.workspace }}/integration_tests/resources/vars/vars-bigquery.basic.yml"
           delete_before: "1"
           verbose: "1"
+      - name: Delete .gitignore for the generated models
+        shell: bash
+        run: |
+          rm -f "${{ github.workspace }}/integration_tests/models/.gitignore"
+      - name: Push and revert the generated models
+        shell: bash
+        run: |
+          # Configure the account
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          # Push the generated models
+          git add "${{ github.workspace }}/integration_tests/models"
+          git commit --signoff -m 'Generate dbt models by dbt-data-privacy'
+          git push --set-upstream origin "HEAD:${{ github.head_ref }}"
+          # Revert the commit
+          git revert HEAD^
+          git push --set-upstream origin "HEAD:${{ github.head_ref }}"
+      # SEE https://github.com/stefanzweifel/git-auto-commit-action
+#      - uses: stefanzweifel/git-auto-commit-action@v4
+#        with:
+#          commit_message: "Generate dbt models by dbt-data-privacy"
+#          commit_options: '--signoff'
+#          commit_user_name: "github-actions[bot]"
+#          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+#          commit_author: "GitHub Action <41898282+github-actions[bot]@users.noreply.github.com>"
+#          repository: "${{ inputs.dbt_models_dir }}"
+#          add_options: '--force'
