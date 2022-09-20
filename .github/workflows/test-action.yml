@@ -36,9 +36,9 @@ jobs:
         id: test-action
         uses: ./action
         with:
-          github_token: "${{ github.token }}"
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
           working_directory: "${{ github.workspace }}/integration_tests"
-          dbt_profiles_dir: "${{ github.workspace }}/profiles"
+          dbt_profiles_dir: "${{ github.workspace }}/integration_tests/profiles"
           dbt_profile: "default"
           dbt_target: "bigquery"
           dbt_vars_path: "${{ github.workspace }}/integration_tests/resources/vars/vars-bigquery.basic.yml"
