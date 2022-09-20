@@ -6,6 +6,7 @@ on:
   pull_request:
     paths:
       - action/**/*
+      - integration_tests/models/**/schema.yml
 
 jobs:
   test-action:
