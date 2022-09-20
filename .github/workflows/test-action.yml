@@ -73,7 +73,7 @@ jobs:
           git reset --soft HEAD~1
           git add .
           git commit --signoff -m 'Revert: Generate dbt models by dbt-data-privacy'
-          git push --set-upstream origin "HEAD:${{ github.head_ref }}"
+          git push --force --set-upstream origin "HEAD:${{ github.head_ref }}"
       # SEE https://github.com/stefanzweifel/git-auto-commit-action
 #      - uses: stefanzweifel/git-auto-commit-action@v4
 #        with:
