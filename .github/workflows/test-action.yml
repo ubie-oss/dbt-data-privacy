@@ -36,6 +36,7 @@ jobs:
         id: test-action
         uses: ./action
         with:
+          github_token: "${{ github.token }}"
           working_directory: "${{ github.workspace }}/integration_tests"
           dbt_profiles_dir: "${{ github.workspace }}/profiles"
           dbt_profile: "default"
