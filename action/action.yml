@@ -55,21 +55,21 @@ runs:
           --dbt-models-dir "${{ inputs.dbt_models_dir }}" \
           --delete-before "${{ inputs.delete_before }}" \
           --verbose "${{ inputs.verbose }}"
-    - id: git-push
-      shell: bash
-      env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
-      run: |
-        git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
-        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add --force "${{ inputs.dbt_models_dir }}"
-        git commit -m "Generate dbt models by dbt-data-privacy" --signoff
-        git push origin HEAD:"${{ github.base_ref }}"
-#    - uses: stefanzweifel/git-auto-commit-action@v4
-#      with:
-#        commit_message: "Generate dbt models by dbt-data-privacy"
-#        commit_options: '--signoff'
-#        commit_user_name: "github-actions[bot]"
-#        commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
-#        commit_author: "GitHub Action <41898282+github-actions[bot]@users.noreply.github.com>"
+#    - id: git-push
+#      shell: bash
+#      env:
+#        GITHUB_TOKEN: ${{ inputs.github_token }}
+#      run: |
+#        git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+#        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+#        git config --local user.name "github-actions[bot]"
+#        git add --force "${{ inputs.dbt_models_dir }}"
+#        git commit -m "Generate dbt models by dbt-data-privacy" --signoff
+#        git push origin HEAD:"${{ github.base_ref }}"
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: "Generate dbt models by dbt-data-privacy"
+        commit_options: '--signoff'
+        commit_user_name: "github-actions[bot]"
+        commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+        commit_author: "GitHub Action <41898282+github-actions[bot]@users.noreply.github.com>"
