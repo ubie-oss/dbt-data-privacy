@@ -61,7 +61,7 @@ runs:
         git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git add --force "${ inputs.dbt_models_dir }"
+        git add --force "${{ inputs.dbt_models_dir }}"
         git commit -m "Generate dbt models by dbt-data-privacy"
         git push
 #    - uses: stefanzweifel/git-auto-commit-action@v4
