@@ -48,6 +48,9 @@ runs:
       shell: bash
       working-directory: "${{ inputs.working_directory }}"
       run: |
+        pwd
+        ls
+        ls "${GITHUB_ACTION_PATH}"
         bash ${GITHUB_ACTION_PATH}/generated_models.sh \
           --dbt-profiles-dir "${{ inputs.dbt_profiles_dir }}" \
           --dbt-profile "${{ inputs.dbt_profile }}" \
