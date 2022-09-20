@@ -52,7 +52,7 @@ runs:
         ls
         echo "${GITHUB_ACTION_PATH}"
         ls "${GITHUB_ACTION_PATH}"
-        bash ${GITHUB_ACTION_PATH}/generated_models.sh \
+        bash ${GITHUB_ACTION_PATH}/generate_models.sh \
           --dbt-profiles-dir "${{ inputs.dbt_profiles_dir }}" \
           --dbt-profile "${{ inputs.dbt_profile }}" \
           --dbt-target "${{ inputs.dbt_target }}" \
