@@ -125,10 +125,7 @@ echo '::endgroup::'
 echo '::group::Show generated dbt models'
 set +Eeuo pipefail
 
-dbt ls \
-    --select "tag:${default_tag:?}" \
-    --output path \
-    "${dbt_ls_options[@]}"
+git status -s
 
 set -Eeuo pipefail
 echo '::endgroup::'
