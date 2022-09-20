@@ -109,15 +109,13 @@ echo "$generated_models_json" \
 
       # Save a model
       model_path="${dbt_models_dir:?}/${database_alias:?}/${schema:?}/${alias:?}"
-      model_file="${name}.sql"
+      model_file="${name:?}.sql"
       schema_file="schema.yml"
       mkdir -p "$model_path"
-      echo "$model_sql" > "${model_path}/${model_file}"
-      echo "$schema_yaml" > "${model_path}/${schema_file}"
+      echo "${model_sql:?}" > "${model_path}/${model_file}"
+      echo "${schema_yaml:?}" > "${model_path}/${schema_file}"
       echo "create ${model_path}/${model_file}"
       echo "create ${model_path}/${schema_file}"
-      ls -l "${model_path}/${model_file}"
-      ls -l "${model_path}/${schema_file}"
     done
 
 set -Eeuo pipefail
@@ -128,6 +126,7 @@ echo '::group::Show generated dbt models'
 set +Eeuo pipefail
 
 git status -s
+find "${dbt_models_dir}"
 
 set -Eeuo pipefail
 echo '::endgroup::'
