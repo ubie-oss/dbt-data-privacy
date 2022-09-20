@@ -115,7 +115,7 @@ echo "$generated_models_json" \
       echo "$model_sql" > "${model_path}/${model_file}"
       echo "$schema_yaml" > "${model_path}/${schema_file}"
       echo "create ${model_path}/${model_file}"
-      echo "create ${model_file}/${schema_file}"
+      echo "create ${model_path}/${schema_file}"
     done
 
 set -Eeuo pipefail
