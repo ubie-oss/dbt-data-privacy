@@ -26,3 +26,6 @@ docs:
   - docs/*.md
   - docs/**/*.md
   - README.md
+
+action:
+  - action/*

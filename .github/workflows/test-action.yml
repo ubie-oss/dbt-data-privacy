@@ -5,7 +5,7 @@ on:
       - main
   pull_request:
     paths:
-      - actions/
+      - action/
 
 jobs:
   test-action:
