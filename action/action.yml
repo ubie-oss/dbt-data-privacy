@@ -50,6 +50,7 @@ runs:
       run: |
         pwd
         ls
+        echo "${GITHUB_ACTION_PATH}"
         ls "${GITHUB_ACTION_PATH}"
         bash ${GITHUB_ACTION_PATH}/generated_models.sh \
           --dbt-profiles-dir "${{ inputs.dbt_profiles_dir }}" \
