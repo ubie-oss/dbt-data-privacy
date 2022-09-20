@@ -5,8 +5,8 @@ on:
       - main
   pull_request:
     paths:
-      - macros/
-      - integration_tests/models/
+      - macros/**/*
+      - integration_tests/models/**/*
 
 jobs:
   bigquery:

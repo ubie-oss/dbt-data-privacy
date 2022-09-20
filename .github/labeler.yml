@@ -29,3 +29,4 @@ docs:
 
 action:
   - action/*
+  - action/**/*
