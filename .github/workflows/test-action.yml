@@ -69,7 +69,7 @@ jobs:
           git commit --signoff -m 'Generate dbt models by dbt-data-privacy'
           git push --set-upstream origin "HEAD:${{ github.head_ref }}"
           # Revert the commit
-          # git pull --ff origin "${{ github.head_ref }}"
+          git pull --ff origin "${{ github.head_ref }}"
           git reset --soft HEAD~1
           git add .
           git commit --signoff -m 'Revert: Generate dbt models by dbt-data-privacy'
