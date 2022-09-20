@@ -34,7 +34,7 @@ jobs:
           pip install -r "requirements/${{ matrix.pip-requirements }}"
       - name: Test the action
         id: test-action
-        uses: ./actions
+        uses: ./action
         with:
           working_directory: "${{ github.workspace }}/integration_tests"
           dbt_profiles_dir: "${{ github.workspace }}/profiles"
