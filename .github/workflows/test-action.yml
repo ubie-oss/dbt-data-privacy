@@ -70,7 +70,7 @@ jobs:
           git push --set-upstream origin "HEAD:${{ github.head_ref }}"
           # Revert the commit
           git pull --ff origin "${{ github.head_ref }}"
-          git reset --soft HEAD^
+          git reset --soft HEAD~1
           git add .
           git push --set-upstream origin "HEAD:${{ github.head_ref }}"
       # SEE https://github.com/stefanzweifel/git-auto-commit-action
