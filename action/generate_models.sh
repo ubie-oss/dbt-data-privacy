@@ -93,6 +93,7 @@ generated_models_json="$(dbt --quiet run-operation "dbt_data_privacy.generate_pr
 echo "::set-output name=generated-models-json::${generated_models_json}"
 
 # Generate models
+generated="0"
 # shellcheck disable=SC2034
 echo "$generated_models_json" \
   | jq -r -c '.[]' \
@@ -116,7 +117,12 @@ echo "$generated_models_json" \
       echo "${schema_yaml:?}" > "${model_path}/${schema_file}"
       echo "create ${model_path}/${model_file}"
       echo "create ${model_path}/${schema_file}"
+
+      # Set the flag
+      generated="1"
     done
+
+echo "::set-output name=generated::${generated}"
 
 set -Eeuo pipefail
 echo '::endgroup::'
