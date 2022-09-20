@@ -36,9 +36,9 @@ inputs:
     default: "1"
 
 outputs:
-  generated:
-    description: "Returns '1' if models are generated. Otherwise, return '0'."
-    value: ${{ steps.generated-models.outputs.generated }}
+  generated-models-count:
+    description: "The number of generated models"
+    value: ${{ steps.generated-models.outputs.generated-models-count }}
   generated-models-json:
     description: 'The JSON object string of generated models'
     value: ${{ steps.generated-models.outputs.generated-models-json }}

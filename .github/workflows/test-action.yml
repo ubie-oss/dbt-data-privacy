@@ -61,7 +61,7 @@ jobs:
           rm -f "${{ github.workspace }}/integration_tests/models/.gitignore"
       - name: Push and reset the generated models
         shell: bash
-        if: ${{ steps.test-action.generated }} == '1'
+        if: ${{ steps.test-action.generated-models-count }} != '0'
         run: |
           git remote set-url origin "https://github-actions:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
