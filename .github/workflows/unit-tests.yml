@@ -3,13 +3,15 @@ on:
   push:
     branches:
       - main
-    paths:
-      - macros/**/*
-      - integration_tests/models/**/*
   pull_request:
     paths:
       - macros/**/*
       - integration_tests/models/**/*
+  workflow_run:
+    workflows:
+      - "Test the GitHub Actions"
+    types:
+      - completed
 
 jobs:
   bigquery:
