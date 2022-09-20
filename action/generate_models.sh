@@ -64,7 +64,7 @@ if [[ "$delete_before" == "1" ]] ; then
   generated_files="$(dbt --quiet ls \
       --select "\"tag:${default_tag:?}\"" \
       --output path \
-      "${dbt_ls_options[@:]}")"
+      "${dbt_ls_options[@]}")"
   for generated_file in $generated_files
   do
     if [[ -e "$generated_file" ]] ; then

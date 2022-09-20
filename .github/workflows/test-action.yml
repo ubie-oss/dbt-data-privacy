@@ -36,6 +36,10 @@ jobs:
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
           pip install -r "requirements/${{ matrix.pip-requirements }}"
+      - name: Install dbt Packages
+        working-directory: "${{ github.workspace }}/integration_tests"
+        run: |
+          dbt deps --target bigquery
       - name: Test the action
         id: test-action
         uses: ./action
