@@ -3,17 +3,17 @@ on:
   push:
     branches:
       - main
+    paths:
+      - macros/**/*
+      - integration_tests/models/**/*
   pull_request:
-# TODO uncomment when the workflow gets stable.
-#    paths:
-#      - macros/
-#      - integration_tests/models/
+    paths:
+      - macros/**/*
+      - integration_tests/models/**/*
 
 jobs:
   bigquery:
     runs-on: ubuntu-latest
-    env:
-      DBT_DATA_PRIVACY_TEST_PROJECT: "${{ secrets.DBT_DATA_PRIVACY_TEST_PROJECT }}"
     strategy:
       fail-fast: false
       matrix:

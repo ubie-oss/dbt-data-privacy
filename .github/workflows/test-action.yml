@@ -1,0 +1,77 @@
+name: Test the GitHub Actions
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    paths:
+      - action/**/*
+
+jobs:
+  test-action:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      fail-fast: true
+      matrix:
+        include:
+          - python-version: "3.9"
+            pip-requirements: "requirements-1.1.txt"
+          - python-version: "3.10"
+            pip-requirements: "requirements-1.2.txt"
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: "${{ github.head_ref }}"
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+          cache-dependency-path: '**/${{ matrix.pip-requirements }}'
+      - name: Install dbt
+        working-directory: "${{ github.workspace }}/integration_tests"
+        run: |
+          pip install -r "requirements/${{ matrix.pip-requirements }}"
+      - name: Install dbt Packages
+        working-directory: "${{ github.workspace }}/integration_tests"
+        run: |
+          dbt deps --target bigquery
+      - name: Test the action
+        id: test-action
+        uses: ./action
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          working_directory: "${{ github.workspace }}/integration_tests"
+          dbt_profiles_dir: "${{ github.workspace }}/integration_tests/profiles"
+          dbt_models_dir: "${{ github.workspace }}/integration_tests/models"
+          dbt_profile: "default"
+          dbt_target: "bigquery"
+          dbt_vars_path: "${{ github.workspace }}/integration_tests/resources/vars/vars-bigquery.basic.yml"
+          delete_before: "1"
+          verbose: "1"
+      - name: Delete .gitignore for the generated models
+        shell: bash
+        run: |
+          rm -f "${{ github.workspace }}/integration_tests/models/.gitignore"
+      - name: Push and revert the generated models
+        shell: bash
+        if: ${{ steps.test-action.generated-models-count }} != '0'
+        run: |
+          # Confiture the git account
+          git remote set-url origin "https://github-actions:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          # Push the generated models
+          git add "${{ github.workspace }}/integration_tests/models"
+          git commit --signoff -m 'Generate dbt models by dbt-data-privacy'
+          git push --set-upstream origin "HEAD:${{ github.head_ref }}"
+          # Revert the commit
+          git revert HEAD
+          git push --force --set-upstream origin "HEAD:${{ github.head_ref }}"
