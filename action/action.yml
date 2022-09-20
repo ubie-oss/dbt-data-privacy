@@ -15,7 +15,7 @@ inputs:
     description: "Which directory to look in for the profiles.yml file."
     required: false
     default: ""
-  dbt_profiles:
+  dbt_profile:
     description: "Which profile to load."
     required: false
     default: ""
@@ -49,4 +49,10 @@ runs:
       working-directory: "${{ inputs.working_directory }}"
       run: |
         bash ${GITHUB_ACTION_PATH}/generated_models.sh \
-          --dbt-models-dir "${{ inputs.working_directory }}/${{ inputs.dbt_models_dir }}" \
+          --dbt-profiles-dir "${{ inputs.dbt_profiles_dir }}" \
+          --dbt-profile "${{ inputs.dbt_profile }}" \
+          --dbt-target "${{ inputs.dbt_target }}" \
+          --dbt-vars-path "${{ inputs.dbt_vars_path }}" \
+          --dbt-models-dir "${{ inputs.dbt_models_dir }}" \
+          --delete-before "${{ inputs.delete_before }}" \
+          --verbose "${{ inputs.verbose }}" 
