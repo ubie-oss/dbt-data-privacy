@@ -77,12 +77,19 @@
     alias={{- dbt_data_privacy.safe_quote(alias) -}},
     {% if "grant_access_to" in adapter_config -%}
     grant_access_to=[
-      {% for x in adapter_config["grant_access_to"] -%}
+      {%- for x in adapter_config["grant_access_to"] %}
       {
+        {%- if "project" in x and "dataset" in x %}
         "project": {{ dbt_data_privacy.safe_quote(x.get("project")) }},
-        "dataset": {{ dbt_data_privacy.safe_quote(x.get("dataset")) }}
+        "dataset": {{ dbt_data_privacy.safe_quote(x.get("dataset")) }},
+        {%- elif "database" in x and "schema" in x %}
+        "project": {{ dbt_data_privacy.safe_quote(x.get("database")) }},
+        "dataset": {{ dbt_data_privacy.safe_quote(x.get("schema")) }},
+        {%- else %}
+          {% do exceptions.raise_compiler_error("unexpected grant_access_to: {}".format(x)) %}
+        {%- endif %}
       },
-      {% endfor -%}
+      {%- endfor %}
     ],{%- endif %}
     tags={{ tags }},
     labels={
