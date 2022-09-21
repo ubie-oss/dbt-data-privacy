@@ -6,12 +6,8 @@ on:
   pull_request:
     paths:
       - macros/**/*
-      - integration_tests/models/**/*
-  workflow_run:
-    workflows:
-      - "Test the GitHub Actions"
-    types:
-      - completed
+      - integration_tests/macros/**/*.sql
+      - integration_tests/models/**/*.sql
 
 jobs:
   bigquery:
