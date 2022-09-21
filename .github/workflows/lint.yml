@@ -2,8 +2,8 @@ name: Lint resources
 on:
   pull_request:
     paths:
-      - ci/*.sh
-      - macros/*/*.yml
+      - "**/*.sh"
+      - "**/*.yml"
 
 jobs:
   check-style:
