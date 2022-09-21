@@ -101,13 +101,13 @@
     grant_access_to=[
       {
         "project": "test-project1",
-        "dataset": "test_dataset1"
+        "dataset": "test_dataset1",
       },
       {
         "project": "test-project2",
-        "dataset": "test_dataset2"
+        "dataset": "test_dataset2",
       },
-      ],
+    ],
     tags=['tag1'],
     labels={
       "key1": "value1","key2": "value2",
