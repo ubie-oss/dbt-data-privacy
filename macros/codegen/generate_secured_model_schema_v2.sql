@@ -53,10 +53,10 @@ models:
     description: |
       {{ description | indent(width=6, first=False) }}
     {%- endif %}
-    {% if tags | length > 0 -%}
+    {%- if tags | length > 0 %}
     tags: {{ tags | unique | list }}
     {%- endif %}
-    {% if labels | length > 0 -%}
+    {%- if labels | length > 0 %}
     meta: {% for k, v in labels.items() %}
       {{ k }}: {{ v }}
     {%- endfor %}
@@ -66,11 +66,11 @@ models:
       # A schema YAML file doesn't appear by `dbt ls --output path`, when it contains no tests.
       - dbt_data_privacy.dummy_test
 
-    {% if columns | length > 0 -%}
+    {%- if columns | length > 0 %}
     columns: {%- for column_name, column in columns.items() %}
       - name: {{ column.name }}
         description: |
-          {{ column.description | default('', true) }}
+          {{ column.description | default('', true) | indent(width=10, first=False) }}
         {%- if 'data_privacy' in column.meta and column.meta.data_privacy.level %}
         {%- set data_privacy_level = column.meta.data_privacy.level %}
         meta:
@@ -78,11 +78,11 @@ models:
             {#- Think of the downgraded data security level #}
             level: {{ secured_columns.get(column_name, {}).get("level", column.meta.data_privacy.level) }}
         {%- endif %}
-        {% if 'data_privacy' in column.meta
+        {%- if 'data_privacy' in column.meta
             and name in column.meta.data_privacy
             and 'tests' in column.meta.data_privacy[name]
-            and column.meta.data_privacy[name].tests | length > 0 -%}
-        tests: {% for test in column.meta.data_privacy[name].tests %}
+            and column.meta.data_privacy[name].tests | length > 0 %}
+        tests: {%- for test in column.meta.data_privacy[name].tests %}
           - {{ test }}
         {%- endfor %}
         {%- endif %}

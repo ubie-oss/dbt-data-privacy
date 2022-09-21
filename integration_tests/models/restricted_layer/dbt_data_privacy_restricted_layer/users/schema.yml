@@ -60,7 +60,12 @@ models:
               to: ref("restricted_layer__dbt_data_privacy_seed__users")
               field: "user_id"
       - name: name
-        description: "User's name"
+        description: |
+          User's name
+          
+          # NOTE
+          - XXX
+          - XXX
         meta:
           data_privacy:
             level: restricted
