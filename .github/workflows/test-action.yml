@@ -73,6 +73,6 @@ jobs:
           git add "${{ github.workspace }}/integration_tests/models"
           git commit --signoff -m 'Generate dbt models by dbt-data-privacy'
           git push --set-upstream origin "HEAD:${{ github.head_ref }}"
-#          # Revert the commit
-#          git revert HEAD
-#          git push --force --set-upstream origin "HEAD:${{ github.head_ref }}"
+          # Revert the commit
+          git revert HEAD
+          git push --force --set-upstream origin "HEAD:${{ github.head_ref }}"
