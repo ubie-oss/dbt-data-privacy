@@ -51,7 +51,7 @@ models:
   - name: {{ name }}
     {% if description is not none -%}
     description: |
-      {{ description }}
+      {{ description | indent(width=6, first=False) }}
     {%- endif %}
     {% if tags | length > 0 -%}
     tags: {{ tags | unique | list }}

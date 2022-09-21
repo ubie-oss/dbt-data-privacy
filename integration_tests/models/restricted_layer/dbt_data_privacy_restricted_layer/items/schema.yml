@@ -5,6 +5,10 @@ models:
   - name: restricted_layer__dbt_data_privacy_restricted_layer__items
     description: |
       Items' table
+      
+      ## NOTE
+      - XXX
+      - XXX
     meta:
       data_privacy:
         - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer__items
