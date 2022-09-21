@@ -69,8 +69,10 @@ models:
     {%- if columns | length > 0 %}
     columns: {%- for column_name, column in columns.items() %}
       - name: {{ column.name }}
+        {%- if column.description is defined and column.description | length > 0 %}
         description: |
           {{ column.description | default('', true) | indent(width=10, first=False) }}
+        {%- endif %}
         {%- if 'data_privacy' in column.meta and column.meta.data_privacy.level %}
         {%- set data_privacy_level = column.meta.data_privacy.level %}
         meta:
