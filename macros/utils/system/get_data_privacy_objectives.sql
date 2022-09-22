@@ -1,4 +1,4 @@
-{% macro get_data_privacy_targets() %}
+{% macro get_data_privacy_objectives() %}
   {% set targets = [] %}
 
   {% set data_privacy_configs = dbt_data_privacy.get_data_privacy_configs() %}

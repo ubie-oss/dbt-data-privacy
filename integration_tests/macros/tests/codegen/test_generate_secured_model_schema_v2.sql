@@ -4,7 +4,7 @@
 
 {% macro default__test_generate_secured_model_schema_v2() %}
   {%- set result = dbt_data_privacy.generate_secured_model_schema_v2(
-      target="data_analysis",
+      objective="data_analysis",
       name="test_project__test_dataset__test_table",
       database="test-project",
       schema="test_dataset",

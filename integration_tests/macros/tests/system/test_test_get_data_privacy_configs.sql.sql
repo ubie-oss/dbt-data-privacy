@@ -1,5 +1,5 @@
-{% macro test_get_data_privacy_config_by_target() %}
-  {% set result = dbt_data_privacy.get_data_privacy_config_by_target("data_analysis") %}
+{% macro test_get_data_privacy_config_by_objective() %}
+  {% set result = dbt_data_privacy.get_data_privacy_config_by_objective("data_analysis") %}
   {% set expected = {
      'default_materialization': 'view',
      'default_tag': 'dbt_data_privacy',

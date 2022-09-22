@@ -7,8 +7,8 @@
     utils
   #}
   {% do test_get_data_privacy_configs() %}
-  {% do test_get_data_privacy_targets() %}
-  {% do test_get_data_privacy_config_by_target() %}
+  {% do test_get_data_privacy_objectives() %}
+  {% do test_get_data_privacy_config_by_objective() %}
   {% do test_get_secured_expression_by_method() %}
   {% do test_get_secured_expression_by_level() %}
   {% do test_get_secured_columns() %}
