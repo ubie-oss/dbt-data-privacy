@@ -21,7 +21,7 @@
         partition_expiration_days=7
     ) %}
   {%- set result = dbt_data_privacy.generate_privacy_protected_model_sql(
-      target="data_analysis",
+      objective="data_analysis",
       materialized="view",
       database="data-analysis-project",
       schema="test_dataset",

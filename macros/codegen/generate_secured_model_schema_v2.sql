@@ -1,5 +1,5 @@
 {% macro generate_secured_model_schema_v2(
-      target,
+      objective,
       name,
       database,
       schema,
@@ -10,7 +10,7 @@
       labels={}
     ) %}
   {{- return(adapter.dispatch('generate_secured_model_schema_v2', 'dbt_data_privacy')(
-      target=target,
+      objective=objective,
       name=name,
       database=database,
       schema=schema,
@@ -23,7 +23,7 @@
 {% endmacro %}
 
 {% macro default__generate_secured_model_schema_v2(
-      target,
+      objective,
       name,
       database,
       schema,
@@ -38,7 +38,7 @@
     {{ exceptions.raise_compiler_error("No columns for {}".format(name)) }}
   {% endif %}
 
-  {%- set config = dbt_data_privacy.get_data_privacy_config_by_target(target) %}
+  {%- set config = dbt_data_privacy.get_data_privacy_config_by_objective(objective) %}
   {%- set data_handling_standards = config.get('data_handling_standards') %}
   {%- set secured_columns = dbt_data_privacy.get_secured_columns(data_handling_standards, columns) %}
 

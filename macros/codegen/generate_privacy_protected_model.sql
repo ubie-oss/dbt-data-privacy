@@ -16,12 +16,12 @@
 
   {% for data_privacy_meta in node.meta.data_privacy %}
     {% set name = data_privacy_meta.get("name") %}
-    {% set target = data_privacy_meta.get("target") %}
+    {% set objective = data_privacy_meta.get("objective") %}
     {% set model_config = data_privacy_meta.get("config") %}
     {% set relationships = data_privacy_meta.get("relationships") | default(none, True) %}
     {% set where = data_privacy_meta.get("where") | default(none, True) %}
 
-    {% set data_privacy_config = dbt_data_privacy.get_data_privacy_config_by_target(target) %}
+    {% set data_privacy_config = dbt_data_privacy.get_data_privacy_config_by_objective(objective) %}
     {% set default_materialization = dbt_data_privacy.get_default_materialization(data_privacy_config) %}
 
     {% set model_config = dbt_data_privacy.format_model_config(**model_config) %}
@@ -37,11 +37,11 @@
     {% set adapter_config = model_config.get("adapter_config") %}
     {% set unknown_config = model_config.get("unknown_config") %}
 
-    {# Append the target tag #}
-    {% do tags.extend([dbt_data_privacy.get_default_tag(data_privacy_config), target]) %}
+    {# Append the objective tag #}
+    {% do tags.extend([dbt_data_privacy.get_default_tag(data_privacy_config), objective]) %}
 
     {% set model_sql = dbt_data_privacy.generate_privacy_protected_model_sql(
-        target=target,
+        objective=objective,
         enabled=enabled,
         full_refresh=full_refresh,
         materialized=materialized,
@@ -60,7 +60,7 @@
       ) %}
 
     {% set schema_yaml = dbt_data_privacy.generate_secured_model_schema_v2(
-        target=target,
+        objective=objective,
         name=name,
         database=database,
         schema=schema,

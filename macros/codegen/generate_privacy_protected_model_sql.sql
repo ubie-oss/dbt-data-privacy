@@ -1,5 +1,5 @@
 {% macro generate_privacy_protected_model_sql(
-    target,
+    objective,
     materialized,
     database,
     schema,
@@ -17,7 +17,7 @@
     full_refresh=none
   ) %}
   {{- return(adapter.dispatch('generate_privacy_protected_model_sql', 'dbt_data_privacy')(
-      target=target,
+      objective=objective,
       materialized=materialized,
       database=database,
       schema=schema,
@@ -37,7 +37,7 @@
 {% endmacro %}
 
 {% macro bigquery__generate_privacy_protected_model_sql(
-    target,
+    objective,
     materialized,
     database,
     schema,
@@ -59,7 +59,7 @@
     {{ exceptions.raise_compiler_error("No columns for {}.{}.{}".format(database, schema, alias)) }}
   {% endif %}
 
-  {%- set config = dbt_data_privacy.get_data_privacy_config_by_target(target) %}
+  {%- set config = dbt_data_privacy.get_data_privacy_config_by_objective(objective) %}
   {%- set data_handling_standards = config.get('data_handling_standards') %}
   {%- set secured_columns = dbt_data_privacy.get_secured_columns(data_handling_standards, columns) %}
 
