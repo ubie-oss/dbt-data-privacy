@@ -1,5 +1,5 @@
-{% macro generate_privacy_protected_models(unique_ids=none, verbose=true) %}
-  {% set generated_models = [] %}
+{% macro get_unique_ids_with_data_privacy_meta(unique_ids=none, verbose=true) %}
+  {% set selected_unique_ids = [] %}
 
   {# Generate dbt models and sources #}
   {% set models_and_sources = [] %}
@@ -17,16 +17,13 @@
 
   {% for model_or_source in models_and_sources %}
     {% if model_or_source.unique_id in unique_ids and dbt_data_privacy.has_data_privacy_meta(model_or_source) %}
-      {% set generated_model = dbt_data_privacy.generate_privacy_protected_model(model_or_source) %}
-      {% if generated_model is not none and generated_model | length > 0 %}
-        {{ generated_models.extend(generated_model) }}
-      {% endif %}
+      {% do selected_unique_ids.append(model_or_source.unique_id) %}
     {% endif %}
   {% endfor %}
 
   {% if verbose is true %}
-    {% do print(tojson(generated_models)) %}
+    {% do print(tojson(selected_unique_ids)) %}
   {% endif %}
 
-  {{ return(generated_models) }}
+  {{ return(selected_unique_ids) }}
 {% endmacro %}

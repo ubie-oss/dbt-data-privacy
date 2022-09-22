@@ -32,7 +32,12 @@
   {% do test_format_model_config() %}
   {% do test_generate_secured_model_schema_v2() %}
   {% do test_generate_privacy_protected_model_sql() %}
+
+  {#
+    public
+  #}
   {% do test_generate_privacy_protected_models() %}
+  {% do test_get_unique_ids_with_data_privacy_meta() %}
 
 
 {% endmacro %}
