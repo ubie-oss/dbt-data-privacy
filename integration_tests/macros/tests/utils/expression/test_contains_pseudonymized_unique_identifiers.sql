@@ -6,6 +6,7 @@
       "restricted": {
         "method": "CONDITIONAL_HASH",
         "with": {
+          "default_method": "SHA256",
           "condition": "contains_pseudonymized_unique_identifiers",
         },
       },
