@@ -1,8 +1,8 @@
-{% macro is_securing_method(method) %}
-  {{ return(adapter.dispatch("is_securing_method", "dbt_data_privacy")(method)) }}
+{% macro is_secure_method(method) %}
+  {{ return(adapter.dispatch("is_secure_method", "dbt_data_privacy")(method)) }}
 {% endmacro %}
 
-{% macro bigquery__is_securing_method(method) %}
+{% macro bigquery__is_secure_method(method) %}
   {% set methods = {
       "RAW": false,
       "SHA256": true,

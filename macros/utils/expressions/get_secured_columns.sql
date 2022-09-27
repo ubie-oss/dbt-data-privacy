@@ -1,6 +1,6 @@
 {% macro get_secured_columns(data_handling_standards, columns) %}
   {% set secured_columns = {} %}
-  {% set column_conditions = dbt_data_privacy.analyze_column_conditions(columns) %}
+  {% set column_conditions = dbt_data_privacy.analyze_column_conditions(data_handling_standards, columns) %}
 
   {% for column_name, column_info in columns.items() %}
     {% if "data_privacy" in column_info.meta and column_info.meta.data_privacy.level %}
