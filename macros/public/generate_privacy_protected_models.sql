@@ -7,9 +7,9 @@
   {% do models_and_sources.extend(dbt_data_privacy.get_nodes("source")) %}
 
   {% if unique_ids is not none and unique_ids | length > 0 %}
-    {# Adjust the format
-      A `dbt ls` command returns sources with 'source:xxx'. But, an `unique_id` is like `source.xxx`.
-      TODO consider use `original_file_path`.
+    {#
+        Adjust the format
+        NOTE: A `dbt ls` command returns sources with 'source:xxx'. But, an `unique_id` is like `source.xxx`.
     #}
     {% set unique_ids = unique_ids | map("replace", "source:", "source.") | list %}
     {% for model_or_source in models_and_sources %}
