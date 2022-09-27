@@ -1,4 +1,8 @@
 {% macro conditional_hash(column_conditions, expression, default_method, condition, data_type=none) -%}
+  {% if column_conditions is none or column_conditions is not mapping %}
+    {% do exceptions.raise_compiler_error("Invalid column_conditions {}".format(column_conditions)) %}
+  {% endif %}
+
   {% if condition not in column_conditions %}
     {% do exceptions.raise_compiler_error("Invalid condition {} to {}".format(condition, column_conditions)) %}
   {% endif %}

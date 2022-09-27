@@ -14,10 +14,11 @@
           column_conditions=column_conditions) %}
 
       {% set level = column_info.meta.data_privacy.level %}
+      {# Downgrade the data security level if secured #}
       {% set method, with, converted_level = dbt_data_privacy.get_data_handling_standard_by_level(
           data_handling_standards,
           column_info.meta.data_privacy.level) %}
-      {% if converted_level is not none %}
+      {% if converted_level is not none and column_name != secured_expression %}
         {% set level = converted_level %}
       {% endif %}
 

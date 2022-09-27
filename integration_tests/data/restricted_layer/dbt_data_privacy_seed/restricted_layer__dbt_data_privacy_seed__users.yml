@@ -16,3 +16,4 @@ seeds:
         user_id: INTEGER
         name: STRING
         email: STRING
+        age: INTEGER

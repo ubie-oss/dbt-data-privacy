@@ -26,6 +26,7 @@
           "meta": {
             "data_privacy": {
               "level": "confidential",
+              "policy_tags": ["unique_identifier"],
               "test_project__test_dataset__test_table": {
                 "tests": [
                   "not_null"
@@ -49,6 +50,15 @@
           "meta": {
             "data_privacy": {
               "level": "internal",
+            },
+          },
+        },
+        "created_at": {
+          "name": "created_at",
+          "description": "timestamp at when created",
+          "meta": {
+            "data_privacy": {
+              "level": "restricted",
             },
           },
         },
@@ -102,6 +112,12 @@ models:
       - name: consents.data_sharing
         description: |-
           Agree on data sharing
+        meta:
+          data_privacy:
+            level: internal
+      - name: created_at
+        description: |-
+          timestamp at when created
         meta:
           data_privacy:
             level: internal
