@@ -24,4 +24,18 @@
     {{ assert_element_in_list("model_sql", generated_model) }}
     {{ assert_element_in_list("schema_yaml", generated_model) }}
   {% endfor %}
+
+  {% set target_original_file_paths = [
+      "models/restricted_layer/dbt_data_privacy_restricted_layer/consents/restricted_layer__dbt_data_privacy_restricted_layer__consents.sql",
+      "models/restricted_layer/dbt_data_privacy_restricted_layer/users/restricted_layer__dbt_data_privacy_restricted_layer__users.sql",
+  ] %}
+  {% set generated_models = dbt_data_privacy.generate_privacy_protected_models(
+        original_file_paths=target_original_file_paths, verbose=false) %}
+  {{ assert_equals(generated_models | length, 2) }}
+  {% for generated_model in generated_models %}
+    {{ assert_element_in_list("name", generated_model) }}
+    {{ assert_element_in_list("meta", generated_model) }}
+    {{ assert_element_in_list("model_sql", generated_model) }}
+    {{ assert_element_in_list("schema_yaml", generated_model) }}
+  {% endfor %}
 {% endmacro %}
