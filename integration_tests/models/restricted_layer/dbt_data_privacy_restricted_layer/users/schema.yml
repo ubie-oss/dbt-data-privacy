@@ -68,11 +68,18 @@ models:
           - XXX
         meta:
           data_privacy:
-            level: restricted
+            level: highly_restricted
         tests:
           - not_null
       - name: email
         description: "User's email"
+        meta:
+          data_privacy:
+            level: highly_restricted
+        tests:
+          - not_null
+      - name: age
+        description: "Age"
         meta:
           data_privacy:
             level: restricted

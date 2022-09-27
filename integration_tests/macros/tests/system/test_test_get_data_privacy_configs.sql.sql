@@ -6,8 +6,19 @@
      'data_handling_standards': {
        'public': { 'method': 'RAW' },
         'internal': {'method': 'RAW'},
-        'confidential': {'method': 'SHA256', 'converted_level': 'internal'},
-        'restricted': {'method': 'DROPPED'}
+        'confidential': {
+          'method': 'SHA256',
+          'converted_level': 'internal'
+        },
+        'restricted': {
+          'converted_level': 'internal',
+          'method': 'CONDITIONAL_HASH',
+          'with': {
+            'default_method': 'SHA256',
+            'condition': 'contains_pseudonymized_unique_identifiers'
+          }
+        },
+        'highly_restricted': {'method': 'DROPPED'}
      }
    } %}
 

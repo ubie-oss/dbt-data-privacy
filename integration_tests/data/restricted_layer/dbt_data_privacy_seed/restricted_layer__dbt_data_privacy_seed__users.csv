@@ -1,7 +1,7 @@
-id,user_id,name,email
-1,1,Alice,alice@exampl.com
-2,2,Bob,bob@exampl.com
-3,3,Tom,tom@exampl.com
-4,4,Marry,marry@exampl.com
-5,5,Sam,sam@exampl.com
-6,6,Leo,leo@exampl.com
+id,user_id,name,email,age
+1,1,Alice,alice@exampl.com,20
+2,2,Bob,bob@exampl.com,25
+3,3,Tom,tom@exampl.com,30
+4,4,Marry,marry@exampl.com,35
+5,5,Sam,sam@exampl.com,40
+6,6,Leo,leo@exampl.com,45

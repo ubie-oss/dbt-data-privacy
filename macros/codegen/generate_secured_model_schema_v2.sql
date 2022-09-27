@@ -50,7 +50,7 @@ version: 2
 models:
   - name: {{ name }}
     {% if description is not none -%}
-    description: |
+    description: |-
       {{ description | indent(width=6, first=False) }}
     {%- endif %}
     {%- if tags | length > 0 %}
@@ -70,7 +70,7 @@ models:
     columns: {%- for column_name, column in columns.items() %}
       - name: {{ column.name }}
         {%- if column.description is defined and column.description | length > 0 %}
-        description: |
+        description: |-
           {{ column.description | default('', true) | indent(width=10, first=False) }}
         {%- endif %}
         {%- if 'data_privacy' in column.meta and column.meta.data_privacy.level %}

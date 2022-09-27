@@ -1,23 +1,22 @@
-{% macro conditional_hash(expression, with_params, column_conditions, data_type=none) -%}
-  {# Validate inputs #}
-  {% if with_params is none %}
-    {{ exceptions.raise_compiler_error("'with_params' is none") }}
-  {% elif column_conditions is none %}
-    {{ exceptions.raise_compiler_error("'column_conditions' is none") }}
-  {% elif 'default_method' not in with_params %}
-    {{ exceptions.raise_compiler_error("'default_method' doesn't exist in {}".format(with_params)) }}
-  {% elif 'condition' not in with_params %}
-    {{ exceptions.raise_compiler_error("'condition' doesn't exist in {}".format(with_params)) }}
-  {% elif with_params['condition'] not in column_conditions %}
-    {{ exceptions.raise_compiler_error("No matched condition {} in column_conditions {}".format(with_params['condition'], column_conditions)) }}
+{% macro conditional_hash(column_conditions, expression, default_method, condition, data_type=none) -%}
+  {% if column_conditions is none or column_conditions is not mapping %}
+    {% do exceptions.raise_compiler_error("Invalid column_conditions {}".format(column_conditions)) %}
+  {% endif %}
+
+  {% if condition not in column_conditions %}
+    {% do exceptions.raise_compiler_error("Invalid condition {} to {}".format(condition, column_conditions)) %}
   {% endif %}
 
   {{- return(adapter.dispatch('conditional_hash', 'dbt_data_privacy')(
-      expression, with_params, column_conditions, data_type=data_type)) -}}
+      column_conditions=column_conditions,
+      expression=expression,
+      default_method=default_method,
+      condition=condition,
+      data_type=data_type)) -}}
 {%- endmacro %}
 
-{%- macro bigquery__conditional_hash(expression, with_params, conditions, data_type=none) -%}
-  {% if column_conditions[with_params['condition']] is true  %}
+{% macro bigquery__conditional_hash(column_conditions, expression, default_method, condition, data_type=none) -%}
+  {% if column_conditions.get(condition, false) is sameas true  %}
     {%- set secured_expression = dbt_data_privacy.get_secured_expression_by_method(expression, default_method, data_type=data_type) -%}
     {%- do return(secured_expression) -%}
   {% else %}

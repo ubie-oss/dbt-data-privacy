@@ -26,6 +26,7 @@
           "meta": {
             "data_privacy": {
               "level": "confidential",
+              "policy_tags": ["unique_identifier"],
               "test_project__test_dataset__test_table": {
                 "tests": [
                   "not_null"
@@ -52,6 +53,15 @@
             },
           },
         },
+        "created_at": {
+          "name": "created_at",
+          "description": "timestamp at when created",
+          "meta": {
+            "data_privacy": {
+              "level": "restricted",
+            },
+          },
+        },
       },
       tags=["tag1"],
       labels={
@@ -68,7 +78,7 @@ version: 2
 
 models:
   - name: test_project__test_dataset__test_table
-    description: |
+    description: |-
       Sample description
     tags: ['tag1']
     meta:
@@ -80,13 +90,13 @@ models:
       - dbt_data_privacy.dummy_test
     columns:
       - name: id
-        description: |
+        description: |-
           Raw ID
         meta:
           data_privacy:
             level: internal
       - name: user_id
-        description: |
+        description: |-
           User ID
         meta:
           data_privacy:
@@ -94,14 +104,20 @@ models:
         tests:
           - not_null
       - name: consents.data_analysis
-        description: |
+        description: |-
           Agree on data analysis
         meta:
           data_privacy:
             level: internal
       - name: consents.data_sharing
-        description: |
+        description: |-
           Agree on data sharing
+        meta:
+          data_privacy:
+            level: internal
+      - name: created_at
+        description: |-
+          timestamp at when created
         meta:
           data_privacy:
             level: internal

@@ -17,6 +17,8 @@
   {% do test_create_deep_dict() %}
   {% do test_deep_merge_dicts() %}
   {% do test_restructure_secured_columns() %}
+  {% do test_get_columns_by_policy_tag() %}
+  {% do test_contains_pseudonymized_unique_identifiers() %}
 
   {#
     pseudonymization
@@ -25,6 +27,7 @@
   {% do test_sha512() %}
   {% do test_extract_email_domain() %}
   {% do test_get_secured_expression_by_method() %}
+  {% do test_conditional_hash() %}
 
   {#
     codegen
