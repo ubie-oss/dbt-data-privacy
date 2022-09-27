@@ -40,7 +40,5 @@
     public
   #}
   {% do test_generate_privacy_protected_models() %}
-  {% do test_get_unique_ids_with_data_privacy_meta() %}
-
 
 {% endmacro %}
