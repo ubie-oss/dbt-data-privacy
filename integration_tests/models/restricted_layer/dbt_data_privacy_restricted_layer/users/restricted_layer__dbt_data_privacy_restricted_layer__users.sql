@@ -12,7 +12,7 @@
     labels={
       "modeled_by": "dbt",
     },
-    tags=[],
+    tags=["tag_in_users"],
     grant_access_to=[
       {"project": var('restricted_layer'), "dataset": schema},
       {"project": var('restricted_layer'), "dataset": "dbt_data_privacy_seed"},
