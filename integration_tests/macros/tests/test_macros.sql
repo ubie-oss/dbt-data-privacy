@@ -40,5 +40,6 @@
     public
   #}
   {% do test_generate_privacy_protected_models() %}
+  {% do test_get_tags_by_original_file_paths() %}
 
 {% endmacro %}
