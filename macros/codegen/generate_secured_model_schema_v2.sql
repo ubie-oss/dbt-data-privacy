@@ -54,7 +54,7 @@ models:
       {{ description | indent(width=6, first=False) }}
     {%- endif %}
     {%- if tags | length > 0 %}
-    tags: {{ tags | unique | list }}
+    tags: {{ tags | unique | sort | list }}
     {%- endif %}
     {%- if labels | length > 0 %}
     meta: {% for k, v in labels.items() %}

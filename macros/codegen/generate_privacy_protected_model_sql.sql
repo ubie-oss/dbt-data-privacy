@@ -91,7 +91,7 @@
       },
       {%- endfor %}
     ],{%- endif %}
-    tags={{ tags }},
+    tags={{ tags | unique | sort }},
     labels={
       {% for k, v in labels.items() -%}
       {{ '"' ~ k ~ '"' }}: {{ dbt_data_privacy.safe_quote(v) }},
