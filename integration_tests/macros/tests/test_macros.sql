@@ -20,6 +20,11 @@
   {% do test_get_columns_by_policy_tag() %}
   {% do test_contains_pseudonymized_unique_identifiers() %}
 
+  {# graph #}
+  {% do test_select_nodes_by_unique_ids() %}
+  {% do test_select_nodes_by_original_file_paths() %}
+  {% do test_select_nodes_by_tags() %}
+
   {#
     pseudonymization
   #}
