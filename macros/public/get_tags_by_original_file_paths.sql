@@ -36,7 +36,7 @@
   {% endfor %}
 
   {% if verbose is true %}
-    {% do print(tojson(unique_tags | unique | list)) %}
+    {% do print(tojson(unique_tags | unique | sort | list)) %}
   {% endif %}
 
   {{ return(unique_tags) }}
