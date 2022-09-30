@@ -31,6 +31,13 @@
     {% else %}
       {{ exceptions.raise_compiler_error("Invalid inputs for {} with {} under {} ".format(expression, method, column_conditions)) }}
     {% endif %}
+  {% elif method == "UDF_HASH" %}
+    {% set udf_function = none %}
+    {% if with_params is mapping
+        and with_params.function is defined %}
+      {% set udf_function = with_params.function %}
+    {% endif %}
+    {% set secured_expression = dbt_data_privacy.udf(expression, udf_function=udf_function, data_type=data_type) %}
   {% elif method == "DROPPED" %}
     {# do nothing #}
   {% else %}

@@ -7,6 +7,7 @@
       "RAW": false,
       "SHA256": true,
       "SHA512": true,
+      "UDF_HASH": none,
       "CONDITIONAL_HASH": none,
       "DROPPED": true,
     }
