@@ -18,7 +18,7 @@
       {% set method, with, converted_level = dbt_data_privacy.get_data_handling_standard_by_level(
           data_handling_standards,
           column_info.meta.data_privacy.level) %}
-      {% if converted_level is not none and column_name != secured_expression %}
+      {% if converted_level is not none %}
         {% set level = converted_level %}
       {% endif %}
 

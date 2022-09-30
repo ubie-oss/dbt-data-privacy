@@ -55,6 +55,7 @@
           "meta": {
             "data_privacy": {
               "level": "confidential",
+              "policy_tags": ["unique_identifier"],
             },
           },
         },
@@ -72,11 +73,18 @@
             },
           },
         },
+        "dummy_column": {
+          "meta": {
+            "data_privacy": {
+              "level": "restricted",
+            },
+          },
+        },
         "dummy_array": {
           "data_type": "ARRAY",
           "meta": {
             "data_privacy": {
-              "level": "confidential",
+              "level": "restricted",
             },
           },
         }
@@ -127,7 +135,8 @@ WITH privacy_protected_model AS (
       consents.data_analysis AS `data_analysis`,
       consents.data_sharing AS `data_sharing`
     ) AS `consents`,
-    ARRAY(SELECT SHA256(CAST(e AS STRING)) FROM UNNEST(dummy_array) AS e) AS `dummy_array`,
+    dummy_column AS `dummy_column`,
+    dummy_array AS `dummy_array`,
   FROM
     {{ ref('test_restricted_users') }}
   WHERE

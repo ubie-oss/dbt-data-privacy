@@ -17,9 +17,9 @@
 
 {% macro bigquery__conditional_hash(column_conditions, expression, default_method, condition, data_type=none) -%}
   {% if column_conditions.get(condition, false) is sameas true  %}
+    {%- do return(expression) -%}
+  {% else %}
     {%- set secured_expression = dbt_data_privacy.get_secured_expression_by_method(expression, default_method, data_type=data_type) -%}
     {%- do return(secured_expression) -%}
-  {% else %}
-    {%- do return(expression) -%}
   {% endif %}
 {%- endmacro -%}
