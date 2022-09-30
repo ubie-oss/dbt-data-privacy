@@ -30,6 +30,7 @@
   #}
   {% do test_sha256() %}
   {% do test_sha512() %}
+  {% do test_udf_hash() %}
   {% do test_extract_email_domain() %}
   {% do test_get_secured_expression_by_method() %}
   {% do test_conditional_hash() %}
