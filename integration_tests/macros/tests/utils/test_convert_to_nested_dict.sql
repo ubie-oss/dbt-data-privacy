@@ -14,14 +14,18 @@
   {% set result = dbt_data_privacy.convert_to_nested_dict(keys, v) %}
   {% set expected = {
     'column1': {
-      'name': 'column1',
-      'description': 'Column 1',
-      'meta': {'data_privacy': {'level': 'confidential'}},
-      'data_type': None,
-      'quote': None,
-      'tags': []
+      'original_info': {
+        'name': 'column1',
+        'description': 'Column 1',
+        'meta': {'data_privacy': {'level': 'confidential'}},
+        'data_type': None,
+        'quote': None,
+        'tags': []
+      },
+      'additional_info': {}
     }
-  } %}
+  }
+  %}
   {{ assert_dict_equals(result, expected) }}
 
   {% set keys = "column1.column2".split(".") %}
@@ -41,12 +45,15 @@
     'column1': {
       'fields': {
         'column2': {
-          'name': 'column1.column2',
-          'description': 'Column 2',
-          'meta': {'data_privacy': {'level': 'confidential'}},
-          'data_type': 'ARRAY',
-          'quote': None,
-          'tags': []
+          'original_info': {
+            'name': 'column1.column2',
+            'description': 'Column 2',
+            'meta': {'data_privacy': {'level': 'confidential'}},
+            'data_type': 'ARRAY',
+            'quote': None,
+            'tags': []
+          },
+          'additional_info': {}
         }
       }
     }

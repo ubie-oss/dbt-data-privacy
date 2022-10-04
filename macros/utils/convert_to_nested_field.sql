@@ -8,6 +8,11 @@
     {% do nested_dict[keys[0]].update({"fields": dbt_data_privacy.convert_to_nested_dict(keys[1:], value)}) %}
     {{ return(nested_dict) }}
   {% else %}
-    {{ return({keys[0]: value}) }}
+    {{ return({
+      keys[0]: {
+        "original_info": value,
+        "additional_info": {},
+      }
+    }) }}
   {% endif %}
 {% endmacro %}
