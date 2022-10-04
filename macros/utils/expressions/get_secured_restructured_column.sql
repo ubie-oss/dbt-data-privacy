@@ -14,6 +14,14 @@
     {% set relative_path = [] %}
   {% endif %}
 
+  {% if copied_restructured_column.additional_info is not defined %}
+    {% do copied_restructured_column.update({"additional_info": {}}) %}
+  {% endif %}
+  {% if copied_restructured_column.additional_info is mapping
+      and copied_restructured_column.additional_info.relative_path is not defined %}
+    {% do copied_restructured_column["additional_info"].update({"relative_path": relative_path}) %}
+  {% endif %}
+
   {% set is_array = false %}
   {% if restructured_column.original_info is defined
       and restructured_column.original_info is mapping
@@ -53,6 +61,7 @@
         ) %}
       {% do copied_restructured_column["fields"][field_key].update(secured_restructured_column) %}
     {% endfor %}
+
     {{ return(copied_restructured_column) }}
   {% else %}
     {# SCALAR #}

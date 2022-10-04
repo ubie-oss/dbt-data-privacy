@@ -211,7 +211,7 @@
       'quote': None,
       'tags': []
     },
-    'additional_info': {},
+    'additional_info': {'relative_path': ['array1']},
     'fields': {
       'x': {
         'original_info': {
@@ -238,27 +238,27 @@
           'tags': []
         },
         'additional_info': {
-          'relative_path': ['y'],
-          'secured_expression': 'SHA256(CAST(y AS STRING))',
-          'level': 'internal'
-        }
-      },
-      'z': {
-        'original_info': {
-          'name': 'array1.z',
-          'description': '',
-          'meta': {'data_privacy': {'level': 'internal'}},
-          'data_type': None,
-          'quote': None,
-          'tags': []
-        },
-        'additional_info': {
-          'relative_path': ['z'],
-          'secured_expression': 'z',
-          'level': 'internal'
-        }
-      }
-    }
+           'relative_path': ['y'],
+           'secured_expression': 'SHA256(CAST(y AS STRING))',
+           'level': 'internal'
+         }
+       },
+       'z': {
+         'original_info': {
+           'name': 'array1.z',
+           'description': '',
+           'meta': {'data_privacy': {'level': 'internal'}},
+           'data_type': None,
+           'quote': None,
+           'tags': []
+         },
+         'additional_info': {
+           'relative_path': ['z'],
+           'secured_expression': 'z',
+           'level': 'internal'
+         }
+       }
+     }
   } %}
   {{ assert_equals(result, expected) }}
 {% endmacro %}
