@@ -64,12 +64,11 @@
       'tags': []
     },
   } %}
-  {% set restructured_columns = dbt_data_privacy.restructure_columns(columns) %}
 
   {% set result = dbt_data_privacy.get_secured_columns_v2(
       data_handling_standards=data_handling_standards,
       column_conditions={},
-      restructured_columns=restructured_columns
+      columns=columns
     ) %}
   {% set expected = {
     'struct1': {
@@ -204,7 +203,7 @@
       'tags': []
     },
     'struct1.array1.scalar1': {
-      'name': 'struct1.array1.',
+      'name': 'struct1.array1.scalar1',
       'description': '',
       'meta': {
         'data_privacy': {'level': 'internal'}
@@ -217,12 +216,123 @@
       'name': 'struct1.y',
       'description': '',
       'meta': {
-        'data_privacy': {'level': 'internal'}
+        'data_privacy': {'level': 'confidential'}
       },
-      'data_type': None,
+      'data_type': "ARRAY",
       'quote': None,
       'tags': []
     },
   } %}
-  {% set restructured_columns = dbt_data_privacy.restructure_columns(columns) %}
+  {% set result = dbt_data_privacy.get_secured_columns_v2(
+      data_handling_standards=data_handling_standards,
+      column_conditions={},
+      columns=columns
+    ) %}
+  {% set expected = {
+    'struct1': {
+      'fields': {
+        'x': {
+          'original_info': {
+            'name': 'struct1.x',
+            'description': '',
+            'meta': {'data_privacy': {'level': 'confidential'}},
+            'data_type': None,
+            'quote': None,
+            'tags': []
+          },
+          'additional_info': {
+            'relative_path': ['struct1', 'x'],
+            'secured_expression': 'SHA256(CAST(struct1.x AS STRING))',
+            'level': 'internal'
+          }
+        },
+        'struct2': {
+          'fields': {
+            'x': {
+              'original_info': {
+                'name': 'struct1.struct11.scalar111',
+                'description': '',
+                'meta': {'data_privacy': {'level': 'confidential'}},
+                'data_type': None,
+                'quote': None,
+                'tags': []
+              },
+              'additional_info': {
+                'relative_path': ['struct1', 'struct2', 'x'],
+                'secured_expression': 'SHA256(CAST(struct1.struct2.x AS STRING))',
+                'level': 'internal'
+              }
+            }
+          }
+        },
+        'struct11': {
+          'fields': {
+            'array111': {
+              'original_info': {
+                'name': 'struct1.struct11.array111',
+                'description': '',
+                'meta': {'data_privacy': {'level': 'confidential'}},
+                'data_type': 'ARRAY',
+                'quote': None,
+                'tags': []
+              },
+              'additional_info': {
+                'relative_path': ['struct1', 'struct11', 'array111'],
+                'secured_expression': 'ARRAY(SELECT SHA256(CAST(e AS STRING)) FROM UNNEST(struct1.struct11.array111) AS e)',
+                'level': 'internal'
+              }
+            }
+          }
+        },
+        'array1': {
+          'original_info': {
+            'name': 'struct1.array1',
+            'description': '',
+            'meta': {},
+            'data_type': 'ARRAY',
+            'quote': None,
+            'tags': []
+          },
+          'additional_info': {},
+          'fields': {
+            'scalar1': {
+              'original_info': {
+                'name': 'struct1.array1.scalar1',
+                'description': '',
+                'meta': {'data_privacy': {'level': 'internal'}},
+                'data_type': None,
+                'quote': None,
+                'tags': []
+              },
+              'additional_info': {
+                'relative_path': ['scalar1'],
+                'secured_expression': 'scalar1',
+                'level': 'internal'
+              }
+            },
+            'struct2': {
+              'fields': {
+                'x': {
+                  'original_info': {
+                    'name': 'struct1.y',
+                    'description': '',
+                    'meta': {'data_privacy': {'level': 'confidential'}},
+                    'data_type': 'ARRAY',
+                    'quote': None,
+                    'tags': []
+                  },
+                  'additional_info': {
+                    'relative_path': ['struct2', 'x'],
+                    'secured_expression': 'ARRAY(SELECT SHA256(CAST(e AS STRING)) FROM UNNEST(struct2.x) AS e)',
+                    'level': 'internal'
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  } %}
+  {{ assert_dict_equals(result, expected) }}
 {% endmacro %}
