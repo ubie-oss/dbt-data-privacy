@@ -15,6 +15,8 @@
   {% do test_is_macro_expression() %}
   {% do test_get_nodes() %}
   {% do test_create_deep_dict() %}
+  {% do test_convert_to_nested_dict() %}
+  {% do test_restructure_columns() %}
   {% do test_deep_merge_dicts() %}
   {% do test_restructure_secured_columns() %}
   {% do test_get_columns_by_policy_tag() %}
