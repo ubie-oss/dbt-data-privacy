@@ -61,10 +61,7 @@
 
   {%- set config = dbt_data_privacy.get_data_privacy_config_by_objective(objective) %}
   {%- set data_handling_standards = config.get('data_handling_standards') %}
-  {%- set secured_columns = dbt_data_privacy.get_secured_columns(data_handling_standards, columns) %}
-
-  {% set restructured_secured_columns = dbt_data_privacy.restructure_secured_columns(secured_columns) %}
-  {% set restructured_secured_expressions = dbt_data_privacy.convert_secured_columns_to_expressions(restructured_secured_columns) %}
+  {%- set restructured_columns = dbt_data_privacy.get_secured_columns_v2(data_handling_standards, columns) %}
 
   {# Generate a model SQL #}
   {%- set model_sql -%}
@@ -108,8 +105,11 @@
 
 WITH privacy_protected_model AS (
   SELECT
-    {%- for column_name, restructured_secured_expression in restructured_secured_expressions.items() %}
-    {{ restructured_secured_expression }} AS `{{- column_name -}}`,
+    {%- for top_level_column_name, top_level_restructured_column in restructured_columns.items() %}
+    {%- set expression = dbt_data_privacy.convert_restructured_column_to_expression(top_level_column_name, top_level_restructured_column) %}
+    {%- if expression is not none %}
+    {{ expression }},
+    {%- endif %}
     {%- endfor %}
   FROM
     {%- if dbt_data_privacy.is_macro_expression(reference) %}
