@@ -20,6 +20,8 @@
   {% do test_get_secured_restructured_column() %}
   {% do test_get_secured_columns_v2() %}
   {% do test_convert_restructured_column_to_expression() %}
+  {% do test_flatten_restructured_column_for_schema() %}
+  {% do test_flatten_restructured_columns_for_schema() %}
   {% do test_deep_merge_dicts() %}
   {% do test_restructure_secured_columns() %}
   {% do test_get_columns_by_policy_tag() %}
