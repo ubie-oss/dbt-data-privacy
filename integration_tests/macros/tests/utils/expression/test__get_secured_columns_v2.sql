@@ -67,7 +67,6 @@
 
   {% set result = dbt_data_privacy.get_secured_columns_v2(
       data_handling_standards=data_handling_standards,
-      column_conditions={},
       columns=columns
     ) %}
   {% set expected = {
@@ -266,7 +265,6 @@
   } %}
   {% set result = dbt_data_privacy.get_secured_columns_v2(
       data_handling_standards=data_handling_standards,
-      column_conditions={},
       columns=columns
     ) %}
   {% set expected = {

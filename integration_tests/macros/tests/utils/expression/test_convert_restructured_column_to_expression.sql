@@ -25,6 +25,14 @@
       'quote': None,
       'tags': []
     },
+    'struct1.z': {
+      'name': 'struct1.z',
+      'description': '',
+      'meta': {},
+      'data_type': None,
+      'quote': None,
+      'tags': []
+    },
     'array1': {
       'name': 'array1',
       'description': '',
@@ -91,11 +99,18 @@
       'quote': None,
       'tags': []
     },
+    'array1.struct1.array2.z': {
+      'name': 'array1.struct1.array2.z',
+      'description': '',
+      'meta': {},
+      'data_type': None,
+      'quote': None,
+      'tags': []
+    },
   } %}
 
   {% set restructured_columns = dbt_data_privacy.get_secured_columns_v2(
       data_handling_standards=data_handling_standards,
-      column_conditions={},
       columns=columns
     ) %}
 
