@@ -36,6 +36,12 @@
           {"project": "test-project1", "dataset": "test_dataset1"},
           {"project": "test-project2", "dataset": "test_dataset2"},
         ],
+        "partition_by": {
+          "field": "created_at",
+          "data_type": "timestamp",
+          "granularity": "day"
+        },
+        "cluster_by": ["id"],
         "require_partition_filter": true,
         "partition_expiration_days": 7,
       },
@@ -116,6 +122,12 @@
         "dataset": "test_dataset2",
       },
     ],
+    partition_by={
+      field: "created_at",
+      data_type: "timestamp",
+      granularity: "day",
+    },
+    cluster_by=['id'],
     tags=['tag1'],
     labels={
       "key1": "value1","key2": "value2",

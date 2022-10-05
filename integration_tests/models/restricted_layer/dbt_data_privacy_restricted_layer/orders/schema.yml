@@ -22,6 +22,11 @@ models:
             grant_access_to:
               - project: var('restricted_layer')
                 dataset: "dbt_data_privacy_restricted_layer"
+            partition_by:
+              field: "created_at"
+              data_type: "timestamp"
+              granularity: "day"
+            cluster_by: ["id"]
             tags: []
             labels:
               modeled_by: dbt
