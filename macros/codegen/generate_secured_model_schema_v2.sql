@@ -40,7 +40,8 @@
 
   {%- set config = dbt_data_privacy.get_data_privacy_config_by_objective(objective) %}
   {%- set data_handling_standards = config.get('data_handling_standards') %}
-  {%- set secured_columns = dbt_data_privacy.get_secured_columns(data_handling_standards, columns) %}
+  {%- set restructured_columns = dbt_data_privacy.get_secured_columns_v2(data_handling_standards, columns) %}
+  {%- set flatten_columns = dbt_data_privacy.flatten_restructured_columns_for_schema(restructured_columns) %}
 
   {%- set schema_yaml -%}
 ---
@@ -67,7 +68,7 @@ models:
       - dbt_data_privacy.dummy_test
 
     {%- if columns | length > 0 %}
-    columns: {%- for column_name, column in columns.items() %}
+    columns: {%- for column_name, column in flatten_columns | dictsort %}
       - name: {{ column.name }}
         {%- if column.description is defined and column.description | length > 0 %}
         description: |-
@@ -78,7 +79,7 @@ models:
         meta:
           data_privacy:
             {#- Think of the downgraded data security level #}
-            level: {{ secured_columns.get(column_name, {}).get("level", column.meta.data_privacy.level) }}
+            level: {{ column.meta.data_privacy.level }}
         {%- endif %}
         {%- if 'data_privacy' in column.meta
             and name in column.meta.data_privacy

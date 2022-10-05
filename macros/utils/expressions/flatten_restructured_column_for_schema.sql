@@ -12,7 +12,7 @@
 {% endmacro %}
 
 {% macro bigquery__flatten_restructured_column_for_schema(restructured_column, path) %}
-  {% set flatten_columns = [] %}
+  {% set flatten_columns = {} %}
 
   {% set is_array = false %}
   {% if restructured_column.original_info is defined
@@ -43,7 +43,7 @@
 
     {% set secured_expression = dbt_data_privacy.get_secured_expression_from_restructured_column(restructured_column) %}
     {% if secured_expression is not none %}
-      {% do flatten_columns.append([{full_column_name: restructured_column.original_info}]) %}
+      {% do flatten_columns.update({full_column_name: restructured_column.original_info}) %}
     {% endif %}
   {% endif %}
 
@@ -52,7 +52,9 @@
       {% set sub_flatten_columns = dbt_data_privacy.flatten_restructured_column_for_schema(
           restructured_column=sub_restructured_column,
           path=(path + [sub_column_name])) %}
-      {% do flatten_columns.extend(sub_flatten_columns) %}
+      {% for k, v in sub_flatten_columns.items() %}
+        {% do flatten_columns.update({k: v}) %}
+      {% endfor %}
     {% endfor %}
   {% endif %}
 

@@ -88,10 +88,10 @@
 
   {% set result = dbt_data_privacy.flatten_restructured_column_for_schema(
         restructured_columns["array1"], ["array1"]) %}
-  {% set expected = [
-    [{'array1.x': {'name': 'array1.x', 'description': '', 'meta': {'data_privacy': {'level': 'internal'}}, 'data_type': 'ARRAY', 'quote': None, 'tags': []}}],
-    [{'array1.y': {'name': 'array1.y', 'description': '', 'meta': {'data_privacy': {'level': 'internal'}}, 'data_type': None, 'quote': None, 'tags': []}}],
-    [{'array1.z': {'name': 'array1.z', 'description': '', 'meta': {'data_privacy': {'level': 'internal'}}, 'data_type': None, 'quote': None, 'tags': []}}]
-  ] %}
-  {{ assert_equals(result, expected) }}
+  {% set expected = {
+    'array1.x': {'name': 'array1.x', 'description': '', 'meta': {'data_privacy': {'level': 'internal'}}, 'data_type': 'ARRAY', 'quote': None, 'tags': []},
+    'array1.y': {'name': 'array1.y', 'description': '', 'meta': {'data_privacy': {'level': 'internal'}}, 'data_type': None, 'quote': None, 'tags': []},
+    'array1.z': {'name': 'array1.z', 'description': '', 'meta': {'data_privacy': {'level': 'internal'}}, 'data_type': None, 'quote': None, 'tags': []}
+  } %}
+  {{ assert_dict_equals(result, expected) }}
 {% endmacro %}

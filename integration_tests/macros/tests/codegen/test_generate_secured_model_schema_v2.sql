@@ -89,20 +89,6 @@ models:
       # A schema YAML file doesn't appear by `dbt ls --output path`, when it contains no tests.
       - dbt_data_privacy.dummy_test
     columns:
-      - name: id
-        description: |-
-          Raw ID
-        meta:
-          data_privacy:
-            level: internal
-      - name: user_id
-        description: |-
-          User ID
-        meta:
-          data_privacy:
-            level: internal
-        tests:
-          - not_null
       - name: consents.data_analysis
         description: |-
           Agree on data analysis
@@ -121,6 +107,20 @@ models:
         meta:
           data_privacy:
             level: internal
+      - name: id
+        description: |-
+          Raw ID
+        meta:
+          data_privacy:
+            level: internal
+      - name: user_id
+        description: |-
+          User ID
+        meta:
+          data_privacy:
+            level: internal
+        tests:
+          - not_null
 {%- endraw -%}
   {%- endset %}
 
