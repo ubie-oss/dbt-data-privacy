@@ -6,6 +6,9 @@
   {%- set result = dbt_data_privacy.get_secured_expression_by_method("column_a", "RAW") -%}
   {%- set expected = 'column_a' -%}
   {{ assert_equals(result, expected) }}
+  {%- set result = dbt_data_privacy.get_secured_expression_by_method("column_a", "raw") -%}
+  {%- set expected = 'column_a' -%}
+  {{ assert_equals(result, expected) }}
 
   {%- set result = dbt_data_privacy.get_secured_expression_by_method("column_a", "SHA256") -%}
   {%- set expected = 'SHA256(CAST(column_a AS STRING))' -%}
