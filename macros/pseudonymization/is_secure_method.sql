@@ -12,10 +12,10 @@
       "DROPPED": true,
     }
   %}
-  {% set capitalized_method = method | upper %}
-  {% if capitalized_method not in methods %}
-    {% do exceptions.raise_compiler_error("{} doesn't exit in {}".format(capitalized_method, methods)) %}
+  {% set uppercase_method = method | upper %}
+  {% if uppercase_method not in methods %}
+    {% do exceptions.raise_compiler_error("{} doesn't exit in {}".format(uppercase_method, methods)) %}
   {% endif %}
 
-  {{ return(methods.get(capitalized_method) ) }}
+  {{ return(methods.get(uppercase_method) ) }}
 {% endmacro %}
