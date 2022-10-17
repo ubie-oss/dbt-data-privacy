@@ -124,9 +124,9 @@ WITH privacy_protected_model AS (
     {%- endfor %}
   FROM
     {%- if dbt_data_privacy.is_macro_expression(reference) %}
-    {{ '{{ ' ~ reference ~ ' }}'}}
+    {{ '{{ ' ~ reference ~ ' }}'}} AS __original_table
     {%- else %}
-    {{ reference }}
+    {{ reference }} AS __original_table
     {%- endif %}
   {%- if where is not none %}
   WHERE
