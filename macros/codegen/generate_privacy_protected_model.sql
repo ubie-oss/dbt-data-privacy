@@ -22,7 +22,7 @@
     {% set where = data_privacy_meta.get("where") | default(none, True) %}
 
     {% set data_privacy_config = dbt_data_privacy.get_data_privacy_config_by_objective(objective) %}
-    {% set default_materialization = dbt_data_privacy.get_default_materialization(data_privacy_config) %}
+    {% set default_materialization = dbt_data_privacy.get_default_materialized_config(data_privacy_config) %}
 
     {% set model_config = dbt_data_privacy.format_model_config(**model_config) %}
     {% set enabled = model_config.get("enabled") %}
