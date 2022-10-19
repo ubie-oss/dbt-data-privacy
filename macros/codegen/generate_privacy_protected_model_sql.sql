@@ -114,7 +114,7 @@
     {%- endfor %}
     persist_docs={{ persist_docs }},
     {%- if docs is not none and docs is mapping %}
-    docs=docs,
+    docs={{ docs }},
     {%- endif %}
     full_refresh={{ full_refresh }},
     enabled={{ enabled }}
