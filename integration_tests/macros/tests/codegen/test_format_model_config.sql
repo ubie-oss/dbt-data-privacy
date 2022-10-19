@@ -35,6 +35,7 @@
         "relation": true,
         "columns": true
       },
+      "docs": none,
       "full_refresh": none,
       "enabled": true,
       "adapter_config": {

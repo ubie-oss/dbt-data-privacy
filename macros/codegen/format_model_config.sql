@@ -7,8 +7,13 @@
     labels={},
     persist_docs={"relation": true, "columns": true},
     full_refresh=none,
+    docs=none,
     enabled=true
   ) %}
+
+  {%- if docs is not none and docs is not mapping %}
+    {{ exceptions.raise_compiler_error("the 'docs' parameter must be a map {}".format(docs)) }}
+  {%- endif %}
 
   {% set configurations = {
       "materialized": materialized,
@@ -20,6 +25,7 @@
       "persist_docs": persist_docs,
       "full_refresh": full_refresh,
       "enabled": enabled,
+      "docs": docs,
       "adapter_config": {},
       "unknown_config": {},
     } %}

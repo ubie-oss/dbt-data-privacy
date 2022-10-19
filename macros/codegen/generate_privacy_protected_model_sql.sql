@@ -13,9 +13,11 @@
     tags=[],
     labels={},
     persist_docs={"relation": true, "columns": true},
+    docs=none,
     enabled=True,
     full_refresh=none
   ) %}
+
   {{- return(adapter.dispatch('generate_privacy_protected_model_sql', 'dbt_data_privacy')(
       objective=objective,
       materialized=materialized,
@@ -25,6 +27,7 @@
       tags=tags,
       labels=labels,
       persist_docs=persist_docs,
+      docs=docs,
       adapter_config=adapter_config,
       unknown_config=unknown_config,
       reference=reference,
@@ -50,6 +53,7 @@
     tags=[],
     labels={},
     persist_docs={"relation": true, "columns": true},
+    docs=none,
     relationships=none,
     enabled=True,
     full_refresh=none
@@ -109,6 +113,9 @@
     {{ k }}={{ dbt_data_privacy.safe_quote(v) }},
     {%- endfor %}
     persist_docs={{ persist_docs }},
+    {%- if docs is not none and docs is mapping %}
+    docs=docs,
+    {%- endif %}
     full_refresh={{ full_refresh }},
     enabled={{ enabled }}
   )
