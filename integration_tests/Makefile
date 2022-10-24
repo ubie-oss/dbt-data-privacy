@@ -17,3 +17,8 @@ test-get_tags_by_original_file_paths: setup
 		--vars "$$(cat "./resources/vars/vars-bigquery.basic.yml")" \
 		--args '{"original_file_paths":["models/restricted_layer/dbt_data_privacy_restricted_layer/consents/restricted_layer__dbt_data_privacy_restricted_layer__consents.sql"]}' \
 		get_tags_by_original_file_paths
+
+compile: setup
+	dbt compile --profiles-dir ./profiles \
+		--target bigquery \
+		--vars "$$(cat "./resources/vars/vars-bigquery.basic.yml")"
