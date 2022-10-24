@@ -16,7 +16,7 @@
       'name': 'user_id',
       'description': 'User ID',
       'meta': {
-        'data_privacy': {'level': 'confidential', 'policy_tags': ['unique_identifiers']}},
+        'data_privacy': {'level': 'confidential', 'policy_tags': ['unique_identifier']}},
         'data_type': None,
         'quote': None,
         'tags': []
