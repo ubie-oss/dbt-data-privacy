@@ -4,7 +4,8 @@
   {% for column_name, column_info in columns.items() %}
     {% if column_info.meta is defined
         and column_info.meta.data_privacy is defined
-        and column_info.meta.data_privacy.policy_tags is defined %}
+        and column_info.meta.data_privacy.policy_tags is defined
+        and policy_tag in column_info.meta.data_privacy.policy_tags %}
       {% do columns_with_target_policy_tag.update({column_name: column_info}) %}
     {% endif %}
   {% endfor %}
