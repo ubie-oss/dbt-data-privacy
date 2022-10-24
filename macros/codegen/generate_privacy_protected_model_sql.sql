@@ -91,9 +91,9 @@
     {%- endif %}
     {%- if "partition_by" in adapter_config %}
     partition_by={
-      field: {{ dbt_data_privacy.safe_quote(adapter_config["partition_by"]["field"]) }},
-      data_type: {{ dbt_data_privacy.safe_quote(adapter_config["partition_by"]["data_type"]) }},
-      granularity: {{ dbt_data_privacy.safe_quote(adapter_config["partition_by"]["granularity"]) }},
+      "field": {{ dbt_data_privacy.safe_quote(adapter_config["partition_by"]["field"]) }},
+      "data_type": {{ dbt_data_privacy.safe_quote(adapter_config["partition_by"]["data_type"]) }},
+      "granularity": {{ dbt_data_privacy.safe_quote(adapter_config["partition_by"]["granularity"]) }},
     },
     {%- endif %}
     {%- if "cluster_by" in adapter_config %}
