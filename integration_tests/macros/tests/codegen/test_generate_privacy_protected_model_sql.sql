@@ -107,9 +107,9 @@
       },
     ],
     partition_by={
-      field: "created_at",
-      data_type: "timestamp",
-      granularity: "day",
+      "field": "created_at",
+      "data_type": "timestamp",
+      "granularity": "day",
     },
     cluster_by=['id'],
     tags=['tag1'],
