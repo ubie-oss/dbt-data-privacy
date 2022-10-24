@@ -47,8 +47,10 @@
 ARRAY(
   SELECT
     STRUCT(
-      {%- for expression in sub_expressions %}
-      {{ expression }}{%- if not loop.last %},{%- endif %}
+      {%- for sub_expression in sub_expressions %}
+      {%- if sub_expression is not none %}
+      {{ sub_expression }}{%- if not loop.last %},{%- endif %}
+      {%- endif %}
       {%- endfor %}
     )
   FROM UNNEST({{- column_alias -}})
@@ -66,8 +68,10 @@ ARRAY(
 
     {%- set expression -%}
 STRUCT(
-  {%- for expression in sub_expressions %}
-  {{ expression }}{%- if not loop.last %},{%- endif %}
+  {%- for sub_expression in sub_expressions %}
+  {%- if sub_expression is not none %}
+  {{ sub_expression }}{%- if not loop.last %},{%- endif %}
+  {%- endif %}
   {%- endfor %}
 ) AS `{{- key -}}`
     {%- endset %}
@@ -81,9 +85,13 @@ STRUCT(
       {{ exceptions.raise_compiler_error("secured_expression is not defined {} => {}".format(key, restructured_column)) }}
     {% endif %}
 
+    {% if restructured_column.additional_info.secured_expression is none  %}
+      {{ return(none) }}
     {%- set expression -%}
-    {{ restructured_column.additional_info.secured_expression }} AS `{{- key -}}`
     {%- endset %}
+    {%- else %}
+      {% set expression = '{} AS `{}`'.format(restructured_column.additional_info.secured_expression, key) %}
+    {%- endif %}
   {% endif %}
 
   {# indent by depth #}
