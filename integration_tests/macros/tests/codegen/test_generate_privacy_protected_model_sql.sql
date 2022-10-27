@@ -80,11 +80,18 @@
         }
       },
       where="1 = 1",
-      relationships={
-        "to": "ref('test_consents')",
-        "fields": {"user_id": "user_id"},
-        "where": "agree is TRUE",
-      }
+      relationships=[
+        {
+          "to": "ref('test_consents_01')",
+          "fields": {"user_id": "user_id"},
+          "where": "agree is TRUE",
+        },
+        {
+          "to": "ref('test_consents_02')",
+          "fields": {"user_id": "customer_id"},
+          "where": "consent is TRUE",
+        },
+      ]
     ) -%}
 
   {%- set expected -%}
@@ -138,15 +145,27 @@ WITH privacy_protected_model AS (
     {{ ref('test_restricted_users') }} AS __original_table
   WHERE
     1 = 1
-  )
+)
+, __relationships_0 AS (
+  SELECT *
+  FROM {{ ref('test_consents_01') }} AS __relationships_0
+  WHERE
+    agree is TRUE
+)
+, __relationships_1 AS (
+  SELECT *
+  FROM {{ ref('test_consents_02') }} AS __relationships_1
+  WHERE
+    consent is TRUE
+)
 
 SELECT
-  source.*,
-FROM privacy_protected_model AS source
-JOIN {{ ref('test_consents') }} AS target
-  ON source.user_id = target.user_id
-  WHERE
-  agree is TRUE
+  __source.*,
+FROM privacy_protected_model AS __source
+JOIN __relationships_0
+  ON __source.user_id = __relationships_0.user_id
+JOIN __relationships_1
+  ON __source.user_id = __relationships_1.customer_id
 {%- endraw -%}
   {%- endset %}
 
