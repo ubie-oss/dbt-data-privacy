@@ -138,24 +138,35 @@ WITH privacy_protected_model AS (
   {%- if where is not none %}
   WHERE
     {{ where }}
-  {% endif -%}
+  {%- endif %}
 )
+{%- if relationships is not none and dbt_data_privacy.validate_relationships(relationships)  -%}
+{%- for i in range(relationships | length) %}
+, __relationships_{{ i }} AS (
+  SELECT *
+  FROM {{ '{{ ' ~ relationships[i]["to"] ~ ' }}' }} AS __relationships_{{ i }}
+  {%- if "where" in relationships[i] %}
+  WHERE
+    {{ relationships[i]["where"] }}
+  {%- endif %}
+)
+{%- endfor %}
+{%- endif %}
 
 SELECT
-  source.*,
-FROM privacy_protected_model AS source
-{% if relationships is not none and dbt_data_privacy.validate_relationships(relationships)  -%}
-JOIN {{ '{{ ' ~ relationships["to"] ~ ' }}' }} AS target
-  ON {% for k, v in relationships["fields"].items() -%}
-    {%- if not loop.first -%}AND {% endif -%}
-    source.{{ k }} = target.{{ v }}
-  {% endfor -%}
-{% if "where" in relationships and relationships["where"] | length > 0 -%}
-WHERE
-  {{ relationships["where"] }}
-{%- endif %}
-{%- endif %}
-  {% endset %}
+  __source.*,
+FROM privacy_protected_model AS __source
 
-  {{- return(model_sql) -}}
+{%- if relationships is not none and dbt_data_privacy.validate_relationships(relationships)  -%}
+{%- for i in range(relationships | length) %}
+JOIN __relationships_{{ i }}
+  ON {% for k, v in relationships[i]["fields"].items() -%}
+    {%- if not loop.first -%}AND {% endif -%}
+    __source.{{- k }} = __relationships_{{- i -}}.{{- v }}
+  {% endfor -%}
+{%- endfor %}
+{%- endif %}
+  {%- endset %}
+
+  {{ return(model_sql) }}
 {% endmacro %}
