@@ -143,7 +143,7 @@ WITH privacy_protected_model AS (
   SELECT *
   FROM {{ ref('test_consents') }} AS __relationships_0
   WHERE
-    relationships[i]["where"]
+    agree is TRUE
 )
 
 SELECT
