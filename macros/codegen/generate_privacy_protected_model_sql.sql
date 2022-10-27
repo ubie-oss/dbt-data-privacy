@@ -163,7 +163,7 @@ JOIN __relationships_{{ i }}
   ON {% for k, v in relationships[i]["fields"].items() -%}
     {%- if not loop.first -%}AND {% endif -%}
     __source.{{- k }} = __relationships_{{- i -}}.{{- v }}
-  {% endfor -%}
+  {%- endfor %}
 {%- endfor %}
 {%- endif %}
   {%- endset %}
