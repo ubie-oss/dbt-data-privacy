@@ -23,12 +23,12 @@
   {% elif uppercase_method == "CONDITIONAL_HASH" %}
     {% if with_params is mapping
         and with_params.default_method is defined
-        and with_params.condition is defined %}
+        and with_params.conditions is defined %}
       {% set secured_expression = dbt_data_privacy.conditional_hash(
         column_conditions=column_conditions,
         expression=expression,
         default_method=with_params.default_method,
-        condition=with_params.condition,
+        conditions=with_params.conditions,
         data_type=data_type) %}
     {% else %}
       {{ exceptions.raise_compiler_error("Invalid inputs for {} with {} under {} ".format(expression, method, column_conditions)) }}
