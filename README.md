@@ -67,4 +67,4 @@ SELECT
 ```
 
 ### Code generation
-COMING SOON
+[Generate privacy-protected dbt models](./docs/generate_models.md)
