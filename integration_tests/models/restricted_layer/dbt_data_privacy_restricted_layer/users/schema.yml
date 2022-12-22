@@ -78,10 +78,12 @@ models:
             level: highly_restricted
         tests:
           - not_null
-      - name: age
-        description: "Age"
+      - name: birthdate
+        description: "birthdate"
         meta:
           data_privacy:
             level: restricted
+            policy_tags:
+              - birthdate
         tests:
           - not_null

@@ -3,6 +3,7 @@
   {% set expected = {
      'default_materialization': 'view',
      'default_tag': 'dbt_data_privacy',
+     "enabled_policy_tags": ["birthdate"],
      'data_handling_standards': {
        'public': { 'method': 'RAW' },
         'internal': {'method': 'RAW'},

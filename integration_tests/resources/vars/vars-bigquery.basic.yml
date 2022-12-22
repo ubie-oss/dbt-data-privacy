@@ -5,6 +5,8 @@ data_analysis_layer: "ubie-oss-data-engineering"
 data_privacy:
   data_analysis:
     default_materialization: view
+    enabled_policy_tags:
+      - birthdate
     data_handling_standards:
         public:
           method: RAW

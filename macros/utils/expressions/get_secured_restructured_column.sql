@@ -79,6 +79,10 @@
           data_type=data_type,
           column_conditions=column_conditions) %}
 
+      {# Obfuscate by policy tags #}
+      {# NOTE Data obfuscation is highly prioritized than data handling standards #}
+      {% do print(restructured_column) %}
+
       {# Downgrade the data security level if secured #}
       {% set method, with, converted_level = dbt_data_privacy.get_data_handling_standard_by_level(
           data_handling_standards=data_handling_standards,
