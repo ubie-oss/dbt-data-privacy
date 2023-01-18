@@ -43,7 +43,7 @@
 
     {% set secured_expression = dbt_data_privacy.get_secured_expression_from_restructured_column(restructured_column) %}
     {% if secured_expression is not none %}
-      {% do flatten_columns.update({full_column_name: restructured_column.original_info}) %}
+      {% do flatten_columns.update({full_column_name: column_info}) %}
     {% endif %}
   {% endif %}
 
