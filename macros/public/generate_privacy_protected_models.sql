@@ -6,7 +6,7 @@
   {% do models_and_sources.extend(dbt_data_privacy.get_nodes("model")) %}
   {% do models_and_sources.extend(dbt_data_privacy.get_nodes("source")) %}
 
-  {% set selected_models_and_sources = models_and_sources.copy() %}
+  {% set selected_models_and_sources = models_and_sources %}
 
   {# Filter by unique_ids #}
   {% if unique_ids is not none and unique_ids | length > 0 %}

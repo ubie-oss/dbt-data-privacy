@@ -30,7 +30,7 @@
   {% if restructured_column.original_info is defined %}
     {# TODO overwrite downgraded data security level #}
     {% set full_column_name = path | join('.') %}
-    {% set column_info = restructured_column.original_info %}
+    {% set column_info = dbt_data_privacy.deep_copy_dict(restructured_column.original_info) %}
 
     {# overwrite by converted data security level #}
     {% set converted_level = dbt_data_privacy.get_converted_level_from_restructured_column(restructured_column) %}
@@ -43,7 +43,7 @@
 
     {% set secured_expression = dbt_data_privacy.get_secured_expression_from_restructured_column(restructured_column) %}
     {% if secured_expression is not none %}
-      {% do flatten_columns.update({full_column_name: restructured_column.original_info}) %}
+      {% do flatten_columns.update({full_column_name: column_info}) %}
     {% endif %}
   {% endif %}
 

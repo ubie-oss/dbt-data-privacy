@@ -6,6 +6,7 @@
   {#
     utils
   #}
+  {% do test_deep_copy_dict() %}
   {% do test_get_data_privacy_configs() %}
   {% do test_get_data_privacy_objectives() %}
   {% do test_get_data_privacy_config_by_objective() %}

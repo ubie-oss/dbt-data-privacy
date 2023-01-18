@@ -3,7 +3,7 @@
 
   {% for node in nodes %}
     {% if dbt_data_privacy.has_data_privacy_meta(node) %}
-      {% do selected_nodes.append(node.copy()) %}
+      {% do selected_nodes.append(node) %}
     {% endif %}
   {% endfor %}
 

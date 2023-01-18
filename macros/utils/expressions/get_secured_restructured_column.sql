@@ -8,7 +8,7 @@
 {% endmacro %}
 
 {% macro bigquery__get_secured_restructured_column(data_handling_standards, column_conditions, restructured_column, relative_path=none, depth=0) %}
-  {% set copied_restructured_column = restructured_column.copy() %}
+  {% set copied_restructured_column = dbt_data_privacy.deep_copy_dict(restructured_column) %}
 
   {% if relative_path is none %}
     {% set relative_path = [] %}

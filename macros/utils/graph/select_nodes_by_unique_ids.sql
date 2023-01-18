@@ -11,7 +11,7 @@
     {% endif %}
 
     {% if node.unique_id in unique_ids %}
-      {% do selected_nodes.append(node.copy()) %}
+      {% do selected_nodes.append(node) %}
     {% endif %}
   {% endfor %}
 
