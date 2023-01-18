@@ -7,7 +7,7 @@
     {% endif %}
 
     {% if node.original_file_path in original_file_paths %}
-      {% do selected_nodes.append(node.copy()) %}
+      {% do selected_nodes.append(dbt_data_privacy.deep_copy_dict(node)) %}
     {% endif %}
   {% endfor %}
 
