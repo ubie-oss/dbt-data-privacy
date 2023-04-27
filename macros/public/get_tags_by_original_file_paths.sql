@@ -7,8 +7,9 @@
 
   {# Generate dbt models and sources #}
   {% set models_and_sources = [] %}
-  {% do models_and_sources.extend(dbt_data_privacy.get_nodes("model")) %}
   {% do models_and_sources.extend(dbt_data_privacy.get_nodes("source")) %}
+  {% do models_and_sources.extend(dbt_data_privacy.get_nodes("model")) %}
+  {% do models_and_sources.extend(dbt_data_privacy.get_nodes("snapshot")) %}
 
   {# Filter by original_file_paths #}
   {% set selected_nodes = [] %}
