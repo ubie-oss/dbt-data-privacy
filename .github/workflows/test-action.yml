@@ -22,6 +22,10 @@ jobs:
             pip-requirements: "requirements-1.2.txt"
           - python-version: "3.10"
             pip-requirements: "requirements-1.3.txt"
+          - python-version: "3.10"
+            pip-requirements: "requirements-1.4.txt"
+          - python-version: "3.10"
+            pip-requirements: "requirements-1.5.txt"
     defaults:
       run:
         shell: bash
