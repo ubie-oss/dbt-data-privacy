@@ -27,6 +27,7 @@ jobs:
           - "requirements-1.2.txt"
           - "requirements-1.3.txt"
           - "requirements-1.4.txt"
+          - "requirements-1.5.txt"
     defaults:
       run:
         shell: bash
