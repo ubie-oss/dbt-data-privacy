@@ -1,5 +1,5 @@
 setup:
-	pip install -r requirements/requirements-1.4.txt
+	pip install --force-reinstall -r requirements/requirements-1.6.txt
 	dbt deps --profiles-dir profiles --target bigquery
 
 generate:
