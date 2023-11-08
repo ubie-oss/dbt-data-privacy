@@ -5,7 +5,7 @@
 {%- macro bigquery__sha512(expression, data_type=none) -%}
   {% set secured_expression = "SHA512(CAST({} AS STRING))".format(expression)%}
 
-  {% if data_type | upper == "ARRAY" %}
+  {% if data_type | upper in ["ARRAY", "RECORD"] %}
     {% set secured_expression = "ARRAY(SELECT SHA512(CAST(e AS STRING)) FROM UNNEST({}) AS e)".format(expression)%}
   {% endif %}
 

@@ -9,7 +9,7 @@
 {%- macro bigquery__udf_hash(expression, udf_function, data_type=none) -%}
   {% set secured_expression = "{}(CAST({} AS STRING))".format(udf_function, expression)%}
 
-  {% if data_type | upper == "ARRAY" %}
+  {% if data_type | upper in ["ARRAY", "RECORD"] %}
     {% set secured_expression = "ARRAY(SELECT {}(CAST(e AS STRING)) FROM UNNEST({}) AS e)".format(udf_function, expression)%}
   {% endif %}
 

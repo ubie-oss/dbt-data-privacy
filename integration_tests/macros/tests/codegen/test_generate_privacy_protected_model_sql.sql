@@ -77,6 +77,14 @@
               "level": "restricted",
             },
           },
+        },
+        "dummy_record": {
+          "data_type": "RECORD",
+          "meta": {
+            "data_privacy": {
+              "level": "internal",
+            },
+          },
         }
       },
       where="1 = 1",
@@ -141,6 +149,7 @@ WITH privacy_protected_model AS (
     ) AS `consents`,
     dummy_column AS `dummy_column`,
     dummy_array AS `dummy_array`,
+    dummy_record AS `dummy_record`,
   FROM
     {{ ref('test_restricted_users') }} AS __original_table
   WHERE
