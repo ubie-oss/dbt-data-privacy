@@ -17,7 +17,7 @@
   {% set is_array = false %}
   {% if restructured_column.original_info is defined
       and restructured_column.original_info.data_type is defined
-      and restructured_column.original_info.data_type == "ARRAY" %}
+      and restructured_column.original_info.data_type in ["ARRAY", "RECORD"] %}
     {% set is_array = true %}
   {% endif %}
 
