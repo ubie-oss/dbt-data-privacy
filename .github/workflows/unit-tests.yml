@@ -6,11 +6,7 @@ on:
   pull_request:
     paths:
       - macros/**/*
-      - integration_tests/macros/**/*.sql
-      - integration_tests/models/**/*.sql
-      - integration_tests/dbt_package.yml
-      - integration_tests/packages.yml
-      - integration_tests/requirements/*
+      - integration_tests/**/*
 
 jobs:
   bigquery:
