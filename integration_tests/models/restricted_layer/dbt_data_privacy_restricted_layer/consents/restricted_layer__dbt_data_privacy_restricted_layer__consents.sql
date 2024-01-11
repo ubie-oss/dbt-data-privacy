@@ -1,3 +1,4 @@
+-- noqa: disable=all
 {% set database = var('restricted_layer') %}
 {% set schema = "dbt_data_privacy_restricted_layer" %}
 {% set data_privacy_config = dbt_data_privacy.get_data_privacy_config_by_objective("data_analysis") %}
