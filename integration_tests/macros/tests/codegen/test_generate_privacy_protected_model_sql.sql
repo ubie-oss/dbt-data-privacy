@@ -151,7 +151,7 @@ WITH privacy_protected_model AS (
     dummy_array AS `dummy_array`,
     dummy_record AS `dummy_record`,
   FROM
-    {{ ref('test_restricted_users') }} AS __original_table
+    {{ ref('test_restricted_users') }}
   WHERE
     1 = 1
 )
