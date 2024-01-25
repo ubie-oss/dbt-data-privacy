@@ -58,7 +58,7 @@ models:
     tags: {{ tags | unique | sort | list }}
     {%- endif %}
     {%- if labels | length > 0 %}
-    meta: {% for k, v in labels.items() %}
+    meta:{% for k, v in labels.items() %}
       {{ k }}: {{ v }}
     {%- endfor %}
     {%- endif %}
@@ -92,6 +92,5 @@ models:
     {%- endfor %}
     {%- endif %}
   {% endset %}
-
   {% do return(schema_yaml) %}
 {% endmacro %}
