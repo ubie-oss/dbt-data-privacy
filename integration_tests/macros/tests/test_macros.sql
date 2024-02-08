@@ -55,5 +55,6 @@
   #}
   {% do test_generate_privacy_protected_models() %}
   {% do test_get_tags_by_original_file_paths() %}
+  {% do test_get_files_by_tag() %}
 
 {% endmacro %}
