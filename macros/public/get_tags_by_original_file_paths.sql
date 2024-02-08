@@ -3,20 +3,13 @@
     {% do exceptions.raise_compiler_error("Invalid original_file_paths {}".format(original_file_paths)) %}
   {% endif %}
 
-  {% set unique_tags = [] %}
-
-  {# Generate dbt models and sources #}
-  {% set models_and_sources = [] %}
-  {% do models_and_sources.extend(dbt_data_privacy.get_nodes("source")) %}
-  {% do models_and_sources.extend(dbt_data_privacy.get_nodes("model")) %}
-  {% do models_and_sources.extend(dbt_data_privacy.get_nodes("snapshot")) %}
-
-  {# Filter by original_file_paths #}
-  {% set selected_nodes = [] %}
-  {% if original_file_paths is not none and original_file_paths | length > 0 %}
-    {% set selected_nodes = dbt_data_privacy.select_nodes_by_original_file_paths(
-            models_and_sources, original_file_paths) %}
-  {% endif %}
+  {# Select dbt models and sources whose original_file_path is in the list #}
+  {% set selected_sources = graph.sources.values()
+      | selectattr("original_file_path", "in", original_file_paths) %}
+  {% set selected_models = graph.nodes.values()
+      | selectattr("resource_type", "in", ["model", "snapshot"])
+      | selectattr("original_file_path", "in", original_file_paths) %}
+  {% set selected_nodes = selected_sources|list + selected_models|list %}
 
   {# Filter if a node has data privacy meta #}
   {% if has_data_privacy_meta %}
@@ -24,6 +17,7 @@
   {% endif %}
 
   {# Extract tags #}
+  {% set unique_tags = [] %}
   {% for node in selected_nodes %}
     {% if node.tags is defined and node.tags | length > 0 %}
       {% do unique_tags.extend(node.tags) %}
