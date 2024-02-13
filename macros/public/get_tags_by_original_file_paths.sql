@@ -7,8 +7,6 @@
   {% set selected_sources = graph.sources.values()
       | selectattr("original_file_path", "in", original_file_paths) %}
   {% set selected_models = graph.nodes.values()
-      | rejectattr("resource_type", "equalto", "test")
-      | selectattr("resource_type", "in", ["model", "snapshot"])
       | selectattr("original_file_path", "in", original_file_paths) %}
   {% set selected_nodes = selected_sources|list + selected_models|list %}
 
