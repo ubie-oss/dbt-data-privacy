@@ -1,9 +1,9 @@
-{% macro generate_privacy_protected_model(node) %}
-  {% set generated_models = adapter.dispatch('generate_privacy_protected_model', 'dbt_data_privacy')(node) %}
+{% macro generate_privacy_protected_model(node, extra_labels=none) %}
+  {% set generated_models = adapter.dispatch('generate_privacy_protected_model', 'dbt_data_privacy')(node, extra_labels=extra_labels) %}
   {{ return(generated_models) }}
 {% endmacro %}
 
-{% macro bigquery__generate_privacy_protected_model(node) %}
+{% macro bigquery__generate_privacy_protected_model(node, extra_labels=none) %}
   {% set generated_models = [] %}
 
   {% if dbt_data_privacy.has_data_privacy_meta(node) is false %}
@@ -39,6 +39,11 @@
 
     {# Append the objective tag #}
     {% do tags.extend([dbt_data_privacy.get_default_tag(data_privacy_config), objective]) %}
+
+    {# Add extra labels #}
+    {%- if extra_labels is not none and extra_labels is mapping %}
+      {% do labels.update(extra_labels) %}
+    {%- endif %}
 
     {% set model_sql = dbt_data_privacy.generate_privacy_protected_model_sql(
         objective=objective,

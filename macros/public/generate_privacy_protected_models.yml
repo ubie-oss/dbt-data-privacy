@@ -1,0 +1,30 @@
+version: 2
+
+macros:
+  - name: generate_privacy_protected_models
+    arguments:
+      - name: unique_ids
+        type: string
+        description: |-
+          A list of unique ID of dbt resources to select
+      - name: original_file_paths
+        type: string
+        description: |-
+          A list of original file paths of dbt resources to select
+      - name: tags
+        type: string
+        description: |-
+          A list of tags of the dbt resources to select
+      - name: extra_labels
+        type: object
+        description: |-
+          A JSON object containing additional labels to apply to the generated models. If none, no extra labels are applied.
+          A map of labels to apply to the generated models. If none, no extra labels are applied.
+      - name: verbose
+        type: boolean
+        description: |-
+          If true, prints detailed information about the generated models. Defaults to true.
+    description: |
+      This macro generates privacy-protected models based on the specified criteria such as unique IDs, original file paths, tags, and additional labels.
+      It leverages the `generate_privacy_protected_model` macro to create models that adhere to data privacy configurations defined in the project.
+      The macro supports filtering dbt resources to process only those that match the given criteria, and it can optionally print detailed information about the generated models if the verbose argument is set to true.

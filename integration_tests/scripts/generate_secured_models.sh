@@ -62,7 +62,10 @@ done
 #    --profile "$dbt_profile" \
 #    --target "$dbt_target" \
 #    --vars "$(cat "${vars_path}")"
-generated_models="$(dbt --quiet run-operation "dbt_data_privacy.generate_privacy_protected_models" \
+run_operation_args='{"extra_labels": {"invocation_id": 123456789}}'
+generated_models="$(dbt --quiet run-operation \
+    --args "${run_operation_args}" \
+    "dbt_data_privacy.generate_privacy_protected_models" \
     --profiles-dir "${dbt_profiles_dir:?}" \
     --profile "${dbt_profile:?}" \
     --target "${dbt_target:?}" \
