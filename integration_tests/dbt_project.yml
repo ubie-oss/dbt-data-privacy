@@ -20,4 +20,12 @@ clean-targets:  # directories to be removed by `dbt clean`
   - "target"
   - "dbt_modules"
 
+flags:
+  send_anonymous_usage_stats: false
+  use_colors: true
+  warn_error_options:
+    silence:
+      - ProjectFlagsMovedDeprecation
+
+
 models:
