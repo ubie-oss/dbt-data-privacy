@@ -17,6 +17,11 @@
           "meta": {
             "data_privacy": {
               "level": "internal",
+              "test_project__test_dataset__test_table": {
+                "data_tests": [
+                  "unique"
+                ],
+              },
             },
           },
         },
@@ -109,13 +114,15 @@ models:
         meta:
           data_privacy:
             level: internal
+        data_tests:
+          - unique
       - name: user_id
         description: |-
           User ID
         meta:
           data_privacy:
             level: internal
-        tests:
+        data_tests:
           - not_null
 {%- endraw -%}
   {%- endset %}
