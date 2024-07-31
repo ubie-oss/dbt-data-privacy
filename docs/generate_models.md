@@ -249,10 +249,10 @@ We have to change the key to your model ID.
             level: confidential
             policy_tags: ["unique_identifier"]
             data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents:
-              tests: ["unique"]
+              data_tests: ["unique"]
       - name: pseudonymized_user_id
         description: "Pseudonymized user ID"
-        tests:
+        data_tests:
           - not_null
       - name: consent.data_analysis
         description: "Consent agree of data analysis"
