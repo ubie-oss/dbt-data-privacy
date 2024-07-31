@@ -76,12 +76,18 @@ models:
             {#- Think of the downgraded data security level #}
             level: {{ column.meta.data_privacy.level }}
         {%- endif %}
+        {#- We support both `data_tests` and `tests` for a while -#}
+        {#- TODO: remove `tests` after dbt no longer supports it -#}
         {%- if 'data_privacy' in column.meta
             and name in column.meta.data_privacy
-            and 'tests' in column.meta.data_privacy[name]
-            and column.meta.data_privacy[name].tests | length > 0 %}
-        tests: {%- for test in column.meta.data_privacy[name].tests %}
-          - {{ test }}
+            and (
+              column.meta.data_privacy[name].get('data_tests', []) | length > 0
+              or column.meta.data_privacy[name].get('tests', []) | length > 0
+            ) %}
+        {%- set data_tests = column.meta.data_privacy[name].get('data_tests', [])
+            + column.meta.data_privacy[name].get('tests', []) %}
+        data_tests: {%- for data_test in data_tests %}
+          - {{ data_test }}
         {%- endfor %}
         {%- endif %}
     {%- endfor %}
