@@ -34,13 +34,7 @@
               "policy_tags": ["unique_identifier"],
               "test_project__test_dataset__test_table": {
                 "tests": [
-                  {
-                    "not_null": {
-                      "config": {
-                        "where": "1 = 1"
-                      }
-                    }
-                  }
+                  "not_null"
                 ],
               },
             },
@@ -78,6 +72,21 @@
       labels={
         "key1": "value1",
         "key2": "value2",
+      },
+      data_tests={
+        "test1": {
+          "key1": "value1",
+        },
+        "test2": {
+          "key2": "value2",
+          "key3": "value3",
+        }
+      },
+      tests={
+        "test1": {
+          "key4": "value4",
+          "key5": "value5",
+        }
       }
     ) -%}
 
@@ -92,6 +101,15 @@ models:
     description: |-
       Sample description
     tags: ['tag1']
+    data_tests:
+      - test1:
+          key1: value1
+      - test2:
+          key2: value2
+          key3: value3
+      - test1:
+          key4: value4
+          key5: value5
     meta:
       key1: value1
       key2: value2
@@ -129,7 +147,7 @@ models:
           data_privacy:
             level: internal
         data_tests:
-          - {"not_null": {"config": {"where": "1=1"}}}
+          - not_null
 {%- endraw -%}
   {%- endset %}
 

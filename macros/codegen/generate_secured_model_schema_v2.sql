@@ -7,7 +7,9 @@
       description=none,
       columns={},
       tags=[],
-      labels={}
+      labels={},
+      data_tests={},
+      tests={}
     ) %}
   {{- return(adapter.dispatch('generate_secured_model_schema_v2', 'dbt_data_privacy')(
       objective=objective,
@@ -18,7 +20,9 @@
       description=description,
       columns=columns,
       tags=tags,
-      labels=labels
+      labels=labels,
+      data_tests=data_tests,
+      tests=tests
     )) -}}
 {% endmacro %}
 
@@ -31,7 +35,9 @@
       description=none,
       columns=[],
       tags=[],
-      labels={}
+      labels={},
+      data_tests={},
+      tests={}
     ) %}
 
   {% if columns | length == 0 %}
@@ -58,6 +64,26 @@ models:
     tags: {{ tags | unique | sort | list }}
     {%- endif %}
     {%- if labels | length > 0 %}
+    {#- We support both `data_tests` and `tests` for a while -#}
+    {#- TODO: remove `tests` after dbt no longer supports it -#}
+    {%- set combined_tests = [] %}
+    {%- for test_name, test_content in data_tests.items() %}
+        {%- do combined_tests.append({test_name: [test_content]}) %}
+    {%- endfor %}
+    {%- for test_name, test_content in tests.items() %}
+        {%- do combined_tests.append({test_name: [test_content]}) %}
+    {%- endfor %}
+    {%- if combined_tests | length > 0 %}
+    data_tests:
+        {%- for test in combined_tests %}
+        - {{ test.keys() | first }}:
+            {%- for content in test.values() | first %}
+            {%- for key, value in content.items() %}
+            {{ key }}: {{ value }}
+            {%- endfor %}
+            {%- endfor %}
+        {%- endfor %}
+    {%- endif %}
     meta: {%- for k, v in labels.items() %}
       {{ k }}: {{ v }}
     {%- endfor %}
@@ -87,12 +113,7 @@ models:
         {%- set data_tests = column.meta.data_privacy[name].get('data_tests', [])
             + column.meta.data_privacy[name].get('tests', []) %}
         data_tests: {%- for data_test in data_tests %}
-          {%- if data_test is mapping %}
-          {#- Convert to single line as we assume embedded JSON is ok in YAML #}
-          - {{ data_test | tojson }}
-          {%- else %}
           - {{ data_test }}
-          {%- endif %}
         {%- endfor %}
         {%- endif %}
     {%- endfor %}
