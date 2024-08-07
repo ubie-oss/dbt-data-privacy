@@ -87,12 +87,7 @@ models:
         {%- set data_tests = column.meta.data_privacy[name].get('data_tests', [])
             + column.meta.data_privacy[name].get('tests', []) %}
         data_tests: {%- for data_test in data_tests %}
-          {%- if data_test is mapping %}
-          {#- Convert to single line as we assume embedded JSON is ok in YAML #}
-          - {{ data_test | tojson }}
-          {%- else %}
           - {{ data_test }}
-          {%- endif %}
         {%- endfor %}
         {%- endif %}
     {%- endfor %}
