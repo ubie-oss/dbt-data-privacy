@@ -34,7 +34,13 @@
               "policy_tags": ["unique_identifier"],
               "test_project__test_dataset__test_table": {
                 "tests": [
-                  "not_null"
+                  {
+                    "not_null": {
+                      "config": {
+                        "where": "1 = 1"
+                      }
+                    }
+                  }
                 ],
               },
             },
@@ -123,7 +129,7 @@ models:
           data_privacy:
             level: internal
         data_tests:
-          - not_null
+          - {"not_null": {"config": {"where": "1=1"}}}
 {%- endraw -%}
   {%- endset %}
 
