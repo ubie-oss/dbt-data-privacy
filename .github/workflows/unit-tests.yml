@@ -10,6 +10,10 @@ on:
 
 jobs:
   bigquery:
+    # Add "id-token" with the intended permissions.
+    permissions:
+      contents: read
+      id-token: write
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -50,12 +54,16 @@ jobs:
         shell: bash
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
           cache-dependency-path: '**/${{ matrix.pip-requirements }}'
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/131500153501/locations/global/workloadIdentityPools/github-oidc-pool/providers/github-oidc-provider
+          service_account: dbt-data-privacy@ubie-oss-data-engineering.iam.gserviceaccount.com
       - name: Install dbt
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
