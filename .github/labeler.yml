@@ -3,30 +3,37 @@
 
 # Related to CI
 CI:
-  - ci/*
-  - ci/**/*
-  - .github/*
-  - .github/**/*
+  - changed-files:
+      - any-glob-to-any-file: 'ci/*'
+      - any-glob-to-any-file: 'ci/**/*'
+      - any-glob-to-any-file: '.github/*'
+      - any-glob-to-any-file: '.github/**/*'
 
 # Related to dbt analysis
 integration-tests:
-  - integration_tests/*
-  - integration_tests/**/*
+  - changed-files:
+      - any-glob-to-any-file: 'integration_tests/*'
+      - any-glob-to-any-file: 'integration_tests/**/*'
 
 # Related to dbt models
 macros:
-  - macros/*
-  - macros/**/*
+  - changed-files:
+      - any-glob-to-any-file: 'macros/*'
+      - any-glob-to-any-file: 'macros/**/*'
+
 # Foundational changes
 core:
-  - dbt_project.yml
+  - changed-files:
+      - any-glob-to-any-file: 'dbt_project.yml'
 
 # Related to documentations
 docs:
-  - docs/*.md
-  - docs/**/*.md
-  - README.md
+  - changed-files:
+      - any-glob-to-any-file: 'docs/*.md'
+      - any-glob-to-any-file: 'docs/**/*.md'
+      - any-glob-to-any-file: 'README.md'
 
 action:
-  - action/*
-  - action/**/*
+  - changed-files:
+      - any-glob-to-any-file: 'action/*'
+      - any-glob-to-any-file: 'action/**/*'
