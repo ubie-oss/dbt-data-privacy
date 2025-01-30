@@ -71,6 +71,7 @@ jobs:
         run: |
           pip install -r "requirements/${{ matrix.pip-requirements }}"
       - name: Run unit tests
+        id: run_unit_tests
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
           bash run_unit_tests.sh --target bigquery  --vars-path resources/vars/vars-bigquery.basic.yml
@@ -85,4 +86,6 @@ jobs:
             integration_tests/logs
             integration_tests/target
       - id: exit
-        run: exit ${{ steps.apply.outputs.exitcode }}
+        if: steps.run_unit_tests.outcome != 'success'
+        run: |
+          exit 1
