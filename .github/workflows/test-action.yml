@@ -2,6 +2,7 @@ name: Test the GitHub Actions
 on:
   pull_request:
     paths:
+      - .github/workflows/test-action.yml
       - action/**/*
       - integration_tests/models/**/schema.yml
 
