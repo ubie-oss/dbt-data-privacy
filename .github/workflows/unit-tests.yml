@@ -5,6 +5,7 @@ on:
       - main
   pull_request:
     paths:
+      - .github/workflows/unit-tests.yml
       - macros/**/*
       - integration_tests/**/*
 
