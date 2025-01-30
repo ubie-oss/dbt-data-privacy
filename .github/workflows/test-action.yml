@@ -2,6 +2,7 @@ name: Test the GitHub Actions
 on:
   pull_request:
     paths:
+      - .github/workflows/test-action.yml
       - action/**/*
       - integration_tests/models/**/schema.yml
 
@@ -16,18 +17,36 @@ jobs:
       fail-fast: true
       matrix:
         include:
+          # Python 3.9
           - python-version: "3.9"
-            pip-requirements: "requirements-1.1.txt"
-          - python-version: "3.10"
-            pip-requirements: "requirements-1.2.txt"
-          - python-version: "3.10"
-            pip-requirements: "requirements-1.3.txt"
-          - python-version: "3.10"
-            pip-requirements: "requirements-1.4.txt"
-          - python-version: "3.10"
-            pip-requirements: "requirements-1.5.txt"
+            pip-requirements: "requirements-1.6.txt"
+          - python-version: "3.9"
+            pip-requirements: "requirements-1.7.txt"
+          - python-version: "3.9"
+            pip-requirements: "requirements-1.8.txt"
+          # Python 3.10
           - python-version: "3.10"
             pip-requirements: "requirements-1.6.txt"
+          - python-version: "3.10"
+            pip-requirements: "requirements-1.7.txt"
+          - python-version: "3.10"
+            pip-requirements: "requirements-1.8.txt"
+          - python-version: "3.10"
+            pip-requirements: "requirements-1.9.txt"
+          # Python 3.11
+          - python-version: "3.11"
+            pip-requirements: "requirements-1.6.txt"
+          - python-version: "3.11"
+            pip-requirements: "requirements-1.7.txt"
+          - python-version: "3.11"
+            pip-requirements: "requirements-1.8.txt"
+          - python-version: "3.11"
+            pip-requirements: "requirements-1.9.txt"
+          # Python 3.12
+          - python-version: "3.12"
+            pip-requirements: "requirements-1.8.txt"
+          - python-version: "3.12"
+            pip-requirements: "requirements-1.9.txt"
     defaults:
       run:
         shell: bash
