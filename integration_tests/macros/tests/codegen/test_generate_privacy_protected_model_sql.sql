@@ -35,54 +35,68 @@
       reference="ref('test_restricted_users')",
       columns={
         "id": {
-          "meta": {
-            "data_privacy": {
-              "level": "public",
+          "config": {
+            "meta": {
+              "data_privacy": {
+                "level": "public",
+              },
             },
           },
         },
         "user_id": {
-          "meta": {
-            "data_privacy": {
-              "level": "confidential",
-              "policy_tags": ["unique_identifier"],
+          "config": {
+            "meta": {
+              "data_privacy": {
+                "level": "confidential",
+                "policy_tags": ["unique_identifier"],
+              },
             },
           },
         },
         "consents.data_analysis": {
-          "meta": {
-            "data_privacy": {
-              "level": "internal",
+          "config": {
+            "meta": {
+              "data_privacy": {
+                "level": "internal",
+              },
             },
           },
         },
         "consents.data_sharing": {
-          "meta": {
-            "data_privacy": {
-              "level": "internal",
+          "config": {
+            "meta": {
+              "data_privacy": {
+                "level": "internal",
+              },
             },
           },
         },
         "dummy_column": {
-          "meta": {
-            "data_privacy": {
-              "level": "restricted",
+          "config": {
+            "meta": {
+              "data_privacy": {
+                "level": "restricted",
+              },
             },
           },
         },
         "dummy_array": {
           "data_type": "ARRAY",
-          "meta": {
-            "data_privacy": {
-              "level": "restricted",
+          "config": {
+            "meta": {
+              "data_privacy": {
+                "level": "restricted",
+              },
             },
           },
         },
         "dummy_record": {
           "data_type": "RECORD",
-          "meta": {
-            "data_privacy": {
-              "level": "internal",
+          "config": {
+            "meta": {
+              "data_privacy": {
+                "level": "internal",
+              },
             },
           },
         }

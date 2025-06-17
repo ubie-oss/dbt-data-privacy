@@ -3,8 +3,10 @@
   {% set v = {
       'name': 'column1',
       'description': 'Column 1',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -17,7 +19,9 @@
       'original_info': {
         'name': 'column1',
         'description': 'Column 1',
-        'meta': {'data_privacy': {'level': 'confidential'}},
+        'config': {
+          'meta': {'data_privacy': {'level': 'confidential'}},
+        },
         'data_type': None,
         'quote': None,
         'tags': []
@@ -32,8 +36,10 @@
   {% set v = {
       'name': 'column1.column2',
       'description': 'Column 2',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': "ARRAY",
       'quote': None,
@@ -48,7 +54,9 @@
           'original_info': {
             'name': 'column1.column2',
             'description': 'Column 2',
-            'meta': {'data_privacy': {'level': 'confidential'}},
+            'config': {
+              'meta': {'data_privacy': {'level': 'confidential'}},
+            },
             'data_type': 'ARRAY',
             'quote': None,
             'tags': []

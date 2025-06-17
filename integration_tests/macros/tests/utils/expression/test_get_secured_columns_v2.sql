@@ -8,8 +8,10 @@
     'struct1.x': {
       'name': 'struct1.x',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -18,8 +20,10 @@
     'struct1.y': {
       'name': 'struct1.y',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'internal'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'internal'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -28,7 +32,9 @@
     'array1': {
       'name': 'array1',
       'description': '',
-      'meta': {},
+      'config': {
+        'meta': {},
+      },
       'data_type': "ARRAY",
       'quote': None,
       'tags': []
@@ -36,8 +42,10 @@
     'array1.x': {
       'name': 'array1.x',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': "ARRAY",
       'quote': None,
@@ -46,8 +54,10 @@
     'array1.y': {
       'name': 'array1.y',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -56,8 +66,10 @@
     'array1.z': {
       'name': 'array1.z',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'internal'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'internal'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -76,9 +88,11 @@
           "original_info": {
             "name": "struct1.x",
             "description": "",
-            "meta": {
-              "data_privacy": {
-                "level": "confidential"
+            "config": {
+              "meta": {
+                "data_privacy": {
+                  "level": "confidential"
+                }
               }
             },
             "data_type": none,
@@ -98,9 +112,11 @@
           "original_info": {
             "name": "struct1.y",
             "description": "",
-            "meta": {
-              "data_privacy": {
-                "level": "internal"
+            "config": {
+              "meta": {
+                "data_privacy": {
+                  "level": "internal"
+                }
               }
             },
             "data_type": none,
@@ -127,7 +143,9 @@
       "original_info": {
         "name": "array1",
         "description": "",
-        "meta": {},
+        "config": {
+          "meta": {},
+        },
         "data_type": "ARRAY",
         "quote": none,
         "tags": []
@@ -142,9 +160,11 @@
           "original_info": {
             "name": "array1.x",
             "description": "",
-            "meta": {
-              "data_privacy": {
-                "level": "confidential"
+            "config": {
+              "meta": {
+                "data_privacy": {
+                  "level": "confidential"
+                }
               }
             },
             "data_type": "ARRAY",
@@ -163,9 +183,11 @@
           "original_info": {
             "name": "array1.y",
             "description": "",
-            "meta": {
-              "data_privacy": {
-                "level": "confidential"
+            "config": {
+              "meta": {
+                "data_privacy": {
+                  "level": "confidential"
+                }
               }
             },
             "data_type": none,
@@ -184,9 +206,11 @@
           "original_info": {
             "name": "array1.z",
             "description": "",
-            "meta": {
-              "data_privacy": {
-                "level": "internal"
+            "config": {
+              "meta": {
+                "data_privacy": {
+                  "level": "internal"
+                }
               }
             },
             "data_type": none,
@@ -211,7 +235,11 @@
     'struct1.x': {
       'name': 'struct1.x',
       'description': '',
-      'meta': { 'data_privacy': {'level': 'confidential'} },
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
+      },
       'data_type': None,
       'quote': None,
       'tags': []
@@ -219,7 +247,11 @@
     'struct1.struct2.x': {
       'name': 'struct1.struct11.scalar111',
       'description': '',
-      'meta': { 'data_privacy': {'level': 'confidential'} },
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
+      },
       'data_type': None,
       'quote': None,
       'tags': []
@@ -227,8 +259,10 @@
     'struct1.struct11.array111': {
       'name': 'struct1.struct11.array111',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': "ARRAY",
       'quote': None,
@@ -237,7 +271,9 @@
     'struct1.array1': {
       'name': 'struct1.array1',
       'description': '',
-      'meta': {},
+      'config': {
+        'meta': {},
+      },
       'data_type': "ARRAY",
       'quote': None,
       'tags': []
@@ -245,8 +281,10 @@
     'struct1.array1.scalar1': {
       'name': 'struct1.array1.scalar1',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'internal'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'internal'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -255,8 +293,10 @@
     'struct1.array1.struct2.x': {
       'name': 'struct1.y',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': "ARRAY",
       'quote': None,
@@ -274,7 +314,13 @@
           "original_info": {
             "name": "struct1.x",
             "description": "",
-            "meta": { "data_privacy": { "level": "confidential" } },
+            "config": {
+              "meta": {
+                "data_privacy": {
+                  "level": "confidential"
+                }
+              }
+            },
             "data_type": none,
             "quote": none,
             "tags": []
@@ -291,7 +337,13 @@
               "original_info": {
                 "name": "struct1.struct11.scalar111",
                 "description": "",
-                "meta": { "data_privacy": { "level": "confidential" } },
+                "config": {
+                  "meta": {
+                    "data_privacy": {
+                      "level": "confidential"
+                    }
+                  }
+                },
                 "data_type": none,
                 "quote": none,
                 "tags": []
@@ -313,7 +365,13 @@
               "original_info": {
                 "name": "struct1.struct11.array111",
                 "description": "",
-                "meta": { "data_privacy": { "level": "confidential" } },
+                "config": {
+                  "meta": {
+                    "data_privacy": {
+                      "level": "confidential"
+                    }
+                  }
+                },
                 "data_type": "ARRAY",
                 "quote": none,
                 "tags": []
@@ -333,7 +391,9 @@
           "original_info": {
             "name": "struct1.array1",
             "description": "",
-            "meta": {},
+            "config": {
+              "meta": {},
+            },
             "data_type": "ARRAY",
             "quote": none,
             "tags": []
@@ -346,7 +406,13 @@
               "original_info": {
                 "name": "struct1.array1.scalar1",
                 "description": "",
-                "meta": { "data_privacy": { "level": "internal" } },
+                "config": {
+                  "meta": {
+                    "data_privacy": {
+                      "level": "internal"
+                    }
+                  }
+                },
                 "data_type": none,
                 "quote": none,
                 "tags": []
@@ -363,7 +429,13 @@
                   "original_info": {
                     "name": "struct1.y",
                     "description": "",
-                    "meta": { "data_privacy": { "level": "confidential" } },
+                    "config": {
+                      "meta": {
+                        "data_privacy": {
+                          "level": "confidential"
+                        }
+                      }
+                    },
                     "data_type": "ARRAY",
                     "quote": none,
                     "tags": []

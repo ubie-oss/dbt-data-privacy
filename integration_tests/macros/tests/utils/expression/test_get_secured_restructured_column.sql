@@ -8,8 +8,10 @@
     'user_id': {
       'name': 'user_id',
       'description': 'User ID',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -18,8 +20,10 @@
     'consent.data_analysis': {
       'name': 'consent.data_analysis',
       'description': 'Consent agree of data analysis',
-      'meta': {
-        'data_privacy': {'level': 'internal'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'internal'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -28,8 +32,10 @@
     'consent.data_sharing': {
       'name': 'consent.data_sharing',
       'description': 'Consent agree of data sharing',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': None,
       'quote': None, 'tags': []
@@ -48,7 +54,11 @@
     'original_info': {
       'name': 'user_id',
       'description': 'User ID',
-      'meta': {'data_privacy': {'level': 'confidential'}},
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
+      },
       'data_type': None,
       'quote': None,
       'tags': []
@@ -72,7 +82,11 @@
     'original_info': {
       'name': 'consent.data_analysis',
       'description': 'Consent agree of data analysis',
-      'meta': {'data_privacy': {'level': 'internal'}},
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'internal'}
+        },
+      },
       'data_type': None,
       'quote': None,
       'tags': []
@@ -89,8 +103,10 @@
     'struct1.x': {
       'name': 'struct1.x',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -99,8 +115,10 @@
     'struct1.y': {
       'name': 'struct1.y',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'internal'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'internal'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -109,7 +127,9 @@
     'array1': {
       'name': 'array1',
       'description': '',
-      'meta': {},
+      'config': {
+        'meta': {},
+      },
       'data_type': "ARRAY",
       'quote': None,
       'tags': []
@@ -117,8 +137,10 @@
     'array1.x': {
       'name': 'array1.x',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': "ARRAY",
       'quote': None,
@@ -127,8 +149,10 @@
     'array1.y': {
       'name': 'array1.y',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -137,8 +161,10 @@
     'array1.z': {
       'name': 'array1.z',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'internal'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'internal'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -158,7 +184,11 @@
     'original_info': {
       'name': 'struct1.x',
       'description': '',
-      'meta': {'data_privacy': {'level': 'confidential'}},
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
+      },
       'data_type': None,
       'quote': None,
       'tags': []
@@ -182,7 +212,11 @@
     'original_info': {
       'name': 'struct1.y',
       'description': '',
-      'meta': {'data_privacy': {'level': 'internal'}},
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'internal'}
+        },
+      },
       'data_type': None,
       'quote': None,
       'tags': []
@@ -206,7 +240,9 @@
     'original_info': {
       'name': 'array1',
       'description': '',
-      'meta': {},
+      'config': {
+        'meta': {},
+      },
       'data_type': 'ARRAY',
       'quote': None,
       'tags': []
@@ -217,7 +253,11 @@
         'original_info': {
           'name': 'array1.x',
           'description': '',
-          'meta': {'data_privacy': {'level': 'confidential'}},
+          'config': {
+            'meta': {
+              'data_privacy': {'level': 'confidential'}
+            },
+          },
           'data_type': 'ARRAY',
           'quote': None,
           'tags': []
@@ -232,7 +272,11 @@
         'original_info': {
           'name': 'array1.y',
           'description': '',
-          'meta': {'data_privacy': {'level': 'confidential'}},
+          'config': {
+            'meta': {
+              'data_privacy': {'level': 'confidential'}
+            },
+          },
           'data_type': None,
           'quote': None,
           'tags': []
@@ -247,7 +291,11 @@
          'original_info': {
            'name': 'array1.z',
            'description': '',
-           'meta': {'data_privacy': {'level': 'internal'}},
+           'config': {
+             'meta': {
+               'data_privacy': {'level': 'internal'}
+             },
+           },
            'data_type': None,
            'quote': None,
            'tags': []

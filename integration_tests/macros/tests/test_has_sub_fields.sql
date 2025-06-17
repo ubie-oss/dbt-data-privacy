@@ -4,7 +4,9 @@
     "b.c": {
       'data_type': none,
       'name': "b.c",
-      'meta': {},
+      'config': {
+        'meta': {},
+      },
     }
   } %}
   {{ assert_equals(dbt_data_privacy.has_sub_fields(target_column_name, dummy_columns), false) }}
@@ -12,7 +14,9 @@
     "a.b.c": {
       'data_type': none,
       'name': "a.b.c",
-      'meta': {},
+      'config': {
+        'meta': {},
+      },
     }
   } %}
   {{ assert_equals(dbt_data_privacy.has_sub_fields(target_column_name, dummy_columns), true) }}
@@ -22,7 +26,9 @@
     "b.c": {
       'data_type': none,
       'name': "b.c",
-      'meta': {},
+      'config': {
+        'meta': {},
+      },
     }
   } %}
   {{ assert_equals(dbt_data_privacy.has_sub_fields(target_column_name, dummy_columns), false) }}
@@ -30,7 +36,9 @@
     "a.b.c": {
       'data_type': none,
       'name': "a.b.c",
-      'meta': {},
+      'config': {
+        'meta': {},
+      },
     }
   } %}
   {{ assert_equals(dbt_data_privacy.has_sub_fields(target_column_name, dummy_columns), true) }}

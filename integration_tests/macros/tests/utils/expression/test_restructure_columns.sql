@@ -3,8 +3,10 @@
     'user_id': {
       'name': 'user_id',
       'description': 'User ID',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -13,8 +15,10 @@
     'consent.data_analysis': {
       'name': 'consent.data_analysis',
       'description': 'Consent agree of data analysis',
-      'meta': {
-        'data_privacy': {'level': 'internal'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'internal'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -23,8 +27,10 @@
     'consent.data_sharing': {
       'name': 'consent.data_sharing',
       'description': 'Consent agree of data sharing',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': None,
       'quote': None, 'tags': []
@@ -36,7 +42,9 @@
       'original_info': {
         'name': 'user_id',
         'description': 'User ID',
-        'meta': {'data_privacy': {'level': 'confidential'}},
+        'config': {
+          'meta': {'data_privacy': {'level': 'confidential'}},
+        },
         'data_type': None,
         'quote': None,
         'tags': []
@@ -49,7 +57,9 @@
           'original_info': {
             'name': 'consent.data_analysis',
             'description': 'Consent agree of data analysis',
-            'meta': {'data_privacy': {'level': 'internal'}},
+            'config': {
+              'meta': {'data_privacy': {'level': 'internal'}},
+            },
             'data_type': None,
             'quote': None,
             'tags': []
@@ -60,7 +70,9 @@
           'original_info': {
             'name': 'consent.data_sharing',
             'description': 'Consent agree of data sharing',
-            'meta': {'data_privacy': {'level': 'confidential'}},
+            'config': {
+              'meta': {'data_privacy': {'level': 'confidential'}},
+            },
             'data_type': None,
             'quote': None,
             'tags': []
@@ -76,15 +88,19 @@
     'user_id': {
       'name': 'user_id',
       'description': 'User ID',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': None,
       'quote': None,
       'tags': []
     },
     'consent': {
-      'meta': {},
+      'config': {
+        'meta': {},
+      },
       'data_type': "ARRAY",
       'quote': None,
       'tags': []
@@ -92,8 +108,10 @@
     'consent.data_analysis': {
       'name': 'consent.data_analysis',
       'description': 'Consent agree of data analysis',
-      'meta': {
-        'data_privacy': {'level': 'internal'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'internal'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -102,8 +120,10 @@
     'consent.data_sharing': {
       'name': 'consent.data_sharing',
       'description': 'Consent agree of data sharing',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': None,
       'quote': None, 'tags': []
@@ -115,7 +135,9 @@
       'original_info': {
         'name': 'user_id',
         'description': 'User ID',
-        'meta': {'data_privacy': {'level': 'confidential'}},
+        'config': {
+          'meta': {'data_privacy': {'level': 'confidential'}},
+        },
         'data_type': None,
         'quote': None,
         'tags': []
@@ -124,7 +146,9 @@
     },
     'consent': {
       'original_info': {
-        'meta': {},
+        'config': {
+          'meta': {},
+        },
         'data_type': 'ARRAY',
         'quote': None,
         'tags': []
@@ -135,7 +159,9 @@
           'original_info': {
             'name': 'consent.data_analysis',
             'description': 'Consent agree of data analysis',
-            'meta': {'data_privacy': {'level': 'internal'}},
+            'config': {
+              'meta': {'data_privacy': {'level': 'internal'}},
+            },
             'data_type': None,
             'quote': None,
             'tags': []
@@ -146,7 +172,9 @@
           'original_info': {
             'name': 'consent.data_sharing',
             'description': 'Consent agree of data sharing',
-            'meta': {'data_privacy': {'level': 'confidential'}},
+            'config': {
+              'meta': {'data_privacy': {'level': 'confidential'}},
+            },
             'data_type': None,
             'quote': None,
             'tags': []

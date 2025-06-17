@@ -8,8 +8,10 @@
     'struct1.x': {
       'name': 'struct1.x',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -18,8 +20,10 @@
     'struct1.y': {
       'name': 'struct1.y',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'internal'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'internal'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -28,7 +32,9 @@
     'struct1.z': {
       'name': 'struct1.z',
       'description': '',
-      'meta': {},
+      'config': {
+        'meta': {},
+      },
       'data_type': None,
       'quote': None,
       'tags': []
@@ -36,7 +42,9 @@
     'array1': {
       'name': 'array1',
       'description': '',
-      'meta': {},
+      'config': {
+        'meta': {},
+      },
       'data_type': "ARRAY",
       'quote': None,
       'tags': []
@@ -44,8 +52,10 @@
     'array1.x': {
       'name': 'array1.x',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': "ARRAY",
       'quote': None,
@@ -54,8 +64,10 @@
     'array1.y': {
       'name': 'array1.y',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -64,8 +76,10 @@
     'array1.z': {
       'name': 'array1.z',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'internal'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'internal'}
+        },
       },
       'data_type': None,
       'quote': None,
@@ -74,8 +88,10 @@
     'array1.struct1.x': {
       'name': 'array1.struct1.x',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': "ARRAY",
       'quote': None,
@@ -84,7 +100,9 @@
     'array1.struct1.array2': {
       'name': 'array1.struct1.array2',
       'description': '',
-      'meta': {},
+      'config': {
+        'meta': {},
+      },
       'data_type': "ARRAY",
       'quote': None,
       'tags': []
@@ -92,8 +110,10 @@
     'array1.struct1.array2.y': {
       'name': 'array1.struct1.array2.y',
       'description': '',
-      'meta': {
-        'data_privacy': {'level': 'confidential'}
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'confidential'}
+        },
       },
       'data_type': "ARRAY",
       'quote': None,
@@ -102,7 +122,9 @@
     'array1.struct1.array2.z': {
       'name': 'array1.struct1.array2.z',
       'description': '',
-      'meta': {},
+      'config': {
+        'meta': {},
+      },
       'data_type': None,
       'quote': None,
       'tags': []

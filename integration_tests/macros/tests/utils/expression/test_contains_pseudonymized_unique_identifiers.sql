@@ -15,20 +15,24 @@
     'user_id': {
       'name': 'user_id',
       'description': 'User ID',
-      'meta': {
-        'data_privacy': {'level': 'confidential', 'policy_tags': ['unique_identifier']}},
-        'data_type': None,
-        'quote': None,
-        'tags': []
+      "config": {
+        'meta': {
+          'data_privacy': {'level': 'confidential', 'policy_tags': ['unique_identifier']}},
+          'data_type': None,
+          'quote': None,
+          'tags': []
+        },
       },
     'restricted_column': {
       'name': 'restricted_column',
       'description': 'restricted_column',
-      'meta': {
-        'data_privacy': {'level': 'restricted'},
-        'data_type': None,
-        'quote': None,
-        'tags': []
+      "config": {
+        'meta': {
+          'data_privacy': {'level': 'restricted'},
+          'data_type': None,
+          'quote': None,
+          'tags': []
+        },
       },
     }
   } %}
@@ -40,20 +44,24 @@
     'user_id': {
       'name': 'user_id',
       'description': 'User ID',
-      'meta': {
-        'data_privacy': {'level': 'internal'}},
-        'data_type': None,
-        'quote': None,
-        'tags': []
+      "config": {
+        'meta': {
+          'data_privacy': {'level': 'internal'}},
+          'data_type': None,
+          'quote': None,
+          'tags': []
+        },
       },
     'restricted_column': {
       'name': 'restricted_column',
       'description': 'restricted_column',
-      'meta': {
-        'data_privacy': {'level': 'restricted'},
-        'data_type': None,
-        'quote': None,
-        'tags': []
+      'config': {
+        'meta': {
+          'data_privacy': {'level': 'restricted'},
+          'data_type': None,
+          'quote': None,
+          'tags': []
+        },
       },
     }
   } %}
