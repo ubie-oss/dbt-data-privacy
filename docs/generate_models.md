@@ -202,6 +202,7 @@ data_privacy:
           default_method: SHA256
           conditions: ["contains_pseudonymized_unique_identifiers"]
 ```
+
 ### 2. Implement table-level and column-level metadata in dbt schema YAML files to generate privacy-protected models
 
 Now that we have learned how to configure dbt-data-privacy, let's move on to exercise data inventory to generate privacy-protected models with practical examples of `consents` and `users`.
@@ -261,21 +262,23 @@ We need to change the key to your model ID.
     columns:
       - name: user_id
         description: "User ID"
-        meta:
-          data_privacy:
-            level: confidential
-            policy_tags: ["unique_identifier"]
-            data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents:
-              data_tests: ["unique"]
+        config:
+          meta:
+            data_privacy:
+              level: confidential
+              policy_tags: ["unique_identifier"]
+              data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents:
+                data_tests: ["unique"]
       - name: pseudonymized_user_id
         description: "Pseudonymized user ID"
         data_tests:
           - not_null
       - name: consent.data_analysis
         description: "Consent agree of data analysis"
-        meta:
-          data_privacy:
-            level: internal
+        config:
+          meta:
+            data_privacy:
+              level: internal
 ```
 
 #### `users`
@@ -292,30 +295,31 @@ We are able to define multiple relationships in `relationships`.
 - `where` manages custom conditions to filter the target table. In this case, `consents` are selected by the condition before joining to `users`.
 
 ```yaml
-    meta:
-      data_privacy:
-        - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer__users
-          objective: data_analysis
-          config:
-            enabled: true
-            materialized: view
-            database: var('data_analysis_layer')
-            schema: "dbt_data_privacy_data_analysis_layer"
-            alias: "users"
-            grant_access_to:
-              - project: var('restricted_layer')
-                dataset: "dbt_data_privacy_restricted_layer"
-            tags: []
-            labels:
-              modeled_by: dbt
-          relationships:
-            - to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents")
-              fields:
-                user_id: user_id
-              where: |
-                consent.data_analysis IS TRUE
-          extra_meta:
-            database_alias: data_analysis_layer
+    config:
+      meta:
+        data_privacy:
+          - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer__users
+            objective: data_analysis
+            config:
+              enabled: true
+              materialized: view
+              database: var('data_analysis_layer')
+              schema: "dbt_data_privacy_data_analysis_layer"
+              alias: "users"
+              grant_access_to:
+                - project: var('restricted_layer')
+                  dataset: "dbt_data_privacy_restricted_layer"
+              tags: []
+              labels:
+                modeled_by: dbt
+            relationships:
+              - to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents")
+                fields:
+                  user_id: user_id
+                where: |
+                  consent.data_analysis IS TRUE
+            extra_meta:
+              database_alias: data_analysis_layer
 ```
 
 ### Generate privacy-protected models

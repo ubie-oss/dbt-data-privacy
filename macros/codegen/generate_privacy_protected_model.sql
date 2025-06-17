@@ -14,7 +14,8 @@
   {% set reference = dbt_data_privacy.get_reference_from_node(node) %}
   {% set columns = node.get("columns") | default({}, True) %}
 
-  {% for data_privacy_meta in node.meta.data_privacy %}
+  {% set node_meta = dbt_data_privacy.get_column_meta_block(node) %}
+  {% for data_privacy_meta in node_meta.data_privacy %}
     {% set name = data_privacy_meta.get("name") %}
     {% set objective = data_privacy_meta.get("objective") %}
     {% set model_config = data_privacy_meta.get("config") %}

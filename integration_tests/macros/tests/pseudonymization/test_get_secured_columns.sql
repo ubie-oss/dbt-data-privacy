@@ -10,53 +10,54 @@
       'description': 'User ID',
       'config': {
         'meta': {
-          'data_privacy': {'level': 'confidential', 'policy_tags': ['unique_identifier']}},
-          'data_type': None,
-          'quote': None,
-          'tags': []
-        },
+          'data_privacy': {'level': 'confidential', 'policy_tags': ['unique_identifier']}
+        }
       },
-      'pseudonymized_user_id': {
-        'name': 'pseudonymized_user_id',
-        'description': 'Pseudonymized user ID',
-        'config': {
-          'meta': {},
-        },
-        'data_type': None,
-        'quote': None,
-        'tags': []
+      'data_type': None,
+      'quote': None,
+      'tags': []
+    },
+    'pseudonymized_user_id': {
+      'name': 'pseudonymized_user_id',
+      'description': 'Pseudonymized user ID',
+      'config': {
+        'meta': {}
       },
-      'consent.data_analysis': {
-        'name': 'consent.data_analysis',
-        'description': 'Consent agree of data analysis',
-        'config': {
-          'meta': {'data_privacy': {'level': 'internal'}},
-        },
-        'data_type': None,
-        'quote': None,
-        'tags': []
+      'data_type': None,
+      'quote': None,
+      'tags': []
+    },
+    'consent.data_analysis': {
+      'name': 'consent.data_analysis',
+      'description': 'Consent agree of data analysis',
+      'config': {
+        'meta': {'data_privacy': {'level': 'internal'}}
       },
-      'consent.data_sharing': {
-        'name': 'consent.data_sharing',
-        'description': 'Consent agree of data sharing',
-        'config': {
-          'meta': {'data_privacy': {'level': 'confidential'}},
-        },
-        'data_type': None,
-        'quote': None,
-        'tags': []
+      'data_type': None,
+      'quote': None,
+      'tags': []
+    },
+    'consent.data_sharing': {
+      'name': 'consent.data_sharing',
+      'description': 'Consent agree of data sharing',
+      'config': {
+        'meta': {'data_privacy': {'level': 'confidential'}}
       },
-      'dummy_array': {
-        'name': 'dummy_array',
-        'description': 'Test array',
-        'config': {
-          'meta': {'data_privacy': {'level': 'confidential'}},
-        },
-        'data_type': 'ARRAY',
-        'quote': None,
-        'tags': []
-      }
-    } %}
+      'data_type': None,
+      'quote': None,
+      'tags': []
+    },
+    'dummy_array': {
+      'name': 'dummy_array',
+      'description': 'Test array',
+      'config': {
+        'meta': {'data_privacy': {'level': 'confidential'}}
+      },
+      'data_type': 'ARRAY',
+      'quote': None,
+      'tags': []
+    }
+  } %}
 
   {% set result = dbt_data_privacy.get_secured_columns(data_handling_standards, columns) %}
   {% set expected = {

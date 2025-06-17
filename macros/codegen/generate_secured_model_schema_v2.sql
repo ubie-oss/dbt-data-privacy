@@ -54,14 +54,15 @@ models:
     description: |-
       {{ description | indent(width=6, first=False) }}
     {%- endif %}
-    {%- if tags | length > 0 %}
-    tags: {{ tags | unique | sort | list }}
-    {%- endif %}
-    {%- if labels | length > 0 %}
-    meta: {%- for k, v in labels.items() %}
-      {{ k }}: {{ v }}
-    {%- endfor %}
-    {%- endif %}
+    config:
+      {%- if tags | length > 0 %}
+      tags: {{ tags | unique | sort | list }}
+      {%- endif %}
+      {%- if labels | length > 0 %}
+      meta: {%- for k, v in labels.items() %}
+        {{ k }}: {{ v }}
+      {%- endfor %}
+      {%- endif %}
     {%- if columns | length > 0 %}
     columns: {%- for column_name, column in flatten_columns | dictsort %}
       - name: {{ column.name }}
@@ -69,23 +70,25 @@ models:
         description: |-
           {{ column.description | default('', true) | indent(width=10, first=False) }}
         {%- endif %}
-        {%- if 'data_privacy' in column.meta and column.meta.data_privacy.level %}
-        {%- set data_privacy_level = column.meta.data_privacy.level %}
-        meta:
-          data_privacy:
-            {#- Think of the downgraded data security level #}
-            level: {{ column.meta.data_privacy.level }}
+        {%- set column_meta = dbt_data_privacy.get_column_meta_block(column) %}
+        {%- if column_meta and 'data_privacy' in column_meta and column_meta.data_privacy.level %}
+        {%- set data_privacy_level = column_meta.data_privacy.level %}
+        config:
+          meta:
+            data_privacy:
+              {#- Think of the downgraded data security level #}
+              level: {{ column_meta.data_privacy.level }}
         {%- endif %}
         {#- We support both `data_tests` and `tests` for a while -#}
         {#- TODO: remove `tests` after dbt no longer supports it -#}
-        {%- if 'data_privacy' in column.meta
-            and name in column.meta.data_privacy
+        {%- if column_meta and 'data_privacy' in column_meta
+            and name in column_meta.data_privacy
             and (
-              column.meta.data_privacy[name].get('data_tests', []) | length > 0
-              or column.meta.data_privacy[name].get('tests', []) | length > 0
+              column_meta.data_privacy[name].get('data_tests', []) | length > 0
+              or column_meta.data_privacy[name].get('tests', []) | length > 0
             ) %}
-        {%- set data_tests = column.meta.data_privacy[name].get('data_tests', [])
-            + column.meta.data_privacy[name].get('tests', []) %}
+        {%- set data_tests = column_meta.data_privacy[name].get('data_tests', [])
+            + column_meta.data_privacy[name].get('tests', []) %}
         data_tests: {%- for data_test in data_tests %}
           - {{ data_test }}
         {%- endfor %}
