@@ -1,5 +1,5 @@
 setup:
-	pip install --force-reinstall -r requirements/requirements-1.8.txt
+	pip install --force-reinstall -r requirements/requirements-1.10.txt
 	dbt deps --profiles-dir profiles --target bigquery
 
 

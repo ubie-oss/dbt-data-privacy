@@ -1,12 +1,10 @@
-{% macro test_convert_to_nested_dict() %}
+{% macro test_convert_to_nested_dict_legacy() %}
   {% set keys = "column1".split(".") %}
   {% set v = {
       'name': 'column1',
       'description': 'Column 1',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': None,
       'quote': None,
@@ -19,9 +17,7 @@
       'original_info': {
         'name': 'column1',
         'description': 'Column 1',
-        'config': {
-          'meta': {'data_privacy': {'level': 'confidential'}},
-        },
+        'meta': {'data_privacy': {'level': 'confidential'}},
         'data_type': None,
         'quote': None,
         'tags': []
@@ -36,10 +32,8 @@
   {% set v = {
       'name': 'column1.column2',
       'description': 'Column 2',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': "ARRAY",
       'quote': None,
@@ -54,9 +48,7 @@
           'original_info': {
             'name': 'column1.column2',
             'description': 'Column 2',
-            'config': {
-              'meta': {'data_privacy': {'level': 'confidential'}},
-            },
+            'meta': {'data_privacy': {'level': 'confidential'}},
             'data_type': 'ARRAY',
             'quote': None,
             'tags': []

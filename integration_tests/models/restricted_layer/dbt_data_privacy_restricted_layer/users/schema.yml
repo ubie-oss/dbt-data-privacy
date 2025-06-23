@@ -5,55 +5,58 @@ models:
   - name: restricted_layer__dbt_data_privacy_restricted_layer__users
     description: |
       Users' table
-      
+
       ## NOTE
       - XXX
       - XXX
-    meta:
-      data_privacy:
-        - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer__users
-          objective: data_analysis
-          config:
-            enabled: true
-            materialized: view
-            database: var('data_analysis_layer')
-            schema: "dbt_data_privacy_data_analysis_layer"
-            alias: "users"
-            grant_access_to:
-              - project: var('restricted_layer')
-                dataset: "dbt_data_privacy_restricted_layer"
-            tags: []
-            labels:
-              modeled_by: dbt
-          relationships:
-            - to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents")
-              fields:
-                user_id: user_id
-              where: |
-                consent.data_analysis IS TRUE
-          extra_meta:
-            database_alias: data_analysis_layer
+    config:
+      meta:
+        data_privacy:
+          - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer__users
+            objective: data_analysis
+            config:
+              enabled: true
+              materialized: view
+              database: var('data_analysis_layer')
+              schema: "dbt_data_privacy_data_analysis_layer"
+              alias: "users"
+              grant_access_to:
+                - project: var('restricted_layer')
+                  dataset: "dbt_data_privacy_restricted_layer"
+              tags: []
+              labels:
+                modeled_by: dbt
+            relationships:
+              - to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents")
+                fields:
+                  user_id: user_id
+                where: |
+                  consent.data_analysis IS TRUE
+            extra_meta:
+              database_alias: data_analysis_layer
 
     columns:
       - name: id
         description: "Raw number"
-        meta:
-          data_privacy:
-            level: internal
+        config:
+          meta:
+            data_privacy:
+              level: internal
         tests:
           - not_null
       - name: user_id
         description: "User ID"
-        meta:
-          data_privacy:
-            level: confidential
-            policy_tags:
-              - unique_identifiers
-            data_analysis_layer__dbt_data_privacy_data_analysis_layer__users:
-              tests:
-                - relationships:
-                    to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents")
-                    field: "user_id"
+        config:
+          meta:
+            data_privacy:
+              level: confidential
+              policy_tags:
+                - unique_identifiers
+              data_analysis_layer__dbt_data_privacy_data_analysis_layer__users:
+                tests:
+                  - relationships:
+                      to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents")
+                      field: "user_id"
         tests:
           - not_null
           - relationships:
@@ -62,26 +65,29 @@ models:
       - name: name
         description: |
           User's name
-          
+
           # NOTE
           - XXX
           - XXX
-        meta:
-          data_privacy:
-            level: highly_restricted
+        config:
+          meta:
+            data_privacy:
+              level: highly_restricted
         tests:
           - not_null
       - name: email
         description: "User's email"
-        meta:
-          data_privacy:
-            level: highly_restricted
+        config:
+          meta:
+            data_privacy:
+              level: highly_restricted
         tests:
           - not_null
       - name: age
         description: "Age"
-        meta:
-          data_privacy:
-            level: restricted
+        config:
+          meta:
+            data_privacy:
+              level: restricted
         tests:
           - not_null

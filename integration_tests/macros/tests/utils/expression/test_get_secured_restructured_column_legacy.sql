@@ -1,17 +1,15 @@
-{% macro test_get_secured_restructured_column() %}
-  {{ return(adapter.dispatch("test_get_secured_restructured_column", "dbt_data_privacy_integration_tests")()) }}
+{% macro test_get_secured_restructured_column_legacy() %}
+  {{ return(adapter.dispatch("test_get_secured_restructured_column_legacy", "dbt_data_privacy_integration_tests")()) }}
 {% endmacro %}
 
-{% macro bigquery__test_get_secured_restructured_column()  %}
+{% macro bigquery__test_get_secured_restructured_column_legacy()  %}
   {% set data_handling_standards = get_test_data_handling_standards() %}
   {% set columns = {
     'user_id': {
       'name': 'user_id',
       'description': 'User ID',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': None,
       'quote': None,
@@ -20,10 +18,8 @@
     'consent.data_analysis': {
       'name': 'consent.data_analysis',
       'description': 'Consent agree of data analysis',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'internal'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'internal'}
       },
       'data_type': None,
       'quote': None,
@@ -32,10 +28,8 @@
     'consent.data_sharing': {
       'name': 'consent.data_sharing',
       'description': 'Consent agree of data sharing',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': None,
       'quote': None, 'tags': []
@@ -54,10 +48,8 @@
     'original_info': {
       'name': 'user_id',
       'description': 'User ID',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': None,
       'quote': None,
@@ -82,10 +74,8 @@
     'original_info': {
       'name': 'consent.data_analysis',
       'description': 'Consent agree of data analysis',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'internal'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'internal'}
       },
       'data_type': None,
       'quote': None,
@@ -103,10 +93,8 @@
     'struct1.x': {
       'name': 'struct1.x',
       'description': '',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': None,
       'quote': None,
@@ -115,10 +103,8 @@
     'struct1.y': {
       'name': 'struct1.y',
       'description': '',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'internal'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'internal'}
       },
       'data_type': None,
       'quote': None,
@@ -127,9 +113,7 @@
     'array1': {
       'name': 'array1',
       'description': '',
-      'config': {
-        'meta': {},
-      },
+      'meta': {},
       'data_type': "ARRAY",
       'quote': None,
       'tags': []
@@ -137,10 +121,8 @@
     'array1.x': {
       'name': 'array1.x',
       'description': '',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': "ARRAY",
       'quote': None,
@@ -149,10 +131,8 @@
     'array1.y': {
       'name': 'array1.y',
       'description': '',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': None,
       'quote': None,
@@ -161,10 +141,8 @@
     'array1.z': {
       'name': 'array1.z',
       'description': '',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'internal'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'internal'}
       },
       'data_type': None,
       'quote': None,
@@ -184,10 +162,8 @@
     'original_info': {
       'name': 'struct1.x',
       'description': '',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': None,
       'quote': None,
@@ -212,10 +188,8 @@
     'original_info': {
       'name': 'struct1.y',
       'description': '',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'internal'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'internal'}
       },
       'data_type': None,
       'quote': None,
@@ -240,9 +214,7 @@
     'original_info': {
       'name': 'array1',
       'description': '',
-      'config': {
-        'meta': {},
-      },
+      'meta': {},
       'data_type': 'ARRAY',
       'quote': None,
       'tags': []
@@ -253,10 +225,8 @@
         'original_info': {
           'name': 'array1.x',
           'description': '',
-          'config': {
-            'meta': {
-              'data_privacy': {'level': 'confidential'}
-            },
+          'meta': {
+            'data_privacy': {'level': 'confidential'}
           },
           'data_type': 'ARRAY',
           'quote': None,
@@ -272,10 +242,8 @@
         'original_info': {
           'name': 'array1.y',
           'description': '',
-          'config': {
-            'meta': {
-              'data_privacy': {'level': 'confidential'}
-            },
+          'meta': {
+            'data_privacy': {'level': 'confidential'}
           },
           'data_type': None,
           'quote': None,
@@ -291,10 +259,8 @@
          'original_info': {
            'name': 'array1.z',
            'description': '',
-           'config': {
-             'meta': {
-               'data_privacy': {'level': 'internal'}
-             },
+           'meta': {
+             'data_privacy': {'level': 'internal'}
            },
            'data_type': None,
            'quote': None,

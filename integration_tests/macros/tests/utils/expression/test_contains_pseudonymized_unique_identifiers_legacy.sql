@@ -1,4 +1,4 @@
-{% macro test_contains_pseudonymized_unique_identifiers() %}
+{% macro test_contains_pseudonymized_unique_identifiers_legacy() %}
   {% set data_handling_standard = {
       "public": { "method": "RAW" },
       "internal": { "method": "RAW" },
@@ -15,24 +15,20 @@
     'user_id': {
       'name': 'user_id',
       'description': 'User ID',
-      "config": {
-        'meta': {
-          'data_privacy': {'level': 'confidential', 'policy_tags': ['unique_identifier']}},
-          'data_type': None,
-          'quote': None,
-          'tags': []
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential', 'policy_tags': ['unique_identifier']}},
+        'data_type': None,
+        'quote': None,
+        'tags': []
       },
     'restricted_column': {
       'name': 'restricted_column',
       'description': 'restricted_column',
-      "config": {
-        'meta': {
-          'data_privacy': {'level': 'restricted'},
-          'data_type': None,
-          'quote': None,
-          'tags': []
-        },
+      'meta': {
+        'data_privacy': {'level': 'restricted'},
+        'data_type': None,
+        'quote': None,
+        'tags': []
       },
     }
   } %}
@@ -44,24 +40,20 @@
     'user_id': {
       'name': 'user_id',
       'description': 'User ID',
-      "config": {
-        'meta': {
-          'data_privacy': {'level': 'internal'}},
-          'data_type': None,
-          'quote': None,
-          'tags': []
-        },
+      'meta': {
+        'data_privacy': {'level': 'internal'}},
+        'data_type': None,
+        'quote': None,
+        'tags': []
       },
     'restricted_column': {
       'name': 'restricted_column',
       'description': 'restricted_column',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'restricted'},
-          'data_type': None,
-          'quote': None,
-          'tags': []
-        },
+      'meta': {
+        'data_privacy': {'level': 'restricted'},
+        'data_type': None,
+        'quote': None,
+        'tags': []
       },
     }
   } %}

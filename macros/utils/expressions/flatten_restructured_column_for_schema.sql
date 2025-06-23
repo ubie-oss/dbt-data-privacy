@@ -34,11 +34,19 @@
 
     {# overwrite by converted data security level #}
     {% set converted_level = dbt_data_privacy.get_converted_level_from_restructured_column(restructured_column) %}
-    {% if column_info.meta is defined
-            and column_info.meta.data_privacy is defined
-            and column_info.meta.data_privacy.level is defined
-            and converted_level is not none %}
-       {% do column_info.meta.data_privacy.update({"level": converted_level}) %}
+    {% if converted_level is not none %}
+      {# Try new dbt 1.10+ format first (config.meta) #}
+      {% if column_info.config is defined
+              and column_info.config.meta is defined
+              and column_info.config.meta.data_privacy is defined
+              and column_info.config.meta.data_privacy.level is defined %}
+         {% do column_info.config.meta.data_privacy.update({"level": converted_level}) %}
+      {# Fall back to old format (meta) for backward compatibility #}
+      {% elif column_info.meta is defined
+              and column_info.meta.data_privacy is defined
+              and column_info.meta.data_privacy.level is defined %}
+         {% do column_info.meta.data_privacy.update({"level": converted_level}) %}
+      {% endif %}
     {% endif %}
 
     {% set secured_expression = dbt_data_privacy.get_secured_expression_from_restructured_column(restructured_column) %}

@@ -1,17 +1,15 @@
-{% macro test_get_secured_columns() %}
-  {{ return(adapter.dispatch("test_get_secured_columns", "dbt_data_privacy_integration_tests")()) }}
+{% macro test_get_secured_columns_legacy() %}
+  {{ return(adapter.dispatch("test_get_secured_columns_legacy", "dbt_data_privacy_integration_tests")()) }}
 {% endmacro %}
 
-{% macro bigquery__test_get_secured_columns() %}
+{% macro bigquery__test_get_secured_columns_legacy() %}
   {% set data_handling_standards = get_test_data_handling_standards() %}
   {% set columns = {
     'user_id': {
       'name': 'user_id',
       'description': 'User ID',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential', 'policy_tags': ['unique_identifier']}
-        }
+      'meta': {
+        'data_privacy': {'level': 'confidential', 'policy_tags': ['unique_identifier']}
       },
       'data_type': None,
       'quote': None,
@@ -20,9 +18,7 @@
     'pseudonymized_user_id': {
       'name': 'pseudonymized_user_id',
       'description': 'Pseudonymized user ID',
-      'config': {
-        'meta': {}
-      },
+      'meta': {},
       'data_type': None,
       'quote': None,
       'tags': []
@@ -30,9 +26,7 @@
     'consent.data_analysis': {
       'name': 'consent.data_analysis',
       'description': 'Consent agree of data analysis',
-      'config': {
-        'meta': {'data_privacy': {'level': 'internal'}}
-      },
+      'meta': {'data_privacy': {'level': 'internal'}},
       'data_type': None,
       'quote': None,
       'tags': []
@@ -40,9 +34,7 @@
     'consent.data_sharing': {
       'name': 'consent.data_sharing',
       'description': 'Consent agree of data sharing',
-      'config': {
-        'meta': {'data_privacy': {'level': 'confidential'}}
-      },
+      'meta': {'data_privacy': {'level': 'confidential'}},
       'data_type': None,
       'quote': None,
       'tags': []
@@ -50,9 +42,7 @@
     'dummy_array': {
       'name': 'dummy_array',
       'description': 'Test array',
-      'config': {
-        'meta': {'data_privacy': {'level': 'confidential'}}
-      },
+      'meta': {'data_privacy': {'level': 'confidential'}},
       'data_type': 'ARRAY',
       'quote': None,
       'tags': []

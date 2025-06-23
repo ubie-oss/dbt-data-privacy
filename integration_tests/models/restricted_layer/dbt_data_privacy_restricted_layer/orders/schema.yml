@@ -5,56 +5,59 @@ models:
   - name: restricted_layer__dbt_data_privacy_restricted_layer__orders
     description: |
       Orders' table
-      
+
       ## NOTE
       - XXX
       - XXX
-    meta:
-      data_privacy:
-        - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer__orders
-          objective: data_analysis
-          config:
-            enabled: true
-            materialized: view
-            database: var('data_analysis_layer')
-            schema: "dbt_data_privacy_data_analysis_layer"
-            alias: "orders"
-            grant_access_to:
-              - project: var('restricted_layer')
-                dataset: "dbt_data_privacy_restricted_layer"
-            partition_by:
-              field: "created_at"
-              data_type: "timestamp"
-              granularity: "day"
-            cluster_by: ["id"]
-            tags: []
-            labels:
-              modeled_by: dbt
-          relationships:
-            - to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__users")
-              fields:
-                user_id: user_id
-          extra_meta:
-            database_alias: data_analysis_layer
+    config:
+      meta:
+        data_privacy:
+          - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer__orders
+            objective: data_analysis
+            config:
+              enabled: true
+              materialized: view
+              database: var('data_analysis_layer')
+              schema: "dbt_data_privacy_data_analysis_layer"
+              alias: "orders"
+              grant_access_to:
+                - project: var('restricted_layer')
+                  dataset: "dbt_data_privacy_restricted_layer"
+              partition_by:
+                field: "created_at"
+                data_type: "timestamp"
+                granularity: "day"
+              cluster_by: ["id"]
+              tags: []
+              labels:
+                modeled_by: dbt
+            relationships:
+              - to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__users")
+                fields:
+                  user_id: user_id
+            extra_meta:
+              database_alias: data_analysis_layer
 
     columns:
       - name: id
         description: "Order ID"
-        meta:
-          data_privacy:
-            level: internal
+        config:
+          meta:
+            data_privacy:
+              level: internal
         tests:
           - not_null
       - name: user_id
         description: "User ID"
-        meta:
-          data_privacy:
-            level: confidential
-            data_analysis_layer__dbt_data_privacy_data_analysis_layer__orders:
-              tests:
-                - relationships:
-                    to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__users")
-                    field: "user_id"
+        config:
+          meta:
+            data_privacy:
+              level: confidential
+              data_analysis_layer__dbt_data_privacy_data_analysis_layer__orders:
+                tests:
+                  - relationships:
+                      to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__users")
+                      field: "user_id"
         tests:
           - not_null
           - relationships:
@@ -62,9 +65,10 @@ models:
               field: "user_id"
       - name: item_id
         description: "Item ID"
-        meta:
-          data_privacy:
-            level: public
+        config:
+          meta:
+            data_privacy:
+              level: public
         tests:
           - not_null
           - relationships:
@@ -72,8 +76,9 @@ models:
               field: "id"
       - name: created_at
         description: "Order timestamp"
-        meta:
-          data_privacy:
-            level: internal
+        config:
+          meta:
+            data_privacy:
+              level: internal
         tests:
           - not_null

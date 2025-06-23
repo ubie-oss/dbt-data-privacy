@@ -1,8 +1,8 @@
-{% macro test_generate_secured_model_schema_v2() %}
+{% macro test_generate_secured_model_schema_v2_legacy() %}
   {{- return(adapter.dispatch("test_generate_secured_model_schema_v2", "dbt_data_privacy_integration_tests")()) -}}
 {% endmacro %}
 
-{% macro default__test_generate_secured_model_schema_v2() %}
+{% macro default__test_generate_secured_model_schema_v2_legacy() %}
   {%- set result = dbt_data_privacy.generate_secured_model_schema_v2(
       objective="data_analysis",
       name="test_project__test_dataset__test_table",
@@ -14,15 +14,13 @@
         "id": {
           "name": "id",
           "description": "Raw ID",
-          "config": {
-            "meta": {
-              "data_privacy": {
-                "level": "internal",
-                "test_project__test_dataset__test_table": {
-                  "data_tests": [
-                    "unique"
-                  ],
-                },
+          "meta": {
+            "data_privacy": {
+              "level": "internal",
+              "test_project__test_dataset__test_table": {
+                "data_tests": [
+                  "unique"
+                ],
               },
             },
           },
@@ -30,16 +28,14 @@
         "user_id": {
           "name": "user_id",
           "description": "User ID",
-          "config": {
-            "meta": {
-              "data_privacy": {
-                "level": "confidential",
-                "policy_tags": ["unique_identifier"],
-                "test_project__test_dataset__test_table": {
-                  "tests": [
-                    "not_null"
-                  ],
-                },
+          "meta": {
+            "data_privacy": {
+              "level": "confidential",
+              "policy_tags": ["unique_identifier"],
+              "test_project__test_dataset__test_table": {
+                "tests": [
+                  "not_null"
+                ],
               },
             },
           },
@@ -47,33 +43,27 @@
         "consents.data_analysis": {
           "name": "consents.data_analysis",
           "description": "Agree on data analysis",
-          "config": {
-            "meta": {
-              "data_privacy": {
-                "level": "internal",
-              },
+          "meta": {
+            "data_privacy": {
+              "level": "internal",
             },
           },
         },
         "consents.data_sharing": {
           "name": "consents.data_sharing",
           "description": "Agree on data sharing",
-          "config": {
-            "meta": {
-              "data_privacy": {
-                "level": "internal",
-              },
+          "meta": {
+            "data_privacy": {
+              "level": "internal",
             },
           },
         },
         "created_at": {
           "name": "created_at",
           "description": "timestamp at when created",
-          "config": {
-            "meta": {
-              "data_privacy": {
-                "level": "restricted",
-              },
+          "meta": {
+            "data_privacy": {
+              "level": "restricted",
             },
           },
         },
@@ -95,49 +85,43 @@ models:
   - name: test_project__test_dataset__test_table
     description: |-
       Sample description
-    config:
-      tags: ['tag1']
-      meta:
-        key1: value1
-        key2: value2
+    tags: ['tag1']
+    meta:
+      key1: value1
+      key2: value2
     columns:
       - name: consents.data_analysis
         description: |-
           Agree on data analysis
-        config:
-          meta:
-            data_privacy:
-              level: internal
+        meta:
+          data_privacy:
+            level: internal
       - name: consents.data_sharing
         description: |-
           Agree on data sharing
-        config:
-          meta:
-            data_privacy:
-              level: internal
+        meta:
+          data_privacy:
+            level: internal
       - name: created_at
         description: |-
           timestamp at when created
-        config:
-          meta:
-            data_privacy:
-              level: internal
+        meta:
+          data_privacy:
+            level: internal
       - name: id
         description: |-
           Raw ID
-        config:
-          meta:
-            data_privacy:
-              level: internal
+        meta:
+          data_privacy:
+            level: internal
         data_tests:
           - unique
       - name: user_id
         description: |-
           User ID
-        config:
-          meta:
-            data_privacy:
-              level: internal
+        meta:
+          data_privacy:
+            level: internal
         data_tests:
           - not_null
 {%- endraw -%}

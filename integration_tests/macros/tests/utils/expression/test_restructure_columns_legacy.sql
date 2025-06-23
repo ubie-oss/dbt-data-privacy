@@ -1,12 +1,10 @@
-{% macro test_restructure_columns() %}
+{% macro test_restructure_columns_legacy() %}
   {% set columns = {
     'user_id': {
       'name': 'user_id',
       'description': 'User ID',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': None,
       'quote': None,
@@ -15,10 +13,8 @@
     'consent.data_analysis': {
       'name': 'consent.data_analysis',
       'description': 'Consent agree of data analysis',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'internal'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'internal'}
       },
       'data_type': None,
       'quote': None,
@@ -27,10 +23,8 @@
     'consent.data_sharing': {
       'name': 'consent.data_sharing',
       'description': 'Consent agree of data sharing',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': None,
       'quote': None, 'tags': []
@@ -42,9 +36,7 @@
       'original_info': {
         'name': 'user_id',
         'description': 'User ID',
-        'config': {
-          'meta': {'data_privacy': {'level': 'confidential'}},
-        },
+        'meta': {'data_privacy': {'level': 'confidential'}},
         'data_type': None,
         'quote': None,
         'tags': []
@@ -57,9 +49,7 @@
           'original_info': {
             'name': 'consent.data_analysis',
             'description': 'Consent agree of data analysis',
-            'config': {
-              'meta': {'data_privacy': {'level': 'internal'}},
-            },
+            'meta': {'data_privacy': {'level': 'internal'}},
             'data_type': None,
             'quote': None,
             'tags': []
@@ -70,9 +60,7 @@
           'original_info': {
             'name': 'consent.data_sharing',
             'description': 'Consent agree of data sharing',
-            'config': {
-              'meta': {'data_privacy': {'level': 'confidential'}},
-            },
+            'meta': {'data_privacy': {'level': 'confidential'}},
             'data_type': None,
             'quote': None,
             'tags': []
@@ -88,19 +76,15 @@
     'user_id': {
       'name': 'user_id',
       'description': 'User ID',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': None,
       'quote': None,
       'tags': []
     },
     'consent': {
-      'config': {
-        'meta': {},
-      },
+      'meta': {},
       'data_type': "ARRAY",
       'quote': None,
       'tags': []
@@ -108,10 +92,8 @@
     'consent.data_analysis': {
       'name': 'consent.data_analysis',
       'description': 'Consent agree of data analysis',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'internal'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'internal'}
       },
       'data_type': None,
       'quote': None,
@@ -120,10 +102,8 @@
     'consent.data_sharing': {
       'name': 'consent.data_sharing',
       'description': 'Consent agree of data sharing',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': None,
       'quote': None, 'tags': []
@@ -135,9 +115,7 @@
       'original_info': {
         'name': 'user_id',
         'description': 'User ID',
-        'config': {
-          'meta': {'data_privacy': {'level': 'confidential'}},
-        },
+        'meta': {'data_privacy': {'level': 'confidential'}},
         'data_type': None,
         'quote': None,
         'tags': []
@@ -146,9 +124,7 @@
     },
     'consent': {
       'original_info': {
-        'config': {
-          'meta': {},
-        },
+        'meta': {},
         'data_type': 'ARRAY',
         'quote': None,
         'tags': []
@@ -159,9 +135,7 @@
           'original_info': {
             'name': 'consent.data_analysis',
             'description': 'Consent agree of data analysis',
-            'config': {
-              'meta': {'data_privacy': {'level': 'internal'}},
-            },
+            'meta': {'data_privacy': {'level': 'internal'}},
             'data_type': None,
             'quote': None,
             'tags': []
@@ -172,9 +146,7 @@
           'original_info': {
             'name': 'consent.data_sharing',
             'description': 'Consent agree of data sharing',
-            'config': {
-              'meta': {'data_privacy': {'level': 'confidential'}},
-            },
+            'meta': {'data_privacy': {'level': 'confidential'}},
             'data_type': None,
             'quote': None,
             'tags': []

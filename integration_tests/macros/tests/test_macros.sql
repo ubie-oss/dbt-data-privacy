@@ -3,6 +3,12 @@
 {% endmacro %}
 
 {% macro bigquery__test_macros() %}
+
+  {#
+    legacy
+  #}
+  {% do test_generate_secured_model_schema_v2_legacy() %}
+
   {#
     utils
   #}

@@ -1,17 +1,15 @@
-{% macro test_convert_restructured_column_to_expression() %}
-  {{ return(adapter.dispatch("test_convert_restructured_column_to_expression", "dbt_data_privacy_integration_tests")()) }}
+{% macro test_convert_restructured_column_to_expression_legacy() %}
+  {{ return(adapter.dispatch("test_convert_restructured_column_to_expression_legacy", "dbt_data_privacy_integration_tests")()) }}
 {% endmacro %}
 
-{% macro bigquery__test_convert_restructured_column_to_expression() %}
+{% macro bigquery__test_convert_restructured_column_to_expression_legacy() %}
   {% set data_handling_standards = get_test_data_handling_standards() %}
   {% set columns = {
     'struct1.x': {
       'name': 'struct1.x',
       'description': '',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': None,
       'quote': None,
@@ -20,10 +18,8 @@
     'struct1.y': {
       'name': 'struct1.y',
       'description': '',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'internal'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'internal'}
       },
       'data_type': None,
       'quote': None,
@@ -32,9 +28,7 @@
     'struct1.z': {
       'name': 'struct1.z',
       'description': '',
-      'config': {
-        'meta': {},
-      },
+      'meta': {},
       'data_type': None,
       'quote': None,
       'tags': []
@@ -42,9 +36,7 @@
     'array1': {
       'name': 'array1',
       'description': '',
-      'config': {
-        'meta': {},
-      },
+      'meta': {},
       'data_type': "ARRAY",
       'quote': None,
       'tags': []
@@ -52,10 +44,8 @@
     'array1.x': {
       'name': 'array1.x',
       'description': '',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': "ARRAY",
       'quote': None,
@@ -64,10 +54,8 @@
     'array1.y': {
       'name': 'array1.y',
       'description': '',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': None,
       'quote': None,
@@ -76,10 +64,8 @@
     'array1.z': {
       'name': 'array1.z',
       'description': '',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'internal'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'internal'}
       },
       'data_type': None,
       'quote': None,
@@ -88,10 +74,8 @@
     'array1.struct1.x': {
       'name': 'array1.struct1.x',
       'description': '',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': "ARRAY",
       'quote': None,
@@ -100,9 +84,7 @@
     'array1.struct1.array2': {
       'name': 'array1.struct1.array2',
       'description': '',
-      'config': {
-        'meta': {},
-      },
+      'meta': {},
       'data_type': "ARRAY",
       'quote': None,
       'tags': []
@@ -110,10 +92,8 @@
     'array1.struct1.array2.y': {
       'name': 'array1.struct1.array2.y',
       'description': '',
-      'config': {
-        'meta': {
-          'data_privacy': {'level': 'confidential'}
-        },
+      'meta': {
+        'data_privacy': {'level': 'confidential'}
       },
       'data_type': "ARRAY",
       'quote': None,
@@ -122,9 +102,7 @@
     'array1.struct1.array2.z': {
       'name': 'array1.struct1.array2.z',
       'description': '',
-      'config': {
-        'meta': {},
-      },
+      'meta': {},
       'data_type': None,
       'quote': None,
       'tags': []
