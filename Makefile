@@ -8,3 +8,18 @@ lint-bash:
 
 generate-toc:
 	markdown-toc --maxdepth 5 -i README.md
+
+######################################################################
+# Integration Tests
+######################################################################
+setup-integration-tests:
+	$(MAKE) -C integration_tests setup
+
+run-unit-tests:
+	$(MAKE) -C integration_tests run-unit-tests
+
+generate-models:
+	$(MAKE) -C integration_tests generate
+
+run-integration-tests:
+	$(MAKE) -C integration_tests run-integration-tests

@@ -15,7 +15,7 @@ generate: clean
 run-unit-tests: clean
 	bash run_unit_tests.sh --target bigquery --vars-path resources/vars/vars-bigquery.basic.yml
 
-run-integration-tests: clean
+run-integration-tests: generate
 	bash run_integration_tests.sh --target bigquery --vars-path ./resources/vars/vars-bigquery.basic.yml
 
 test-get_tags_by_original_file_paths: clean setup
