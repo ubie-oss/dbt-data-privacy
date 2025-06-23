@@ -7,6 +7,6 @@ default:
       dataset: "dbt_data_privacy"
       priority: "{{ env_var('DBT_BIGQUERY_PRIORITY', 'interactive') }}"
       threads: |
-        {{ env_var("DBT_THREADS", 1) | as_number }}
+        {{ env_var("DBT_THREADS", 10) | as_number }}
       location: "US"
       impersonate_service_account: "dbt-data-privacy@ubie-oss-data-engineering.iam.gserviceaccount.com"
