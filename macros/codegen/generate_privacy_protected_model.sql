@@ -74,7 +74,7 @@
         description=node.get("description"),
         columns=columns,
         tags=tags,
-        labels=labels,
+        labels=labels
       ) %}
 
     {# NOTE: I tried to use the continue expression, but it doesn't work. #}
