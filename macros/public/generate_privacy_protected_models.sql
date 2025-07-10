@@ -3,7 +3,8 @@
     original_file_paths=none,
     tags=none,
     extra_labels=none,
-    verbose=true) %}
+    verbose=true,
+    legacy_schema=True) %}
 
   {% set generated_models = [] %}
 
@@ -35,7 +36,10 @@
   {# Generate models #}
   {% for model_or_source in selected_models_and_sources %}
     {% if dbt_data_privacy.has_data_privacy_meta(model_or_source) %}
-      {% set generated_model = dbt_data_privacy.generate_privacy_protected_model(model_or_source, extra_labels=extra_labels) %}
+      {% set generated_model = dbt_data_privacy.generate_privacy_protected_model(
+          model_or_source,
+          extra_labels=extra_labels,
+          legacy_schema=legacy_schema) %}
       {% if generated_model is not none and generated_model | length > 0 %}
         {{ generated_models.extend(generated_model) }}
       {% endif %}
