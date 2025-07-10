@@ -1,0 +1,94 @@
+---
+version: 2
+
+models:
+  - name: restricted_layer__dbt_data_privacy_restricted_layer_legacy__users
+    description: |
+      Users' table
+
+      ## NOTE
+      - XXX
+      - XXX
+    config:
+      meta:
+        data_privacy:
+          - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer_legacy__users
+            objective: data_analysis
+            config:
+              enabled: true
+              materialized: view
+              database: var('data_analysis_layer')
+              schema: "dbt_data_privacy_data_analysis_layer_legacy"
+              alias: "users"
+              grant_access_to:
+                - project: var('restricted_layer')
+                  dataset: "dbt_data_privacy_restricted_layer_legacy"
+              tags: []
+              labels:
+                modeled_by: dbt
+            relationships:
+              - to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer_legacy__consents")
+                fields:
+                  user_id: customer_id
+                where: |
+                  consent.data_analysis IS TRUE
+            extra_meta:
+              database_alias: data_analysis_layer
+
+    columns:
+      - name: id
+        description: "Raw number"
+        config:
+          meta:
+            data_privacy:
+              level: internal
+        tests:
+          - not_null
+      - name: user_id
+        description: "User ID"
+        config:
+          meta:
+            data_privacy:
+              level: confidential
+              alias: customer_id_from_users
+              policy_tags:
+                - unique_identifier
+              data_analysis_layer__dbt_data_privacy_data_analysis_layer__users:
+                tests:
+                  - relationships:
+                      to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents")
+                      field: "customer_id"
+        tests:
+          - not_null
+          - relationships:
+              to: ref("restricted_layer__dbt_data_privacy_seed__users")
+              field: "user_id"
+      - name: name
+        description: |
+          User's name
+
+          # NOTE
+          - XXX
+          - XXX
+        config:
+          meta:
+            data_privacy:
+              level: highly_restricted
+        tests:
+          - not_null
+      - name: email
+        description: "User's email"
+        config:
+          meta:
+            data_privacy:
+              level: highly_restricted
+        tests:
+          - not_null
+      - name: age
+        description: "Age"
+        config:
+          meta:
+            data_privacy:
+              level: restricted
+        tests:
+          - not_null

@@ -5,7 +5,7 @@ setup:
 
 clean:
 	rm -fr ./models/data_analysis_layer/dbt_data_privacy_data_analysis_layer
-
+	rm -fr ./models/data_analysis_layer/dbt_data_privacy_data_analysis_layer_legacy
 
 test: clean compile run-unit-tests test-integration compile
 

@@ -1,0 +1,72 @@
+---
+version: 2
+
+models:
+  - name: restricted_layer__dbt_data_privacy_restricted_layer_legacy__consents
+    description: |
+      This is the truth of single source of consent agreements.
+
+      ## NOTE
+      - XXX
+      - XXX
+    config:
+      meta:
+        data_privacy:
+          - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer_legacy__consents
+            objective: data_analysis
+            config:
+              enabled: true
+              materialized: view
+              database: var('data_analysis_layer')
+              schema: "dbt_data_privacy_data_analysis_layer_legacy"
+              alias: "consents"
+              grant_access_to:
+                - project: var('restricted_layer')
+                  dataset: "dbt_data_privacy_restricted_layer_legacy"
+              tags: []
+              labels:
+                modeled_by: dbt
+            where: |
+              consent.data_analysis IS TRUE
+            extra_meta:
+              database_alias: data_analysis_layer
+
+    columns:
+      - name: user_id
+        description: "User ID"
+        config:
+          meta:
+            data_privacy:
+              level: confidential
+              alias: "customer_id"
+        tests:
+          - not_null
+          - relationships:
+              to: ref("restricted_layer__dbt_data_privacy_seed__users")
+              field: "user_id"
+      - name: pseudonymized_user_id
+        description: "Pseudonymized user ID"
+        config: {}
+        tests:
+          - not_null
+      - name: consent.data_analysis
+        description: "Consent agree of data analysis"
+        config:
+          meta:
+            data_privacy:
+              level: internal
+      - name: consent.data_sharing
+        description: "Consent agree of data sharing"
+        tests:
+          - not_null
+        config:
+          meta:
+            data_privacy:
+              level: confidential
+      - name: dummy_array
+        data_type: ARRAY
+        description: "Test array"
+        config:
+          meta:
+            data_privacy:
+              level: confidential
