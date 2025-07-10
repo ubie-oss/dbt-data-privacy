@@ -4,7 +4,10 @@
 
 {% macro bigquery__test_generate_privacy_protected_models() %}
   {% set generated_models = dbt_data_privacy.generate_privacy_protected_models(verbose=false) %}
-  {{ assert_equals(generated_models | length, 4) }}
+  {#
+    NOTE: As we add legacy models, the number of generated models will increase.
+  #}
+  {{ assert_equals(generated_models | length, 8) }}
   {% for generated_model in generated_models %}
     {{ assert_element_in_list("name", generated_model) }}
     {{ assert_element_in_list("meta", generated_model) }}
