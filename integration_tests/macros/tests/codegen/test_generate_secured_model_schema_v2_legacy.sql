@@ -86,49 +86,43 @@ models:
   - name: test_project__test_dataset__test_table
     description: |-
       Sample description
-    config:
-      tags: ['tag1']
-      meta:
-        key1: value1
-        key2: value2
+    tags: ['tag1']
+    meta:
+      key1: value1
+      key2: value2
     columns:
       - name: consents.data_analysis
         description: |-
           Agree on data analysis
-        config:
-          meta:
-            data_privacy:
-              level: internal
+        meta:
+          data_privacy:
+            level: internal
       - name: consents.data_sharing
         description: |-
           Agree on data sharing
-        config:
-          meta:
-            data_privacy:
-              level: internal
+        meta:
+          data_privacy:
+            level: internal
       - name: created_at
         description: |-
           timestamp at when created
-        config:
-          meta:
-            data_privacy:
-              level: internal
+        meta:
+          data_privacy:
+            level: internal
       - name: user_pk
         description: |-
           Raw ID
-        config:
-          meta:
-            data_privacy:
-              level: internal
+        meta:
+          data_privacy:
+            level: internal
         data_tests:
           - unique
       - name: customer_id
         description: |-
           User ID
-        config:
-          meta:
-            data_privacy:
-              level: internal
+        meta:
+          data_privacy:
+            level: internal
         data_tests:
           - not_null
 {%- endset %}
