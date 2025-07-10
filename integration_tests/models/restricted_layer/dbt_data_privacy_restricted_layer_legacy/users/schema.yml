@@ -29,7 +29,7 @@ models:
             relationships:
               - to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer_legacy__consents")
                 fields:
-                  user_id: customer_id
+                  user_id: user_id
                 where: |
                   consent.data_analysis IS TRUE
             extra_meta:
@@ -50,14 +50,13 @@ models:
           meta:
             data_privacy:
               level: confidential
-              alias: customer_id_from_users
               policy_tags:
                 - unique_identifier
               data_analysis_layer__dbt_data_privacy_data_analysis_layer__users:
                 tests:
                   - relationships:
                       to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents")
-                      field: "customer_id"
+                      field: "user_id"
         tests:
           - not_null
           - relationships:

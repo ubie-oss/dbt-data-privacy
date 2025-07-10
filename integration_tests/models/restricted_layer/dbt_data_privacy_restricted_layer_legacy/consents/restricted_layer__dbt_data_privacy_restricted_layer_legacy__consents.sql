@@ -15,7 +15,7 @@
     labels={
       "modeled_by": "dbt",
     },
-    tags=["tag_in_consents"],
+    tags=["tag_in_consents_legacy"],
     grant_access_to=[
       {"project": var('restricted_layer'), "dataset": schema},
       {"project": var('restricted_layer'), "dataset": "dbt_data_privacy_seed"},
