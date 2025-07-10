@@ -1,9 +1,12 @@
-{% macro generate_privacy_protected_model(node, extra_labels=none) %}
-  {% set generated_models = adapter.dispatch('generate_privacy_protected_model', 'dbt_data_privacy')(node, extra_labels=extra_labels) %}
+{% macro generate_privacy_protected_model(node, extra_labels=none, legacy_schema=True) %}
+  {% set generated_models = adapter.dispatch('generate_privacy_protected_model', 'dbt_data_privacy')(
+      node,
+      extra_labels=extra_labels,
+      legacy_schema=legacy_schema) %}
   {{ return(generated_models) }}
 {% endmacro %}
 
-{% macro bigquery__generate_privacy_protected_model(node, extra_labels=none) %}
+{% macro bigquery__generate_privacy_protected_model(node, extra_labels=none, legacy_schema=True) %}
   {% set generated_models = [] %}
 
   {% if dbt_data_privacy.has_data_privacy_meta(node) is false %}
@@ -65,17 +68,31 @@
         relationships=relationships
       ) %}
 
-    {% set schema_yaml = dbt_data_privacy.generate_secured_model_schema_v2(
-        objective=objective,
-        name=name,
-        database=database,
-        schema=schema,
-        alias=alias,
-        description=node.get("description"),
-        columns=columns,
-        tags=tags,
-        labels=labels,
-      ) %}
+    {% if legacy_schema %}
+      {% set schema_yaml = dbt_data_privacy.generate_secured_model_schema_v2_legacy(
+          objective=objective,
+          name=name,
+          database=database,
+          schema=schema,
+          alias=alias,
+          description=node.get("description"),
+          columns=columns,
+          tags=tags,
+          labels=labels
+        ) %}
+    {% else %}
+      {% set schema_yaml = dbt_data_privacy.generate_secured_model_schema_v2(
+          objective=objective,
+          name=name,
+          database=database,
+          schema=schema,
+          alias=alias,
+          description=node.get("description"),
+          columns=columns,
+          tags=tags,
+          labels=labels
+        ) %}
+    {% endif %}
 
     {# NOTE: I tried to use the continue expression, but it doesn't work. #}
     {% if data_privacy_meta.enabled is not false %}
