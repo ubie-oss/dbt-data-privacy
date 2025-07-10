@@ -23,3 +23,11 @@ generate-models:
 
 run-integration-tests:
 	$(MAKE) -C integration_tests run-integration-tests
+
+run-integration-tests-legacy:
+	$(MAKE) -C integration_tests run-integration-tests-legacy
+
+test-integration:
+	$(MAKE) -C integration_tests test-integration
+
+test: run-unit-tests test-integration
