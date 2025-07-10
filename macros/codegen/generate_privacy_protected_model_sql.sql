@@ -161,13 +161,17 @@ WITH privacy_protected_model AS (
 SELECT
   __source.*,
 FROM privacy_protected_model AS __source
-
 {%- if relationships is not none and dbt_data_privacy.validate_relationships(relationships)  -%}
 {%- for i in range(relationships | length) %}
 JOIN __relationships_{{ i }}
   ON {% for k, v in relationships[i]["fields"].items() -%}
     {%- if not loop.first -%}AND {% endif -%}
+    {%- set column = restructured_columns.get(k) -%}
+    {%- if column and column.additional_info and column.additional_info.alias -%}
+    __source.{{- column.additional_info.alias }} = __relationships_{{- i -}}.{{- v }}
+    {%- else -%}
     __source.{{- k }} = __relationships_{{- i -}}.{{- v }}
+    {%- endif -%}
   {%- endfor %}
 {%- endfor %}
 {%- endif %}

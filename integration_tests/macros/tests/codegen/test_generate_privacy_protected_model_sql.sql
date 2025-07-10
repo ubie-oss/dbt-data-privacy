@@ -39,6 +39,7 @@
             "meta": {
               "data_privacy": {
                 "level": "public",
+                "alias": "user_pk"
               },
             },
           },
@@ -49,6 +50,16 @@
               "data_privacy": {
                 "level": "confidential",
                 "policy_tags": ["unique_identifier"],
+                "alias": "customer_id"
+              },
+            },
+          },
+        },
+        "consents": {
+          "config": {
+            "meta": {
+              "data_privacy": {
+                "alias": "user_consents"
               },
             },
           },
@@ -156,12 +167,12 @@
 
 WITH privacy_protected_model AS (
   SELECT
-    id AS `id`,
-    SHA256(CAST(user_id AS STRING)) AS `user_id`,
+    id AS `user_pk`,
+    SHA256(CAST(user_id AS STRING)) AS `customer_id`,
     STRUCT(
       consents.data_analysis AS `data_analysis`,
       consents.data_sharing AS `data_sharing`
-    ) AS `consents`,
+    ) AS `user_consents`,
     dummy_column AS `dummy_column`,
     dummy_array AS `dummy_array`,
     dummy_record AS `dummy_record`,
@@ -187,9 +198,9 @@ SELECT
   __source.*,
 FROM privacy_protected_model AS __source
 JOIN __relationships_0
-  ON __source.user_id = __relationships_0.user_id
+  ON __source.customer_id = __relationships_0.user_id
 JOIN __relationships_1
-  ON __source.user_id = __relationships_1.customer_id
+  ON __source.customer_id = __relationships_1.customer_id
 {%- endraw -%}
   {%- endset %}
 

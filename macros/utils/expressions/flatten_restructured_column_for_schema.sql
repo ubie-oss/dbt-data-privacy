@@ -1,4 +1,4 @@
-{% macro flatten_restructured_column_for_schema(restructured_column, path) %}
+{% macro flatten_restructured_column_for_schema(restructured_column, path, aliased_path) %}
   {% if not (restructured_column.original_info is defined
       or restructured_column.additional_info is defined
       or restructured_column.fields is defined) %}
@@ -7,12 +7,19 @@
 
   {{ return(adapter.dispatch("flatten_restructured_column_for_schema", "dbt_data_privacy")(
       restructured_column=restructured_column,
-      path=path
+      path=path,
+      aliased_path=aliased_path
     )) }}
 {% endmacro %}
 
-{% macro bigquery__flatten_restructured_column_for_schema(restructured_column, path) %}
+{% macro bigquery__flatten_restructured_column_for_schema(restructured_column, path, aliased_path) %}
   {% set flatten_columns = {} %}
+
+  {# Set current aliased path #}
+  {% set alias = restructured_column.additional_info.alias %}
+  {% set current_name = path[-1] %}
+  {% set current_aliased_name = alias | default(current_name) %}
+  {% set new_aliased_path = aliased_path + [current_aliased_name] %}
 
   {% set is_array = false %}
   {% if restructured_column.original_info is defined
@@ -31,6 +38,7 @@
     {# TODO overwrite downgraded data security level #}
     {% set full_column_name = path | join('.') %}
     {% set column_info = dbt_data_privacy.deep_copy_dict(restructured_column.original_info) %}
+    {% do column_info.update({'name': new_aliased_path | join('.')}) %}
 
     {# overwrite by converted data security level #}
     {% set converted_level = dbt_data_privacy.get_converted_level_from_restructured_column(restructured_column) %}
@@ -59,7 +67,9 @@
     {% for sub_column_name, sub_restructured_column in restructured_column.fields.items() %}
       {% set sub_flatten_columns = dbt_data_privacy.flatten_restructured_column_for_schema(
           restructured_column=sub_restructured_column,
-          path=(path + [sub_column_name])) %}
+          path=(path + [sub_column_name]),
+          aliased_path=new_aliased_path
+          ) %}
       {% for k, v in sub_flatten_columns.items() %}
         {% do flatten_columns.update({k: v}) %}
       {% endfor %}

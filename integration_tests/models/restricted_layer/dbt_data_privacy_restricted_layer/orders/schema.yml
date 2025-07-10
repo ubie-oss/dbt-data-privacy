@@ -34,7 +34,7 @@ models:
             relationships:
               - to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__users")
                 fields:
-                  user_id: user_id
+                  user_id: customer_id_from_users
             extra_meta:
               database_alias: data_analysis_layer
 
@@ -57,7 +57,7 @@ models:
                 tests:
                   - relationships:
                       to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__users")
-                      field: "user_id"
+                      field: "customer_id_from_users"
         tests:
           - not_null
           - relationships:

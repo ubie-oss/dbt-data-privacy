@@ -1,5 +1,5 @@
 {% macro test_generate_secured_model_schema_v2_legacy() %}
-  {{- return(adapter.dispatch("test_generate_secured_model_schema_v2", "dbt_data_privacy_integration_tests")()) -}}
+  {{- return(adapter.dispatch("test_generate_secured_model_schema_v2_legacy", "dbt_data_privacy_integration_tests")()) -}}
 {% endmacro %}
 
 {% macro default__test_generate_secured_model_schema_v2_legacy() %}
@@ -17,6 +17,7 @@
           "meta": {
             "data_privacy": {
               "level": "internal",
+              "alias": "user_pk",
               "test_project__test_dataset__test_table": {
                 "data_tests": [
                   "unique"
@@ -32,6 +33,7 @@
             "data_privacy": {
               "level": "confidential",
               "policy_tags": ["unique_identifier"],
+              "alias": "customer_id",
               "test_project__test_dataset__test_table": {
                 "tests": [
                   "not_null"
@@ -85,43 +87,49 @@ models:
   - name: test_project__test_dataset__test_table
     description: |-
       Sample description
-    tags: ['tag1']
-    meta:
-      key1: value1
-      key2: value2
+    config:
+      tags: ['tag1']
+      meta:
+        key1: value1
+        key2: value2
     columns:
       - name: consents.data_analysis
         description: |-
           Agree on data analysis
-        meta:
-          data_privacy:
-            level: internal
+        config:
+          meta:
+            data_privacy:
+              level: internal
       - name: consents.data_sharing
         description: |-
           Agree on data sharing
-        meta:
-          data_privacy:
-            level: internal
+        config:
+          meta:
+            data_privacy:
+              level: internal
       - name: created_at
         description: |-
           timestamp at when created
-        meta:
-          data_privacy:
-            level: internal
-      - name: id
+        config:
+          meta:
+            data_privacy:
+              level: internal
+      - name: user_pk
         description: |-
           Raw ID
-        meta:
-          data_privacy:
-            level: internal
+        config:
+          meta:
+            data_privacy:
+              level: internal
         data_tests:
           - unique
-      - name: user_id
+      - name: customer_id
         description: |-
           User ID
-        meta:
-          data_privacy:
-            level: internal
+        config:
+          meta:
+            data_privacy:
+              level: internal
         data_tests:
           - not_null
 {%- endraw -%}

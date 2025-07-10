@@ -5,12 +5,24 @@
 {% macro bigquery__test_convert_restructured_column_to_expression() %}
   {% set data_handling_standards = get_test_data_handling_standards() %}
   {% set columns = {
+    'struct1': {
+      'name': 'struct1',
+      'description': '',
+      'config': {
+        'meta': {
+          'data_privacy': {'alias': 'aliased_struct1'}
+        },
+      },
+      'data_type': None,
+      'quote': None,
+      'tags': []
+    },
     'struct1.x': {
       'name': 'struct1.x',
       'description': '',
       'config': {
         'meta': {
-          'data_privacy': {'level': 'confidential'}
+          'data_privacy': {'level': 'confidential', 'alias': 'aliased_x'}
         },
       },
       'data_type': None,
@@ -22,7 +34,7 @@
       'description': '',
       'config': {
         'meta': {
-          'data_privacy': {'level': 'internal'}
+          'data_privacy': {'level': 'internal', 'alias': 'aliased_y'}
         },
       },
       'data_type': None,
@@ -140,9 +152,9 @@
       "struct1", restructured_columns["struct1"], depth=0, indent=false) %}
   {%- set expected -%}
   STRUCT(
-    SHA256(CAST(struct1.x AS STRING)) AS `x`,
-    struct1.y AS `y`
-  ) AS `struct1`
+    SHA256(CAST(struct1.x AS STRING)) AS `aliased_x`,
+    struct1.y AS `aliased_y`
+  ) AS `aliased_struct1`
   {%- endset %}
   {{ assert_equals(result | replace(" ", ""), expected | replace(" ", "")) }}
 

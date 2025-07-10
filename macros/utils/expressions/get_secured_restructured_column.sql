@@ -22,6 +22,11 @@
     {% do copied_restructured_column["additional_info"].update({"relative_path": relative_path}) %}
   {% endif %}
 
+  {% set alias = dbt_data_privacy.get_column_alias(restructured_column.get('original_info', {})) %}
+  {% if alias is not none %}
+    {% do copied_restructured_column["additional_info"].update({"alias": alias}) %}
+  {% endif %}
+
   {% set is_array = false %}
   {% if restructured_column.original_info is defined
       and restructured_column.original_info is mapping

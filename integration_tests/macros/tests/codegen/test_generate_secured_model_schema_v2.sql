@@ -18,6 +18,7 @@
             "meta": {
               "data_privacy": {
                 "level": "internal",
+                "alias": "user_pk",
                 "test_project__test_dataset__test_table": {
                   "data_tests": [
                     "unique"
@@ -35,6 +36,7 @@
               "data_privacy": {
                 "level": "confidential",
                 "policy_tags": ["unique_identifier"],
+                "alias": "customer_id",
                 "test_project__test_dataset__test_table": {
                   "tests": [
                     "not_null"
@@ -122,7 +124,7 @@ models:
           meta:
             data_privacy:
               level: internal
-      - name: id
+      - name: user_pk
         description: |-
           Raw ID
         config:
@@ -131,7 +133,7 @@ models:
               level: internal
         data_tests:
           - unique
-      - name: user_id
+      - name: customer_id
         description: |-
           User ID
         config:

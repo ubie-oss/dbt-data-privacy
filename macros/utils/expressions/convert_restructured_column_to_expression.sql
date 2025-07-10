@@ -30,6 +30,8 @@
     {% set is_struct = true %}
   {% endif %}
 
+  {% set output_column_name = restructured_column.additional_info.alias | default(key) %}
+
   {% set column_alias = restructured_column.additional_info.relative_path | join('.') %}
 
   {% set expression = none %}
@@ -54,7 +56,7 @@ ARRAY(
       {%- endfor %}
     )
   FROM UNNEST({{- column_alias -}})
-) AS `{{- key -}}`
+) AS `{{- output_column_name -}}`
     {%- endset %}
   {% elif is_struct is sameas true %}
     {# STRUCT #}
@@ -73,7 +75,7 @@ STRUCT(
   {{ sub_expression }}{%- if not loop.last %},{%- endif %}
   {%- endif %}
   {%- endfor %}
-) AS `{{- key -}}`
+) AS `{{- output_column_name -}}`
     {%- endset %}
   {% else %}
     {# scalar #}
@@ -90,7 +92,7 @@ STRUCT(
     {%- set expression -%}
     {%- endset %}
     {%- else %}
-      {% set expression = '{} AS `{}`'.format(restructured_column.additional_info.secured_expression, key) %}
+      {% set expression = '{} AS `{}`'.format(restructured_column.additional_info.secured_expression, output_column_name) %}
     {%- endif %}
   {% endif %}
 
