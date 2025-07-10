@@ -24,7 +24,7 @@ run-integration-tests: generate
 	bash run_integration_tests.sh --target bigquery --vars-path ./resources/vars/vars-bigquery.basic.yml
 
 run-integration-tests-legacy: generate-legacy
-	bash run_integration_tests_legacy.sh --target bigquery --vars-path ./resources/vars/vars-bigquery.basic.yml
+	bash run_integration_tests.sh --target bigquery --vars-path ./resources/vars/vars-bigquery.basic.yml
 
 test-get_tags_by_original_file_paths: clean setup
 	dbt run-operation --profiles-dir ./profiles \

@@ -21,6 +21,9 @@ run-unit-tests:
 generate-models:
 	$(MAKE) -C integration_tests generate
 
+generate-models-legacy:
+	$(MAKE) -C integration_tests generate-legacy
+
 run-integration-tests:
 	$(MAKE) -C integration_tests run-integration-tests
 
