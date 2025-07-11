@@ -95,6 +95,9 @@ jobs:
           # Revert the commit
           git revert HEAD
           git push --force --set-upstream origin "HEAD:${{ github.head_ref }}"
+      # test
+      - run: exit 1
+
   report-failure:
     permissions:
       pull-requests: write
