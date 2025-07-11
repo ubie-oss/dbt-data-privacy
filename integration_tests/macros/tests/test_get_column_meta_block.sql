@@ -21,6 +21,17 @@
   {% set expected_1_9 = {"data_privacy": {"level": "internal"}} %}
   {{ assert_equals(result_1_9, expected_1_9) }}
 
+  {# Test for dbt 1.10 or later with empty config.meta but meta has content #}
+  {% set column_empty_config_meta = {
+    "config": {
+      "meta": {}
+    },
+    "meta": {"data_privacy": {"level": "from_meta"}}
+  } %}
+  {% set result_empty_config_meta = dbt_data_privacy.get_column_meta_block(column_empty_config_meta) %}
+  {% set expected_empty_config_meta = {"data_privacy": {"level": "from_meta"}} %}
+  {{ assert_equals(result_empty_config_meta, expected_empty_config_meta) }}
+
   {# Test when no meta is defined #}
   {% set column_no_meta = {} %}
   {% set result_no_meta = dbt_data_privacy.get_column_meta_block(column_no_meta) %}
