@@ -5,12 +5,24 @@
 {% macro bigquery__test_get_secured_columns_v2() %}
   {% set data_handling_standards = get_test_data_handling_standards() %}
   {% set columns = {
+    'struct1': {
+      'name': 'struct1',
+      'description': '',
+      'config': {
+        'meta': {
+          'data_privacy': {'alias': 'aliased_struct1'}
+        },
+      },
+      'data_type': None,
+      'quote': None,
+      'tags': []
+    },
     'struct1.x': {
       'name': 'struct1.x',
       'description': '',
       'config': {
         'meta': {
-          'data_privacy': {'level': 'confidential'}
+          'data_privacy': {'level': 'confidential', 'alias': 'aliased_x'}
         },
       },
       'data_type': None,
@@ -22,7 +34,7 @@
       'description': '',
       'config': {
         'meta': {
-          'data_privacy': {'level': 'internal'}
+          'data_privacy': {'level': 'internal', 'alias': 'aliased_y'}
         },
       },
       'data_type': None,
@@ -44,7 +56,7 @@
       'description': '',
       'config': {
         'meta': {
-          'data_privacy': {'level': 'confidential'}
+          'data_privacy': {'level': 'confidential', 'alias': 'aliased_array1_x'}
         },
       },
       'data_type': "ARRAY",
@@ -83,6 +95,18 @@
     ) %}
   {% set expected = {
     "struct1": {
+      "original_info": {
+        'name': 'struct1',
+        'description': '',
+        'config': {
+          'meta': {
+            'data_privacy': {'alias': 'aliased_struct1'}
+          },
+        },
+        'data_type': None,
+        'quote': None,
+        'tags': []
+      },
       "fields": {
         "x": {
           "original_info": {
@@ -91,7 +115,8 @@
             "config": {
               "meta": {
                 "data_privacy": {
-                  "level": "confidential"
+                  "level": "confidential",
+                  "alias": "aliased_x"
                 }
               }
             },
@@ -105,7 +130,8 @@
               "x"
             ],
             "secured_expression": "SHA256(CAST(struct1.x AS STRING))",
-            "level": "internal"
+            "level": "internal",
+            "alias": "aliased_x"
           }
         },
         "y": {
@@ -115,7 +141,8 @@
             "config": {
               "meta": {
                 "data_privacy": {
-                  "level": "internal"
+                  "level": "internal",
+                  "alias": "aliased_y"
                 }
               }
             },
@@ -129,14 +156,16 @@
               "y"
             ],
             "secured_expression": "struct1.y",
-            "level": "internal"
+            "level": "internal",
+            "alias": "aliased_y"
           }
         }
       },
       "additional_info": {
         "relative_path": [
           "struct1"
-        ]
+        ],
+        "alias": "aliased_struct1"
       }
     },
     "array1": {
@@ -163,7 +192,8 @@
             "config": {
               "meta": {
                 "data_privacy": {
-                  "level": "confidential"
+                  "level": "confidential",
+                  "alias": "aliased_array1_x"
                 }
               }
             },
@@ -176,7 +206,8 @@
               "x"
             ],
             "secured_expression": "ARRAY(SELECT SHA256(CAST(e AS STRING)) FROM UNNEST(x) AS e)",
-            "level": "internal"
+            "level": "internal",
+            "alias": "aliased_array1_x"
           }
         },
         "y": {

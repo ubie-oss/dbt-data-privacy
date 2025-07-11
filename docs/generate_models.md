@@ -267,18 +267,30 @@ We need to change the key to your model ID.
             data_privacy:
               level: confidential
               policy_tags: ["unique_identifier"]
+              alias: "customer_id"
               data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents:
                 data_tests: ["unique"]
       - name: pseudonymized_user_id
         description: "Pseudonymized user ID"
         data_tests:
           - not_null
+      - name: consent
+        config:
+          meta:
+            data_privacy:
+              alias: "user_consents"
       - name: consent.data_analysis
         description: "Consent agree of data analysis"
         config:
           meta:
             data_privacy:
               level: internal
+      - name: consent.data_sharing
+        description: "Consent agree of data sharing"
+        config:
+          meta:
+            data_privacy:
+              level: confidential
 ```
 
 #### `users`
@@ -315,12 +327,14 @@ We are able to define multiple relationships in `relationships`.
             relationships:
               - to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents")
                 fields:
-                  user_id: user_id
+                  user_id: customer_id
                 where: |
                   consent.data_analysis IS TRUE
             extra_meta:
               database_alias: data_analysis_layer
 ```
+
+> Note that in the `fields` mapping, `user_id` is the original column name in the `users` model, while `customer_id` is the aliased column name in the generated `consents` model.
 
 ### Generate privacy-protected models
 
@@ -373,11 +387,11 @@ Additionally, the `SHA256` function is applied to the `user_id` column based on 
 
 WITH privacy_protected_model AS (
   SELECT
-    SHA256(CAST(user_id AS STRING)) AS `user_id`,
+    SHA256(CAST(user_id AS STRING)) AS `customer_id`,
     STRUCT(
       consent.data_analysis AS `data_analysis`,
       SHA256(CAST(consent.data_sharing AS STRING)) AS `data_sharing`
-    ) AS `consent`,
+    ) AS `user_consents`,
     ARRAY(SELECT SHA256(CAST(e AS STRING)) FROM UNNEST(dummy_array) AS e) AS `dummy_array`,
   FROM
     {{ ref('restricted_layer__dbt_data_privacy_restricted_layer__consents') }} AS __original_table
@@ -423,7 +437,7 @@ Additionally, the `SHA256` function is applied to the `user_id` and `age` column
 WITH privacy_protected_model AS (
   SELECT
     id AS `id`,
-    SHA256(CAST(user_id AS STRING)) AS `user_id`,
+    SHA256(CAST(user_id AS STRING)) AS `customer_id`,
     SHA256(CAST(age AS STRING)) AS `age`,
   FROM
     {{ ref('restricted_layer__dbt_data_privacy_restricted_layer__users') }} AS __original_table
@@ -439,5 +453,5 @@ SELECT
   __source.*,
 FROM privacy_protected_model AS __source
 JOIN __relationships_0
-  ON __source.user_id = __relationships_0.user_id
+  ON __source.customer_id = __relationships_0.customer_id
 ```
