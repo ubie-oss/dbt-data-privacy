@@ -1,11 +1,11 @@
-name: Unit tests
+name: Unit tests with dbt Core
 on:
   push:
     branches:
       - main
   pull_request:
     paths:
-      - .github/workflows/unit-tests.yml
+      - .github/workflows/unit-tests-dbt-core.yml
       - macros/**/*
       - integration_tests/**/*
 
