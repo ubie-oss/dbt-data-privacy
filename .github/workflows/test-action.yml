@@ -7,6 +7,25 @@ on:
       - integration_tests/models/**/schema.yml
 
 jobs:
+  notice-start-of-test:
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment on PR start of test
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          body=$(cat <<EOF
+          🚀 Starting the test action...
+          Please check the workflow run for more details.
+          URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          EOF
+          )
+          gh pr comment "${{ github.event.pull_request.number }}" \
+            --body "${body}" \
+            --repo "${{ github.repository }}"
+
   test-action:
     permissions:
       contents: write
@@ -17,11 +36,6 @@ jobs:
       fail-fast: true
       matrix:
         include:
-          # Python 3.9
-          - python-version: "3.9"
-            pip-requirements: "requirements-1.7.txt"
-          - python-version: "3.9"
-            pip-requirements: "requirements-1.8.txt"
           # Python 3.10
           - python-version: "3.10"
             pip-requirements: "requirements-1.7.txt"
@@ -100,3 +114,26 @@ jobs:
           # Revert the commit
           git revert HEAD
           git push --force --set-upstream origin "HEAD:${{ github.head_ref }}"
+
+  report-result:
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    needs: test-action
+    steps:
+      - name: Comment on PR failure
+        if: ${{ needs.test-action.result == 'failure' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr comment "${{ github.event.pull_request.number }}" \
+            --body "❌ One or more matrix jobs failed. Please check the workflow run for more details." \
+            --repo "${{ github.repository }}" \
+      - name: Comment on PR failure
+        if: ${{ needs.test-action.result == 'success' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr comment "${{ github.event.pull_request.number }}" \
+            --body "✅ All matrix jobs passed. Please check the workflow run for more details." \
+            --repo "${{ github.repository }}" \
