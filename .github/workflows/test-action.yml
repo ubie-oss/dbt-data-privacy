@@ -19,7 +19,7 @@ jobs:
           body=$(cat <<EOF
           🚀 Starting the test action...
           Please check the workflow run for more details.
-          URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           EOF
           )
           gh pr comment "${{ github.event.pull_request.number }}" \
