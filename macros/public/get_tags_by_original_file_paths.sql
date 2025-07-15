@@ -3,7 +3,7 @@
     {% do exceptions.raise_compiler_error("Invalid original_file_paths {}".format(original_file_paths)) %}
   {% endif %}
 
-  {% set unique_tags = [] %}
+  {% set unique_tags = {} %}
 
   {# Generate dbt models and sources #}
   {% set models_and_sources = [] %}
@@ -23,22 +23,27 @@
     {% set selected_nodes = dbt_data_privacy.select_nodes_with_data_privacy_meta(selected_nodes) %}
   {% endif %}
 
+
   {# Extract tags #}
   {% for node in selected_nodes %}
     {% if node.tags is defined and node.tags | length > 0 %}
-      {% do unique_tags.extend(node.tags) %}
-      {% set unique_tags = unique_tags | unique | list %}
+      {% for tag in node.tags %}
+        {% do unique_tags.update({tag: true}) %}
+      {% endfor %}
     {% endif %}
 
     {% if node.config is defined and node.config.tags is defined and node.config.tags | length > 0 %}
-      {% do unique_tags.extend(node.tags) %}
-      {% set unique_tags = unique_tags | unique | list %}
+      {% for tag in node.config.tags %}
+        {% do unique_tags.update({tag: true}) %}
+      {% endfor %}
     {% endif %}
+      {{ print(unique_tags) }}
   {% endfor %}
+      {{ print(unique_tags) }}
 
   {% if verbose is true %}
-    {% do print(tojson(unique_tags | unique | sort | list)) %}
+    {% do print(tojson(unique_tags.keys() | sort | list)) %}
   {% endif %}
 
-  {{ return(unique_tags) }}
+  {{ return(unique_tags.keys() | list) }}
 {% endmacro %}
