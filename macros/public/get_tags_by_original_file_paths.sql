@@ -60,5 +60,5 @@
   {% endif %}
 
   {# Return the unique tags as a list #}
-  {{ return(unique_tags.keys() | list) }}
+  {{ return(unique_tags.keys() | sort | list) }}
 {% endmacro %}
