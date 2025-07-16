@@ -11,12 +11,15 @@
     Returns:
       list: A list of unique tags found in the selected nodes.
   #}
-  {% if original_file_paths is not defined or original_file_paths | length == 0 %}
-    {# Raise an error if original_file_paths is not defined or empty #}
-    {% do exceptions.raise_compiler_error("Invalid original_file_paths {}".format(original_file_paths)) %}
-  {% endif %}
+  {% set unique_tags_dict = {} %}
+  {% set unique_tags = [] %}
 
-  {% set unique_tags = {} %}
+  {% if original_file_paths is not defined %}
+    {% do exceptions.raise_compiler_error("original_file_paths is not defined") %}
+  {% elif original_file_paths | length == 0 %}
+    {% do exceptions.warn("original_file_paths is empty: {}".format(original_file_paths)) %}
+    {{ return(unique_tags) }}
+  {% endif %}
 
   {# Collect all dbt models, sources, and snapshots #}
   {% set models_and_sources = [] %}
@@ -42,23 +45,24 @@
     {# Add tags from node.tags #}
     {% if node.tags is defined and node.tags | length > 0 %}
       {% for tag in node.tags %}
-        {% do unique_tags.update({tag: true}) %}
+        {% do unique_tags_dict.update({tag: true}) %}
       {% endfor %}
     {% endif %}
 
     {# Add tags from node.config.tags #}
     {% if node.config is defined and node.config.tags is defined and node.config.tags | length > 0 %}
       {% for tag in node.config.tags %}
-        {% do unique_tags.update({tag: true}) %}
+        {% do unique_tags_dict.update({tag: true}) %}
       {% endfor %}
     {% endif %}
   {% endfor %}
 
   {# Print unique tags if verbose is true #}
   {% if verbose is true %}
-    {% do print(tojson(unique_tags.keys() | sort | list)) %}
+    {% do print(tojson(unique_tags_dict.keys() | sort | list)) %}
   {% endif %}
 
   {# Return the unique tags as a list #}
-  {{ return(unique_tags.keys() | sort | list) }}
+  {% set unique_tags = unique_tags_dict.keys() | sort | list %}
+  {{ return(unique_tags) }}
 {% endmacro %}
