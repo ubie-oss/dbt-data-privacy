@@ -7,7 +7,7 @@
 {% endmacro %}
 
 {% macro bigquery__generate_privacy_protected_model(node, extra_labels=none, legacy_schema=True) %}
-  {% set generated_models = [] %}
+  {% set ns = namespace(generated_models=[]) %}
 
   {% if dbt_data_privacy.has_data_privacy_meta(node) is false %}
     {{ log("Skip {}".format(node.unique_id), info=True) }}
@@ -96,7 +96,7 @@
 
     {# NOTE: I tried to use the continue expression, but it doesn't work. #}
     {% if data_privacy_meta.enabled is not false %}
-      {{ generated_models.append({
+      {{ ns.generated_models.append({
           "name": name,
           "meta": data_privacy_meta,
           "model_sql": model_sql,
@@ -105,5 +105,5 @@
     {% endif %}
   {% endfor %}
 
-  {{ return(generated_models) }}
+  {{ return(ns.generated_models) }}
 {% endmacro %}

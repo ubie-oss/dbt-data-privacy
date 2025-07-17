@@ -6,7 +6,7 @@
     verbose=true,
     legacy_schema=True) %}
 
-  {% set generated_models = [] %}
+  {% set ns = namespace(generated_models=[]) %}
 
   {# Generate dbt models and sources #}
   {% set models_and_sources = [] %}
@@ -41,14 +41,14 @@
           extra_labels=extra_labels,
           legacy_schema=legacy_schema) %}
       {% if generated_model is not none and generated_model | length > 0 %}
-        {{ generated_models.extend(generated_model) }}
+        {{ ns.generated_models.extend(generated_model) }}
       {% endif %}
     {% endif %}
   {% endfor %}
 
   {% if verbose is true %}
-    {% do print(tojson(generated_models)) %}
+    {% do print(tojson(ns.generated_models)) %}
   {% endif %}
 
-  {{ return(generated_models) }}
+  {{ return(ns.generated_models) }}
 {% endmacro %}
