@@ -30,7 +30,7 @@
   {# Filter nodes by original_file_paths if provided #}
   {% if original_file_paths is not none and original_file_paths | length > 0 %}
     {% do ns.selected_nodes.extend(dbt_data_privacy.select_nodes_by_original_file_paths(
-            ns.models_and_sources, original_file_paths) %}
+          ns.models_and_sources, original_file_paths)) %}
   {% endif %}
 
   {# Further filter nodes if they have data privacy meta #}
