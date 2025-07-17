@@ -1,5 +1,5 @@
 {% macro select_nodes_by_unique_ids(nodes, unique_ids) %}
-  {% set selected_nodes = [] %}
+  {% set ns = namespace(selected_nodes=[]) %}
 
   {# Adjust the format #}
   {# NOTE: A `dbt ls` command returns sources with 'source:xxx'. But, an `unique_id` is like `source.xxx`. #}
@@ -11,9 +11,9 @@
     {% endif %}
 
     {% if node.unique_id in unique_ids %}
-      {% do selected_nodes.append(node) %}
+      {% do ns.selected_nodes.append(node) %}
     {% endif %}
   {% endfor %}
 
-  {{ return(selected_nodes) }}
+  {{ return(ns.selected_nodes) }}
 {% endmacro %}
