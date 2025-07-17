@@ -58,9 +58,9 @@
 
   {# Print unique tags if verbose is true #}
   {% if verbose is true %}
-    {% do print(tojson(ns.unique_tags | sort | list)) %}
+    {% do print(tojson(ns.unique_tags | unique | list)) %}
   {% endif %}
 
   {# Return the unique tags as a list #}
-  {{ return(ns.unique_tags | sort | list) }}
+  {{ return(ns.unique_tags | unique | list) }}
 {% endmacro %}
