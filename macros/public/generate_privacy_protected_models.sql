@@ -4,7 +4,7 @@
     tags=none,
     extra_labels=none,
     verbose=true,
-    legacy_schema=True) %}
+    legacy_schema=False) %}
 
   {% set ns = namespace(generated_models=[]) %}
 

@@ -24,6 +24,10 @@ macros:
         type: boolean
         description: |-
           If true, prints detailed information about the generated models. Defaults to true.
+      - name: legacy_schema
+        type: boolean
+        description: |-
+          If true, uses the legacy schema generation logic. Defaults to False.
     description: |
       This macro generates privacy-protected models based on the specified criteria such as unique IDs, original file paths, tags, and additional labels.
       It leverages the `generate_privacy_protected_model` macro to create models that adhere to data privacy configurations defined in the project.
