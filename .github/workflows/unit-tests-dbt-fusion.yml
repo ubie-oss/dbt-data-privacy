@@ -9,6 +9,7 @@ on:
       - macros/**/*
       - integration_tests/**/*
 
+
 jobs:
   bigquery:
     # Add "id-token" with the intended permissions.
