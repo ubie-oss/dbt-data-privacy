@@ -167,15 +167,15 @@
 
 WITH privacy_protected_model AS (
   SELECT
-    id AS `user_pk`,
-    SHA256(CAST(user_id AS STRING)) AS `customer_id`,
     STRUCT(
       consents.data_analysis AS `data_analysis`,
       consents.data_sharing AS `data_sharing`
     ) AS `user_consents`,
-    dummy_column AS `dummy_column`,
     dummy_array AS `dummy_array`,
+    dummy_column AS `dummy_column`,
     dummy_record AS `dummy_record`,
+    id AS `user_pk`,
+    SHA256(CAST(user_id AS STRING)) AS `customer_id`,
   FROM
     {{ ref('test_restricted_users') }} AS __original_table
   WHERE
