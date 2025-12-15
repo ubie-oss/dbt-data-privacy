@@ -1,4 +1,3 @@
----
 version: 2
 
 models:
@@ -9,37 +8,39 @@ models:
       ## NOTE
       - XXX
       - XXX
-    meta:
-      data_privacy:
-        - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer_legacy__items
-          objective: data_analysis
-          config:
-            enabled: true
-            materialized: view
-            database: var('data_analysis_layer')
-            schema: "dbt_data_privacy_data_analysis_layer_legacy"
-            alias: "items"
-            grant_access_to:
-              - project: var('restricted_layer')
-                dataset: "dbt_data_privacy_restricted_layer_legacy"
-            tags: []
-            labels:
-              modeled_by: dbt
-          extra_meta:
-            database_alias: data_analysis_layer
-
     columns:
       - name: id
         description: "Item ID"
-        meta:
-          data_privacy:
-            level: public
         tests:
           - not_null
+        config:
+          meta:
+            data_privacy:
+              level: public
       - name: name
         description: "Item name"
-        meta:
-          data_privacy:
-            level: public
         tests:
           - not_null
+        config:
+          meta:
+            data_privacy:
+              level: public
+    config:
+      meta:
+        data_privacy:
+          - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer_legacy__items
+            objective: data_analysis
+            config:
+              enabled: true
+              materialized: view
+              database: var('data_analysis_layer')
+              schema: "dbt_data_privacy_data_analysis_layer_legacy"
+              alias: "items"
+              grant_access_to:
+                - project: var('restricted_layer')
+                  dataset: "dbt_data_privacy_restricted_layer_legacy"
+              tags: []
+              labels:
+                modeled_by: dbt
+            extra_meta:
+              database_alias: data_analysis_layer
