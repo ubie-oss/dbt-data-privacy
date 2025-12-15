@@ -61,7 +61,7 @@ jobs:
       - name: Install dbt
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
-          pip install -r "requirements/${{ matrix.pip-requirements }}"
+          curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --update
       - name: Run unit tests
         id: run_unit_tests
         working-directory: "${{ github.workspace }}/integration_tests"
