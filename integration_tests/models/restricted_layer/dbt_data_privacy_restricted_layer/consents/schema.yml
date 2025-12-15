@@ -46,7 +46,11 @@ models:
                 field: "user_id"
       - name: pseudonymized_user_id
         description: "Pseudonymized user ID"
-        config: {}
+        config:
+          meta:
+            data_privacy:
+              level: confidential
+              alias: "customer_id"
         tests:
           - not_null
       - name: consent.data_analysis

@@ -153,29 +153,29 @@
       "granularity": "day",
     },
     cluster_by=['id'],
-    tags=['tag1'],
+    tags=('tag1',),
     labels={
       "key1": "value1","key2": "value2",
     },
     re_data_monitored="True",
-    persist_docs={'relation': True, 'columns': True},
+    persist_docs={'relation':true,'columns':true},
     docs={'node_color':'red'},
-    full_refresh=None,
+    full_refresh=none,
     enabled=True
   )
 }}
 
 WITH privacy_protected_model AS (
   SELECT
+    id AS `user_pk`,
+    SHA256(CAST(user_idASSTRING)) AS `customer_id`,
     STRUCT(
       consents.data_analysis AS `data_analysis`,
       consents.data_sharing AS `data_sharing`
     ) AS `user_consents`,
-    dummy_array AS `dummy_array`,
     dummy_column AS `dummy_column`,
+    dummy_array AS `dummy_array`,
     dummy_record AS `dummy_record`,
-    id AS `user_pk`,
-    SHA256(CAST(user_id AS STRING)) AS `customer_id`,
   FROM
     {{ ref('test_restricted_users') }} AS __original_table
   WHERE

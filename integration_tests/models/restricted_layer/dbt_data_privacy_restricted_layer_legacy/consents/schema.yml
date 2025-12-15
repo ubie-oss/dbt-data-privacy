@@ -23,6 +23,10 @@ models:
               level: confidential
       - name: pseudonymized_user_id
         description: "Pseudonymized user ID"
+        config:
+          meta:
+            data_privacy:
+              level: confidential
         tests:
           - not_null
       - name: consent.data_analysis
