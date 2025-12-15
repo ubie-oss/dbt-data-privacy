@@ -164,9 +164,6 @@
   ARRAY(
     SELECT
       STRUCT(
-        ARRAY(SELECT SHA256(CAST(e AS STRING)) FROM UNNEST(x) AS e) AS `x`,
-        SHA256(CAST(y AS STRING)) AS `y`,
-        z AS `z`,
         STRUCT(
           ARRAY(SELECT SHA256(CAST(e AS STRING)) FROM UNNEST(struct1.x) AS e) AS `x`,
           ARRAY(
@@ -176,7 +173,10 @@
                 )
               FROM UNNEST(struct1.array2)
           ) AS `array2`
-        ) AS `struct1`
+        ) AS `struct1`,
+        ARRAY(SELECT SHA256(CAST(e AS STRING)) FROM UNNEST(x) AS e) AS `x`,
+        SHA256(CAST(y AS STRING)) AS `y`,
+        z AS `z`
       )
     FROM UNNEST(array1)
   ) AS `array1`
