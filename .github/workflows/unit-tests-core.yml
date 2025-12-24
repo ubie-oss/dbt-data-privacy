@@ -20,27 +20,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Python 3.10
-          - python-version: "3.10"
-            pip-requirements: "requirements-1.8.txt"
-          - python-version: "3.10"
-            pip-requirements: "requirements-1.9.txt"
-          - python-version: "3.10"
-            pip-requirements: "requirements-1.10.txt"
-          # Python 3.11
-          - python-version: "3.11"
-            pip-requirements: "requirements-1.8.txt"
-          - python-version: "3.11"
-            pip-requirements: "requirements-1.9.txt"
           - python-version: "3.11"
             pip-requirements: "requirements-1.10.txt"
+          - python-version: "3.11"
+            pip-requirements: "requirements-1.11.txt"
           # Python 3.12
           - python-version: "3.12"
-            pip-requirements: "requirements-1.8.txt"
-          - python-version: "3.12"
-            pip-requirements: "requirements-1.9.txt"
-          - python-version: "3.12"
             pip-requirements: "requirements-1.10.txt"
+          - python-version: "3.12"
+            pip-requirements: "requirements-1.11.txt"
     defaults:
       run:
         shell: bash
