@@ -62,6 +62,7 @@ if [[ "$delete_before" == "1" ]] ; then
   if [[ -n "${dbt_vars_path+x}" ]]; then dbt_ls_options+=("--vars" "$(cat "${dbt_vars_path:?}")"); fi
   # shellcheck disable=SC2046
   deleted_files="$(dbt --quiet ls \
+      --profiles-dir "${dbt_profiles_dir:?}" \
       --select "\"tag:${default_tag:?}\"" \
       --output path \
       "${dbt_ls_options[@]}")"
