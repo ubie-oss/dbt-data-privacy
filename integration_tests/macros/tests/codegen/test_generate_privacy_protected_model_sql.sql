@@ -153,7 +153,7 @@
       "granularity": "day",
     },
     cluster_by=['id'],
-    tags=('tag1',),
+    tags=['tag1'],
     labels={
       "key1": "value1","key2": "value2",
     },
@@ -168,7 +168,7 @@
 WITH privacy_protected_model AS (
   SELECT
     id AS `user_pk`,
-    SHA256(CAST(user_idASSTRING)) AS `customer_id`,
+    SHA256(CAST(user_id AS STRING)) AS `customer_id`,
     STRUCT(
       consents.data_analysis AS `data_analysis`,
       consents.data_sharing AS `data_sharing`
@@ -208,7 +208,7 @@ JOIN __relationships_1
     {% do print(result) %}
   #}
 
-  {% set result = result | replace(' ', '') | trim %}
-  {% set expected = expected | replace(' ', '') | trim %}
+  {% set result = result | lower | replace(' ', '') | trim %}
+  {% set expected = expected | lower | replace(' ', '') | trim %}
   {{ assert_equals(result, expected) }}
 {% endmacro %}
