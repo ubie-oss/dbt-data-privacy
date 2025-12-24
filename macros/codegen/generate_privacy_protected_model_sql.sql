@@ -108,7 +108,7 @@
     {%- if "cluster_by" in adapter_config %}
     cluster_by={{ adapter_config["cluster_by"] }},
     {%- endif %}
-    tags={{ tags | unique | sort }},
+    tags={{ tags | unique | sort | list }},
     labels={
       {% for k, v in labels.items() -%}
       {{ '"' ~ k ~ '"' }}: {{ dbt_data_privacy.safe_quote(v) }},
