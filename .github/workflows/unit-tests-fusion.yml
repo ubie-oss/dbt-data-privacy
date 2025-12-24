@@ -16,12 +16,6 @@ jobs:
       contents: read
       id-token: write
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - python-version: "3.12"
-            pip-requirements: "requirements-1.10.txt"
     defaults:
       run:
         shell: bash
@@ -48,7 +42,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: fusion-logs-and-target-${{ matrix.python-version }}-${{ matrix.pip-requirements }}
+          name: fusion-logs-and-target
           retention-days: 3
           path: |
             integration_tests/logs
