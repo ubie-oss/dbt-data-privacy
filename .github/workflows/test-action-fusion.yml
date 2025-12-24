@@ -46,7 +46,9 @@ jobs:
       - name: Install dbt Packages
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
-          dbt deps --target bigquery
+          dbt deps \
+            --target bigquery \
+            --profiles-dir "${{ github.workspace }}/integration_tests/profiles"
       - name: Test the action on dbt Fusion
         id: test-action
         uses: ./action
