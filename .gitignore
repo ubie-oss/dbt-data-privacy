@@ -5,3 +5,5 @@
 ./dbt_packages/
 ./logs/
 ./target/
+package-lock.yml
+dbt_internal_packages/

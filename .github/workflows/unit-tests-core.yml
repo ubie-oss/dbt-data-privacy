@@ -1,11 +1,11 @@
-name: Unit tests
+name: Unit tests on dbt Core
 on:
   push:
     branches:
       - main
   pull_request:
     paths:
-      - .github/workflows/unit-tests.yml
+      - .github/workflows/unit-tests-core.yml
       - macros/**/*
       - integration_tests/**/*
 
@@ -20,6 +20,25 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # Python 3.10
+          - python-version: "3.10"
+            pip-requirements: "requirements-1.8.txt"
+          - python-version: "3.10"
+            pip-requirements: "requirements-1.9.txt"
+          - python-version: "3.10"
+            pip-requirements: "requirements-1.10.txt"
+          # Python 3.11
+          - python-version: "3.11"
+            pip-requirements: "requirements-1.8.txt"
+          - python-version: "3.11"
+            pip-requirements: "requirements-1.9.txt"
+          - python-version: "3.11"
+            pip-requirements: "requirements-1.10.txt"
+          # Python 3.12
+          - python-version: "3.12"
+            pip-requirements: "requirements-1.8.txt"
+          - python-version: "3.12"
+            pip-requirements: "requirements-1.9.txt"
           - python-version: "3.12"
             pip-requirements: "requirements-1.10.txt"
     defaults:
@@ -27,7 +46,7 @@ jobs:
         shell: bash
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
@@ -39,21 +58,21 @@ jobs:
         with:
           workload_identity_provider: projects/131500153501/locations/global/workloadIdentityPools/github-oidc-pool/providers/github-oidc-provider
           service_account: dbt-data-privacy@ubie-oss-data-engineering.iam.gserviceaccount.com
-      - name: Install dbt
+      - name: Install dbt Core
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
-          curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --update
-      - name: Run unit tests
+          pip install -r "requirements/${{ matrix.pip-requirements }}"
+      - name: Run unit tests on dbt Core
         id: run_unit_tests
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
-          bash run_unit_tests.sh --target bigquery  --vars-path resources/vars/vars-bigquery.basic.json
+          bash run_unit_tests.sh --target bigquery  --vars-path resources/vars/vars-bigquery.basic.yml
       # Save artifacts for debug
       - name: Save logs and artifacts if failed
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
-          name: save-logs-and-target-${{ matrix.python-version }}-${{ matrix.pip-requirements }}
+          name: core-logs-and-target-${{ matrix.python-version }}-${{ matrix.pip-requirements }}
           retention-days: 3
           path: |
             integration_tests/logs

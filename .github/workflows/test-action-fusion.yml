@@ -1,8 +1,8 @@
-name: Test the GitHub Actions
+name: Test the GitHub Actions on dbt Fusion
 on:
   pull_request:
     paths:
-      - .github/workflows/test-action.yml
+      - .github/workflows/test-action-core.yml
       - action/**/*
       - integration_tests/models/**/schema.yml
 
@@ -12,12 +12,12 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
-      - name: Comment on PR start of test
+      - name: Comment on PR start of test on dbt Fusion
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           body=$(cat <<EOF
-          🚀 Starting the test action...
+          🚀 Starting the test action on dbt Fusion...
           Please check the workflow run for more details.
           URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           EOF
@@ -62,23 +62,18 @@ jobs:
         shell: bash
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: "${{ github.head_ref }}"
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'pip'
-          cache-dependency-path: '**/${{ matrix.pip-requirements }}'
-      - name: Install dbt
+      - name: Install dbt Fusion
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
-          pip install -r "requirements/${{ matrix.pip-requirements }}"
+          curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --update
       - name: Install dbt Packages
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
           dbt deps --target bigquery
-      - name: Test the action
+      - name: Test the action on dbt Fusion
         id: test-action
         uses: ./action
         with:
@@ -105,7 +100,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           # Push the generated models
           git add "${{ github.workspace }}/integration_tests/models"
-          git commit --signoff -m 'Generate dbt models by dbt-data-privacy'
+          git commit --signoff -m 'Generate dbt models by dbt-data-privacy (dbt Fusion)'
           git push --set-upstream origin "HEAD:${{ github.head_ref }}"
           # Revert the commit
           git revert HEAD
