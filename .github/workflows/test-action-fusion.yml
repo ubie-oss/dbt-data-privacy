@@ -6,6 +6,11 @@ on:
       - action/**/*
       - integration_tests/models/**/schema.yml
 
+# We can run either of `test-action-fusion` and `test-action-core` simultaneously.
+concurrency:
+  group: test-action-${{ github.head_ref }}
+  cancel-in-progress: false
+
 jobs:
   notice-start-of-test:
     permissions:
