@@ -50,7 +50,7 @@ models:
           meta:
             data_privacy:
               level: confidential
-              alias: "customer_id"
+              alias: "pseudonymized_customer_id"
         tests:
           - not_null
       - name: consent.data_analysis

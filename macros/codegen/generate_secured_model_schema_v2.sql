@@ -90,7 +90,8 @@ models:
         {%- set data_tests = column_meta.data_privacy[name].get('data_tests', [])
             + column_meta.data_privacy[name].get('tests', []) %}
         data_tests: {%- for data_test in data_tests %}
-          - {{ data_test }}
+          {#- `tojson` is used to escape quotes in the data test -#}
+          - {{ tojson(data_test) }}
         {%- endfor %}
         {%- endif %}
     {%- endfor %}
