@@ -4,7 +4,9 @@
   {% set column_conditions = dbt_data_privacy.analyze_column_conditions(data_handling_standards, columns) %}
 
   {% set restructured_columns = dbt_data_privacy.restructure_columns(columns) %}
-  {% for top_level_column_name, top_level_restructure_column in restructured_columns.items() %}
+  {# Iterate over keys to avoid collision with column named "items" #}
+  {% for top_level_column_name in restructured_columns %}
+    {% set top_level_restructure_column = restructured_columns[top_level_column_name] %}
     {% set secured_top_level_restructure_column = dbt_data_privacy.get_secured_restructured_column(
       data_handling_standards=data_handling_standards,
       column_conditions=column_conditions,

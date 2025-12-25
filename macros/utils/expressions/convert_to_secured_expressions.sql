@@ -4,7 +4,9 @@
   {% endif %}
 
   {% set restructured_secured_expressions = {} %}
-  {% for k, v in restructured_secured_columns.items() %}
+  {# Iterate over keys to avoid collision with key named "items" #}
+  {% for k in restructured_secured_columns %}
+    {% set v = restructured_secured_columns[k] %}
     {% do restructured_secured_expressions.update({k: dbt_data_privacy.convert_secured_column_to_expression(v)}) %}
   {% endfor %}
 
@@ -21,7 +23,9 @@
   {% if restructured_secured_column is mapping and "secured_expression" not in restructured_secured_column %}
     {%- set structured_secured_expression -%}
     STRUCT(
-      {%- for sub_k, sub_v in restructured_secured_column.items() %}
+      {# Iterate over keys to avoid collision with key named "items" #}
+      {%- for sub_k in restructured_secured_column %}
+      {%- set sub_v = restructured_secured_column[sub_k] -%}
       {{ dbt_data_privacy.convert_secured_column_to_expression(sub_v) }} AS `{{- sub_k -}}`{%- if not loop.last %},{%- endif %}
       {%- endfor %}
     )

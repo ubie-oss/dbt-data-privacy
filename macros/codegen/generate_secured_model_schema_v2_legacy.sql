@@ -58,7 +58,7 @@ models:
     tags: {{ tags | unique | sort | list }}
     {%- endif %}
     {%- if labels | length > 0 %}
-    meta: {%- for k, v in labels.items() %}
+    meta: {%- for k in labels %}{% set v = labels[k] %}
       {{ k }}: {{ v }}
     {%- endfor %}
     {%- endif %}
