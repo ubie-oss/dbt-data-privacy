@@ -158,9 +158,9 @@
       "key1": "value1","key2": "value2",
     },
     re_data_monitored="True",
-    persist_docs={'relation': True, 'columns': True},
+    persist_docs={'relation':true,'columns':true},
     docs={'node_color':'red'},
-    full_refresh=None,
+    full_refresh=none,
     enabled=True
   )
 }}
@@ -208,7 +208,7 @@ JOIN __relationships_1
     {% do print(result) %}
   #}
 
-  {% set result = result | replace(' ', '') | trim %}
-  {% set expected = expected | replace(' ', '') | trim %}
+  {% set result = result | lower | replace(' ', '') | trim %}
+  {% set expected = expected | lower | replace(' ', '') | trim %}
   {{ assert_equals(result, expected) }}
 {% endmacro %}

@@ -1,10 +1,15 @@
-name: Test the GitHub Actions
+name: Test the GitHub Actions on dbt Fusion
 on:
   pull_request:
     paths:
-      - .github/workflows/test-action.yml
+      - .github/workflows/test-action-core.yml
       - action/**/*
       - integration_tests/models/**/schema.yml
+
+# We can run either of `test-action-fusion` and `test-action-core` simultaneously.
+concurrency:
+  group: test-action-${{ github.head_ref }}
+  cancel-in-progress: false
 
 jobs:
   notice-start-of-test:
@@ -12,12 +17,12 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
-      - name: Comment on PR start of test
+      - name: Comment on PR start of test on dbt Fusion
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           body=$(cat <<EOF
-          🚀 Starting the test action...
+          🚀 Starting the test action on dbt Fusion...
           Please check the workflow run for more details.
           URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           EOF
@@ -31,32 +36,6 @@ jobs:
       contents: write
       pull-requests: write
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 1
-      fail-fast: true
-      matrix:
-        include:
-          # Python 3.10
-          - python-version: "3.10"
-            pip-requirements: "requirements-1.8.txt"
-          - python-version: "3.10"
-            pip-requirements: "requirements-1.9.txt"
-          - python-version: "3.10"
-            pip-requirements: "requirements-1.10.txt"
-          # Python 3.11
-          - python-version: "3.11"
-            pip-requirements: "requirements-1.8.txt"
-          - python-version: "3.11"
-            pip-requirements: "requirements-1.9.txt"
-          - python-version: "3.11"
-            pip-requirements: "requirements-1.10.txt"
-          # Python 3.12
-          - python-version: "3.12"
-            pip-requirements: "requirements-1.8.txt"
-          - python-version: "3.12"
-            pip-requirements: "requirements-1.9.txt"
-          - python-version: "3.12"
-            pip-requirements: "requirements-1.10.txt"
     defaults:
       run:
         shell: bash
@@ -65,20 +44,17 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: "${{ github.head_ref }}"
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'pip'
-          cache-dependency-path: '**/${{ matrix.pip-requirements }}'
-      - name: Install dbt
+      - name: Install dbt Fusion
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
-          pip install -r "requirements/${{ matrix.pip-requirements }}"
+          curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | sh -s -- --update
       - name: Install dbt Packages
         working-directory: "${{ github.workspace }}/integration_tests"
         run: |
-          dbt deps --target bigquery
-      - name: Test the action
+          dbt deps \
+            --target bigquery \
+            --profiles-dir "${{ github.workspace }}/integration_tests/profiles"
+      - name: Test the action on dbt Fusion
         id: test-action
         uses: ./action
         with:
@@ -105,7 +81,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           # Push the generated models
           git add "${{ github.workspace }}/integration_tests/models"
-          git commit --signoff -m 'Generate dbt models by dbt-data-privacy'
+          git commit --signoff -m 'Generate dbt models by dbt-data-privacy (dbt Fusion)'
           git push --set-upstream origin "HEAD:${{ github.head_ref }}"
           # Revert the commit
           git revert HEAD
@@ -123,7 +99,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr comment "${{ github.event.pull_request.number }}" \
-            --body "❌ One or more matrix jobs failed. Please check the workflow run for more details." \
+            --body "❌ The test failed. Please check the workflow run for more details." \
             --repo "${{ github.repository }}" \
       - name: Comment on PR failure
         if: ${{ needs.test-action.result == 'success' }}
@@ -131,5 +107,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr comment "${{ github.event.pull_request.number }}" \
-            --body "✅ All matrix jobs passed. Please check the workflow run for more details." \
+            --body "✅ The test passed. Please check the workflow run for more details." \
             --repo "${{ github.repository }}" \

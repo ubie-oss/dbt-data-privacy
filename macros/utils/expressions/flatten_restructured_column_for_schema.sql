@@ -64,13 +64,16 @@
   {% endif %}
 
   {% if restructured_column.fields is defined %}
-    {% for sub_column_name, sub_restructured_column in restructured_column.fields.items() %}
+    {# Iterate over keys to avoid collision with column named "items" #}
+    {% for sub_column_name in restructured_column.fields %}
+      {% set sub_restructured_column = restructured_column.fields[sub_column_name] %}
       {% set sub_flatten_columns = dbt_data_privacy.flatten_restructured_column_for_schema(
           restructured_column=sub_restructured_column,
           path=(path + [sub_column_name]),
           aliased_path=new_aliased_path
           ) %}
-      {% for k, v in sub_flatten_columns.items() %}
+      {% for k in sub_flatten_columns %}
+        {% set v = sub_flatten_columns[k] %}
         {% do flatten_columns.update({k: v}) %}
       {% endfor %}
     {% endfor %}

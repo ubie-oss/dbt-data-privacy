@@ -42,7 +42,9 @@
 
   {% if is_array is sameas true and is_struct is sameas true %}
     {# ARRAY of STRUCT #}
-    {% for field_key, field_info in restructured_column.fields.items() %}
+    {# Iterate over keys to avoid collision with field named "items" #}
+    {% for field_key in restructured_column.fields %}
+      {% set field_info = restructured_column.fields[field_key] %}
       {# Reset relative_path from the array #}
       {% set secured_restructured_column = dbt_data_privacy.get_secured_restructured_column(
           data_handling_standards=data_handling_standards,
@@ -56,7 +58,9 @@
     {{ return(copied_restructured_column) }}
   {% elif is_struct is sameas true %}
     {# STRUCT #}
-    {% for field_key, field_info in restructured_column.fields.items() %}
+    {# Iterate over keys to avoid collision with field named "items" #}
+    {% for field_key in restructured_column.fields %}
+      {% set field_info = restructured_column.fields[field_key] %}
       {% set secured_restructured_column = dbt_data_privacy.get_secured_restructured_column(
           data_handling_standards=data_handling_standards,
           column_conditions=column_conditions,

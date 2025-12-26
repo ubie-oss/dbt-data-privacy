@@ -108,13 +108,15 @@
     {%- if "cluster_by" in adapter_config %}
     cluster_by={{ adapter_config["cluster_by"] }},
     {%- endif %}
-    tags={{ tags | unique | sort }},
+    tags={{ tags | unique | sort | list }},
     labels={
-      {% for k, v in labels.items() -%}
+      {% for k in labels -%}
+      {% set v = labels[k] -%}
       {{ '"' ~ k ~ '"' }}: {{ dbt_data_privacy.safe_quote(v) }},
       {%- endfor %}
     },
-    {%- for k, v in unknown_config.items() %}
+    {%- for k in unknown_config %}
+    {% set v = unknown_config[k] -%}
     {{ k }}={{ dbt_data_privacy.safe_quote(v) }},
     {%- endfor %}
     persist_docs={{ persist_docs }},
@@ -128,7 +130,8 @@
 
 WITH privacy_protected_model AS (
   SELECT
-    {%- for top_level_column_name, top_level_restructured_column in restructured_columns.items() %}
+    {%- for top_level_column_name in restructured_columns %}
+    {%- set top_level_restructured_column = restructured_columns[top_level_column_name] %}
     {%- set expression = dbt_data_privacy.convert_restructured_column_to_expression(top_level_column_name, top_level_restructured_column) %}
     {%- if expression is not none %}
     {{ expression }},
@@ -140,7 +143,7 @@ WITH privacy_protected_model AS (
     {%- else %}
     {{ reference }} AS __original_table
     {%- endif %}
-  {%- if where is not none %}
+  {%- if where is not none and where | length > 0 %}
   WHERE
     {{ where }}
   {%- endif %}
@@ -164,7 +167,8 @@ FROM privacy_protected_model AS __source
 {%- if relationships is not none and dbt_data_privacy.validate_relationships(relationships)  -%}
 {%- for i in range(relationships | length) %}
 JOIN __relationships_{{ i }}
-  ON {% for k, v in relationships[i]["fields"].items() -%}
+  ON {% for k in relationships[i]["fields"] -%}
+    {%- set v = relationships[i]["fields"][k] -%}
     {%- if not loop.first -%}AND {% endif -%}
     {%- set column = restructured_columns.get(k) -%}
     {%- if column and column.additional_info and column.additional_info.alias -%}

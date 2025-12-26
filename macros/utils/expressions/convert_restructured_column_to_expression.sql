@@ -38,7 +38,10 @@
   {% if is_array is sameas true and is_struct is sameas true %}
     {# ARRAY of STRUCT #}
     {% set sub_expressions = [] %}
-    {%- for sub_field_key, sub_field_info in restructured_column.fields.items() %}
+    {# Sort field keys alphabetically for deterministic ordering #}
+    {% set sorted_field_keys = restructured_column.fields.keys() | list | sort %}
+    {%- for sub_field_key in sorted_field_keys %}
+      {%- set sub_field_info = restructured_column.fields[sub_field_key] %}
       {%- set expression = dbt_data_privacy.convert_restructured_column_to_expression(sub_field_key, sub_field_info, depth=depth+1) %}
       {%- if expression is not none %}
         {% do sub_expressions.append(expression) %}
@@ -61,7 +64,10 @@ ARRAY(
   {% elif is_struct is sameas true %}
     {# STRUCT #}
     {% set sub_expressions = [] %}
-    {%- for sub_field_key, sub_field_info in restructured_column.fields.items() %}
+    {# Sort field keys alphabetically for deterministic ordering #}
+    {% set sorted_field_keys = restructured_column.fields.keys() | list | sort %}
+    {%- for sub_field_key in sorted_field_keys %}
+      {%- set sub_field_info = restructured_column.fields[sub_field_key] %}
       {%- set expression = dbt_data_privacy.convert_restructured_column_to_expression(sub_field_key, sub_field_info, depth=depth+1) %}
       {%- if expression is not none %}
         {% do sub_expressions.append(expression) %}

@@ -9,7 +9,9 @@
   {# fill in default values #}
   {% if with_default_config is true %}
     {% set default_config = dbt_data_privacy.get_default_data_privacy_config() %}
-    {% for k, v in default_config.items() %}
+    {# Iterate over keys for consistency #}
+    {% for k in default_config %}
+      {% set v = default_config[k] %}
       {% if k not in config_by_objective %}
         {% do config_by_objective.update({k: v}) %}
       {% endif %}

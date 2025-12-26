@@ -1,4 +1,3 @@
----
 version: 2
 
 models:
@@ -9,71 +8,77 @@ models:
       ## NOTE
       - XXX
       - XXX
-    meta:
-      data_privacy:
-        - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer_legacy__orders
-          objective: data_analysis
-          config:
-            enabled: true
-            materialized: view
-            database: var('data_analysis_layer')
-            schema: "dbt_data_privacy_data_analysis_layer_legacy"
-            alias: "orders"
-            grant_access_to:
-              - project: var('restricted_layer')
-                dataset: "dbt_data_privacy_restricted_layer_legacy"
-            partition_by:
-              field: "created_at"
-              data_type: "timestamp"
-              granularity: "day"
-            cluster_by: ["id"]
-            tags: []
-            labels:
-              modeled_by: dbt
-          relationships:
-            - to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer_legacy__users")
-              fields:
-                user_id: user_id
-          extra_meta:
-            database_alias: data_analysis_layer
-
     columns:
       - name: id
         description: "Order ID"
-        meta:
-          data_privacy:
-            level: internal
         tests:
           - not_null
+        config:
+          meta:
+            data_privacy:
+              level: internal
       - name: user_id
         description: "User ID"
-        meta:
-          data_privacy:
-            level: confidential
-            data_analysis_layer__dbt_data_privacy_data_analysis_layer__orders:
-              tests:
-                - relationships:
-                    to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__users")
-                    field: "user_id"
         tests:
           - not_null
           - relationships:
-              to: ref("restricted_layer__dbt_data_privacy_restricted_layer__users")
-              field: "user_id"
+              arguments:
+                to: ref("restricted_layer__dbt_data_privacy_restricted_layer__users")
+                field: "user_id"
+        config:
+          meta:
+            data_privacy:
+              level: confidential
+              data_analysis_layer__dbt_data_privacy_data_analysis_layer__orders:
+                tests:
+                  - relationships:
+                      to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__users")
+                      field: "user_id"
       - name: item_id
         description: "Item ID"
-        meta:
-          data_privacy:
-            level: public
         tests:
           - not_null
           - relationships:
-              to: ref("restricted_layer__dbt_data_privacy_restricted_layer__items")
-              field: "id"
+              arguments:
+                to: ref("restricted_layer__dbt_data_privacy_restricted_layer__items")
+                field: "id"
+        config:
+          meta:
+            data_privacy:
+              level: public
       - name: created_at
         description: "Order timestamp"
-        meta:
-          data_privacy:
-            level: internal
         tests:
           - not_null
+        config:
+          meta:
+            data_privacy:
+              level: internal
+    config:
+      meta:
+        data_privacy:
+          - name: data_analysis_layer__dbt_data_privacy_data_analysis_layer_legacy__orders
+            objective: data_analysis
+            config:
+              enabled: true
+              materialized: view
+              database: var('data_analysis_layer')
+              schema: "dbt_data_privacy_data_analysis_layer_legacy"
+              alias: "orders"
+              grant_access_to:
+                - project: var('restricted_layer')
+                  dataset: "dbt_data_privacy_restricted_layer_legacy"
+              partition_by:
+                field: "created_at"
+                data_type: "timestamp"
+                granularity: "day"
+              cluster_by: ["id"]
+              tags: []
+              labels:
+                modeled_by: dbt
+            relationships:
+              - to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer_legacy__users")
+                fields:
+                  user_id: user_id
+            extra_meta:
+              database_alias: data_analysis_layer

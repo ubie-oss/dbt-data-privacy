@@ -2,7 +2,9 @@
   {% set secured_columns = {} %}
   {% set column_conditions = dbt_data_privacy.analyze_column_conditions(data_handling_standards, columns) %}
 
-  {% for column_name, column_info in columns.items() %}
+  {# Iterate over keys to avoid collision with column named "items" #}
+  {% for column_name in columns %}
+    {% set column_info = columns[column_name] %}
     {% set data_security_level = dbt_data_privacy.get_column_data_security_level(column_info) %}
 
     {% if data_security_level is not none %}

@@ -1,0 +1,5 @@
+dbt-core>=1.11,<1.12
+# dbt-bigquery 1.10 is not released yet.
+dbt-bigquery>=1.9,<1.11
+
+pytz>=2015.7

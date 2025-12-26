@@ -3,3 +3,4 @@ logs/
 !logs/.gitkeep
 target/
 !target/.gitkeep
+dbt_internal_packages/

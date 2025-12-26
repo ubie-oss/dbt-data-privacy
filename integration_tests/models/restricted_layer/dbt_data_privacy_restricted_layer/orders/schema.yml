@@ -1,4 +1,3 @@
----
 version: 2
 
 models:
@@ -61,8 +60,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref("restricted_layer__dbt_data_privacy_restricted_layer__users")
-              field: "user_id"
+              arguments:
+                to: ref("restricted_layer__dbt_data_privacy_restricted_layer__users")
+                field: "user_id"
       - name: item_id
         description: "Item ID"
         config:
@@ -72,8 +72,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref("restricted_layer__dbt_data_privacy_restricted_layer__items")
-              field: "id"
+              arguments:
+                to: ref("restricted_layer__dbt_data_privacy_restricted_layer__items")
+                field: "id"
       - name: created_at
         description: "Order timestamp"
         config:

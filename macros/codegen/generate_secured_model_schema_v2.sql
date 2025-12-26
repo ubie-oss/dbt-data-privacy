@@ -59,7 +59,7 @@ models:
       tags: {{ tags | unique | sort | list }}
       {%- endif %}
       {%- if labels | length > 0 %}
-      meta: {%- for k, v in labels.items() %}
+      meta: {%- for k in labels %}{% set v = labels[k] %}
         {{ k }}: {{ v }}
       {%- endfor %}
       {%- endif %}
@@ -90,7 +90,12 @@ models:
         {%- set data_tests = column_meta.data_privacy[name].get('data_tests', [])
             + column_meta.data_privacy[name].get('tests', []) %}
         data_tests: {%- for data_test in data_tests %}
-          - {{ data_test }}
+          {#- `tojson` is used to escape quotes in the data test if it is not a string #}
+          {%- if data_test is not string %}
+            - {{ tojson(data_test) }}
+          {%- else %}
+            - {{ data_test }}
+          {%- endif %}
         {%- endfor %}
         {%- endif %}
     {%- endfor %}
