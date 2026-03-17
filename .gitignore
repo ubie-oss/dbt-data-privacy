@@ -5,3 +5,5 @@
 ./dbt_packages/
 ./logs/
 ./target/
+
+*.egg-info/
