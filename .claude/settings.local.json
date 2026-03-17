@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(for skill:*)",
+      "Bash(do echo:*)",
+      "Read(//Users/yu/.claude/skills/$skill/**)",
+      "Bash(done)"
+    ]
+  }
+}

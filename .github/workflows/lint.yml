@@ -1,26 +1,18 @@
 name: Lint resources
 on:
   pull_request:
-    paths:
-      - "**/*.sh"
-      - "**/*.yml"
 
 jobs:
-  check-style:
+  pre-commit:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: lint-bash
-        run: |
-          sudo apt-get install -y shellcheck
-          bash ./ci/lint_bash.sh
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
 
-      - name: lint-yaml
-        run: |
-          sudo apt-get install -y yamllint
-          bash ./ci/lint_yaml.sh
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.1
