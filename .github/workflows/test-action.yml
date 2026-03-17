@@ -52,59 +52,19 @@ jobs:
         with:
           enable-cache: true
           cache-dependency-path: "integration_tests/pyproject.toml"
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
           python-version: ${{ matrix.python-version }}
 
       - uses: google-github-actions/auth@v3
         with:
           workload_identity_provider: projects/131500153501/locations/global/workloadIdentityPools/github-oidc-pool/providers/github-oidc-provider
           service_account: dbt-data-privacy@ubie-oss-data-engineering.iam.gserviceaccount.com
-
-      - name: Set up environment variables
-        run: |
-          PY_VER=$(echo "${{ matrix.python-version }}" | tr -d '.')
-          DBT_VER=$(echo "${{ matrix.dbt-version }}" | tr -d '.')
-          echo "DBT_DATASET=dbt_dp_action_py${PY_VER}_dbt${DBT_VER}_${{ github.run_id }}" >> $GITHUB_ENV
-
-      - name: Install dbt
-        working-directory: "integration_tests"
-        run: |
-          uv pip install "dbt-core~=${{ matrix.dbt-version }}.0" "dbt-bigquery~=${{ matrix.dbt-version }}.0"
-
-      - name: dbt deps
-        working-directory: "integration_tests"
-        run: |
-          dbt deps --profiles-dir profiles --target bigquery
-
-      - name: Test the action
-        id: test-action
-        uses: ./.github/actions/generate-models
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          working_directory: "integration_tests"
-          dbt_models_dir: "models"
-          dbt_profiles_dir: "profiles"
-          dbt_target: "bigquery"
-          dbt_vars_path: "resources/vars/vars-bigquery.basic.yml"
-
       - name: Run integration tests
         working-directory: "integration_tests"
+        env:
+          PYTHON_VERSION: ${{ matrix.python-version }}
+          DBT_VERSION: ${{ matrix.dbt-version }}
         run: |
-          bash run_integration_tests.sh \
-            --target bigquery \
-            --vars-path resources/vars/vars-bigquery.basic.yml
-
-      - name: Cleanup dataset
-        if: always()
-        working-directory: "integration_tests"
-        run: |
-          dbt run-operation drop_dataset \
-            --profiles-dir profiles \
-            --target bigquery \
-            --vars "$(cat resources/vars/vars-bigquery.basic.yml)"
+          uv run nox -s "integration_tests-${PYTHON_VERSION}(dbt_version='${DBT_VERSION}')"
 
       - name: Delete .gitignore for the generated models
         shell: bash
@@ -147,7 +107,7 @@ jobs:
           gh pr comment "${{ github.event.pull_request.number }}" \
             --body "❌ One or more matrix jobs failed. Please check the workflow run for more details." \
             --repo "${{ github.repository }}" \
-      - name: Comment on PR failure
+      - name: Comment on PR success
         if: ${{ needs.test-action.result == 'success' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

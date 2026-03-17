@@ -33,10 +33,6 @@ jobs:
         with:
           enable-cache: true
           cache-dependency-path: "integration_tests/pyproject.toml"
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
           python-version: ${{ matrix.python-version }}
 
       - uses: google-github-actions/auth@v3
