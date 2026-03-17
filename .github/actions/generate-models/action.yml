@@ -50,7 +50,7 @@ runs:
       shell: bash
       working-directory: "${{ inputs.working_directory }}"
       run: |
-        bash ${GITHUB_ACTION_PATH}/generate_models.sh \
+        bash "${{ github.action_path }}/generate_models.sh" \
           --dbt-profiles-dir "${{ inputs.dbt_profiles_dir }}" \
           --dbt-profile "${{ inputs.dbt_profile }}" \
           --dbt-target "${{ inputs.dbt_target }}" \

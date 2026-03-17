@@ -131,35 +131,6 @@ def integration_tests(session, dbt_version):
         run_cleanup(session, dataset_name, vars_path)
 
 @nox.session(python=PYTHON_VERSIONS)
-@nox.parametrize("dbt_version", DBT_CORE_VERSIONS)
-def test_action(session, dbt_version):
-    """Test the GitHub Action script."""
-    session.install(*DBT_DEPENDENCIES[dbt_version])
-    dataset_name = get_dataset_name(session, dbt_version)
-    env = {"DBT_DATASET": dataset_name}
-    run_deps(session, env)
-
-    vars_path = "resources/vars/vars-bigquery.basic.yml"
-    try:
-        session.run(
-            "bash", "../action/generate_models.sh",
-            "--dbt-models-dir", "models",
-            "--dbt-target", "bigquery",
-            "--dbt-vars-path", vars_path,
-            env=env,
-            external=True
-        )
-        session.run(
-            "bash", "run_integration_tests.sh",
-            "--target", "bigquery",
-            "--vars-path", vars_path,
-            env=env,
-            external=True
-        )
-    finally:
-        run_cleanup(session, dataset_name, vars_path)
-
-@nox.session(python=PYTHON_VERSIONS)
 def dbt_fusion_tests(session):
     """Placeholder for future dbt Fusion tests."""
     session.log("dbt Fusion tests are not yet implemented.")

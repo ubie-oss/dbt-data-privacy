@@ -3,7 +3,7 @@ on:
   pull_request:
     paths:
       - .github/workflows/test-action.yml
-      - action/**/*
+      - .github/actions/generate-models/**
       - integration_tests/models/**/schema.yml
 
 jobs:
@@ -30,6 +30,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      id-token: write
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
@@ -62,14 +63,48 @@ jobs:
           workload_identity_provider: projects/131500153501/locations/global/workloadIdentityPools/github-oidc-pool/providers/github-oidc-provider
           service_account: dbt-data-privacy@ubie-oss-data-engineering.iam.gserviceaccount.com
 
+      - name: Set up environment variables
+        run: |
+          PY_VER=$(echo "${{ matrix.python-version }}" | tr -d '.')
+          DBT_VER=$(echo "${{ matrix.dbt-version }}" | tr -d '.')
+          echo "DBT_DATASET=dbt_dp_action_py${PY_VER}_dbt${DBT_VER}_${{ github.run_id }}" >> $GITHUB_ENV
+
+      - name: Install dbt
+        working-directory: "integration_tests"
+        run: |
+          uv pip install "dbt-core~=${{ matrix.dbt-version }}.0" "dbt-bigquery~=${{ matrix.dbt-version }}.0"
+
+      - name: dbt deps
+        working-directory: "integration_tests"
+        run: |
+          dbt deps --profiles-dir profiles --target bigquery
+
       - name: Test the action
         id: test-action
+        uses: ./.github/actions/generate-models
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          working_directory: "integration_tests"
+          dbt_models_dir: "models"
+          dbt_profiles_dir: "profiles"
+          dbt_target: "bigquery"
+          dbt_vars_path: "resources/vars/vars-bigquery.basic.yml"
+
+      - name: Run integration tests
         working-directory: "integration_tests"
-        env:
-          PYTHON_VERSION: ${{ matrix.python-version }}
-          DBT_VERSION: ${{ matrix.dbt-version }}
         run: |
-          uv run nox -s "test_action-${PYTHON_VERSION}(dbt_version='${DBT_VERSION}')"
+          bash run_integration_tests.sh \
+            --target bigquery \
+            --vars-path resources/vars/vars-bigquery.basic.yml
+
+      - name: Cleanup dataset
+        if: always()
+        working-directory: "integration_tests"
+        run: |
+          dbt run-operation drop_dataset \
+            --profiles-dir profiles \
+            --target bigquery \
+            --vars "$(cat resources/vars/vars-bigquery.basic.yml)"
 
       - name: Delete .gitignore for the generated models
         shell: bash

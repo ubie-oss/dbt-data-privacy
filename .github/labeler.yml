@@ -3,8 +3,6 @@
 
 # Related to CI
 CI:
-  - ci/*
-  - ci/**/*
   - .github/*
   - .github/**/*
 
@@ -28,5 +26,5 @@ docs:
   - README.md
 
 action:
-  - action/*
-  - action/**/*
+  - .github/actions/generate-models/*
+  - .github/actions/generate-models/**/*
