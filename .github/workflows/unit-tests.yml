@@ -40,7 +40,7 @@ jobs:
       - uses: google-github-actions/auth@v3
         with:
           workload_identity_provider: projects/131500153501/locations/global/workloadIdentityPools/github-oidc-pool/providers/github-oidc-provider
-          service_account: dbt-data-privacy@ubie-oss-data-engineering.iam.gserviceaccount.com
+          service_account: dbt-data-privacy-gha@ubie-oss-data-engineering.iam.gserviceaccount.com
 
       - name: Run unit tests
         id: run_unit_tests
