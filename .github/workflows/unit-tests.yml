@@ -32,7 +32,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
-          cache-dependency-path: "integration_tests/pyproject.toml"
+          cache-dependency-glob: "integration_tests/pyproject.toml"
           python-version: ${{ matrix.python-version }}
 
       # dbt-bigquery 1.9 required the application default credentials
