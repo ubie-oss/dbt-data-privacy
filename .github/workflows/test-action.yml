@@ -118,7 +118,7 @@ jobs:
         run: |
           gh pr comment "${{ github.event.pull_request.number }}" \
             --body "❌ One or more matrix jobs failed. Please check the workflow run for more details." \
-            --repo "${{ github.repository }}" \
+            --repo "${{ github.repository }}"
       - name: Comment on PR success
         if: ${{ needs.test-action.result == 'success' }}
         env:
@@ -126,4 +126,4 @@ jobs:
         run: |
           gh pr comment "${{ github.event.pull_request.number }}" \
             --body "✅ All matrix jobs passed. Please check the workflow run for more details." \
-            --repo "${{ github.repository }}" \
+            --repo "${{ github.repository }}"

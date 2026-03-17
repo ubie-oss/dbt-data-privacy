@@ -16,7 +16,7 @@ asset-paths: ["assets"]
 packages-install-path: "dbt_packages"
 clean-targets:  # directories to be removed by `dbt clean`
   - "target"
-  - "dbt_modules"
+  - "dbt_packages"
 
 flags:
   send_anonymous_usage_stats: false

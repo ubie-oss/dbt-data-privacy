@@ -99,13 +99,11 @@ if [[ -n ${GITHUB_OUTPUT+x} ]]; then
 fi
 
 # Generate models
-# shellcheck disable=SC2034
 echo "$generated_models_json" |
 	jq -r -c '.[]' |
 	while read -r generated_model; do
 		# Get generated features
 		name="$(echo "$generated_model" | jq -r '.meta.name')"
-		database="$(echo "$generated_model" | jq -r '.meta.config.database')"
 		database_alias="$(echo "$generated_model" | jq -r '.meta.extra_meta.database_alias')"
 		schema="$(echo "$generated_model" | jq -r '.meta.config.schema')"
 		alias="$(echo "$generated_model" | jq -r '.meta.config.alias')"

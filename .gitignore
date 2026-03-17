@@ -7,3 +7,6 @@
 ./target/
 
 *.egg-info/
+
+# Claude
+.claude/settings.local.json
