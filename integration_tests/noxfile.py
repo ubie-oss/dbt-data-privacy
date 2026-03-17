@@ -12,7 +12,7 @@ DBT_CORE_VERSIONS = ["1.8", "1.9", "1.10", "1.11"]
 DBT_DEPENDENCIES = {
     "1.8": ["dbt-core>=1.8,<1.9", "dbt-bigquery>=1.8,<1.9"],
     "1.9": ["dbt-core>=1.9,<1.10", "dbt-bigquery>=1.9,<1.10"],
-    "1.10": ["dbt-core>=1.10,<1.11", "dbt-bigquery>=1.9,<1.11"],
+    "1.10": ["dbt-core>=1.10,<1.11", "dbt-bigquery>=1.10,<1.11"],
     "1.11": ["dbt-core>=1.11,<1.12", "dbt-bigquery>=1.11,<1.12"],
 }
 

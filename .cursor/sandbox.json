@@ -1,0 +1,20 @@
+{
+  "networkPolicy": {
+    "default": "deny",
+    "allow": [
+      "github.com",
+      "api.github.com",
+      "pypi.org",
+      "files.pythonhosted.org",
+      "trunk.io",
+      "api.trunk.io"
+    ]
+  },
+  "additionalReadwritePaths": [
+    "//tmp",
+    "./.pytest_cache",
+    "./.trunk",
+    "./build",
+    "./dist"
+  ]
+}
