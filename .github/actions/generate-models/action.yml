@@ -34,6 +34,10 @@ inputs:
     description: "verbose if it is '1'."
     required: false
     default: "1"
+  uv_group:
+    description: "Which uv group to use."
+    required: false
+    default: ""
 
 outputs:
   generated-models-count:
@@ -50,7 +54,7 @@ runs:
       shell: bash
       working-directory: "${{ inputs.working_directory }}"
       run: |
-        bash "${{ github.action_path }}/generate_models.sh" \
+        uv run --group "${{ inputs.uv_group }}" bash "${{ github.action_path }}/generate_models.sh" \
           --dbt-profiles-dir "${{ inputs.dbt_profiles_dir }}" \
           --dbt-profile "${{ inputs.dbt_profile }}" \
           --dbt-target "${{ inputs.dbt_target }}" \

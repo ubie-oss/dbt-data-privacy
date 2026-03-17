@@ -53,42 +53,18 @@ jobs:
           cache-dependency-path: "integration_tests/pyproject.toml"
           python-version: ${{ matrix.python-version }}
 
-      - name: Install dbt
-        run: |
-          uv pip install "dbt-core~=${{ matrix.dbt-version }}.0" "dbt-bigquery~=${{ matrix.dbt-version }}.0"
-
-      - name: Install dbt packages
-        working-directory: "integration_tests"
-        run: |
-          dbt deps
-
-      - name: Create dummy dbt profile
-        run: |
-          mkdir -p integration_tests/dummy_profiles
-          cat <<EOF > integration_tests/dummy_profiles/profiles.yml
-          default:
-            outputs:
-              bigquery:
-                type: bigquery
-                method: service-account
-                project: dummy-project
-                dataset: dummy_dataset
-                location: US
-                keyfile_json: '{"type": "service_account", "project_id": "dummy-project", "private_key_id": "dummy", "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCl\n-----END PRIVATE KEY-----\n", "client_email": "dummy@dummy.iam.gserviceaccount.com", "client_id": "dummy", "auth_uri": "https://accounts.google.com/o/oauth2/auth", "token_uri": "https://oauth2.googleapis.com/token", "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs", "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dummy%40dummy.iam.gserviceaccount.com"}'
-            target: bigquery
-          EOF
-
       - name: Test the action
         id: test-action
         uses: ./.github/actions/generate-models
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
           working_directory: "integration_tests"
-          dbt_profiles_dir: "${{ github.workspace }}/integration_tests/dummy_profiles"
+          dbt_profiles_dir: "${{ github.workspace }}/integration_tests/profiles"
           dbt_models_dir: "${{ github.workspace }}/integration_tests/models"
           dbt_profile: "default"
           dbt_target: "bigquery"
           dbt_vars_path: "${{ github.workspace }}/integration_tests/resources/vars/vars-bigquery.basic.yml"
+          uv_group: "${{ matrix.dbt-group }}"
           delete_before: "1"
           verbose: "1"
 

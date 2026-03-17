@@ -7,13 +7,13 @@ nox.options.sessions = ["dev_unit_tests"]
 nox.options.default_venv_backend = "uv"
 
 PYTHON_VERSIONS = ["3.10", "3.11", "3.12"]
-DBT_VERSION_MAP = {
-    "1.10": {
-        "uv_group": "dbt-core-1-10",
+DBT_GROUP_MAP = {
+    "dbt-core-1-10": {
+        "version": "1.10",
         "description": "dbt-core v1.10",
     },
-    "1.11": {
-        "uv_group": "dbt-core-1-11",
+    "dbt-core-1-11": {
+        "version": "1.11",
         "description": "dbt-core v1.11",
     },
 }
@@ -56,13 +56,16 @@ def run_cleanup(session, dataset_name, vars_path):
     )
 
 @contextmanager
-def dbt_test_env(session, dbt_version):
+def dbt_test_env(session, uv_group):
     """Context manager to setup and cleanup dbt test environment."""
-    if dbt_version not in DBT_VERSION_MAP:
-        session.error(f"Unsupported dbt version: {dbt_version}")
+    if uv_group not in DBT_GROUP_MAP:
+        session.error(f"Unsupported dbt group: {uv_group}")
 
-    version_info = DBT_VERSION_MAP[dbt_version]
-    session.install("--group", version_info["uv_group"])
+    version_info = DBT_GROUP_MAP[uv_group]
+    dbt_version = version_info["version"]
+
+    # Install the project and the requested group
+    session.install(".", "--group", uv_group)
 
     dataset_name = get_dataset_name(session, dbt_version)
     env = {"DBT_DATASET": dataset_name}
@@ -78,20 +81,20 @@ def dbt_test_env(session, dbt_version):
 @nox.session(python="3.12")
 def dev_unit_tests(session):
     """Quickly run unit tests with the latest versions."""
-    latest_version = list(DBT_VERSION_MAP.keys())[-1]
-    unit_tests(session, latest_version)
+    latest_group = list(DBT_GROUP_MAP.keys())[-1]
+    unit_tests(session, latest_group)
 
 @nox.session(python="3.12")
 def dev_integration_tests(session):
     """Quickly run integration tests with the latest versions."""
-    latest_version = list(DBT_VERSION_MAP.keys())[-1]
-    integration_tests(session, latest_version)
+    latest_group = list(DBT_GROUP_MAP.keys())[-1]
+    integration_tests(session, latest_group)
 
 @nox.session(python=PYTHON_VERSIONS)
-@nox.parametrize("dbt_version", list(DBT_VERSION_MAP.keys()))
-def unit_tests(session, dbt_version):
-    """Run unit tests with specified dbt-core version."""
-    with dbt_test_env(session, dbt_version) as test_env:
+@nox.parametrize("uv_group", list(DBT_GROUP_MAP.keys()))
+def unit_tests(session, uv_group):
+    """Run unit tests with specified dbt-core version group."""
+    with dbt_test_env(session, uv_group) as test_env:
         session.run(
             "bash", "run_unit_tests.sh",
             "--target", "bigquery",
@@ -101,10 +104,10 @@ def unit_tests(session, dbt_version):
         )
 
 @nox.session(python=PYTHON_VERSIONS)
-@nox.parametrize("dbt_version", list(DBT_VERSION_MAP.keys()))
-def integration_tests(session, dbt_version):
-    """Run integration tests with specified dbt-core version."""
-    with dbt_test_env(session, dbt_version) as test_env:
+@nox.parametrize("uv_group", list(DBT_GROUP_MAP.keys()))
+def integration_tests(session, uv_group):
+    """Run integration tests with specified dbt-core version group."""
+    with dbt_test_env(session, uv_group) as test_env:
         env = test_env["env"]
         vars_path = test_env["vars_path"]
 
@@ -142,14 +145,13 @@ def integration_tests(session, dbt_version):
         )
 
 @nox.session(python=PYTHON_VERSIONS)
-@nox.parametrize("dbt_version", list(DBT_VERSION_MAP.keys()))
-def setup_dbt_env(session, dbt_version):
-    """Setup a virtual environment for a specific dbt version and output its bin path."""
-    if dbt_version not in DBT_VERSION_MAP:
-        session.error(f"Unsupported dbt version: {dbt_version}")
+@nox.parametrize("uv_group", list(DBT_GROUP_MAP.keys()))
+def setup_dbt_env(session, uv_group):
+    """Setup a virtual environment for a specific dbt version group and output its bin path."""
+    if uv_group not in DBT_GROUP_MAP:
+        session.error(f"Unsupported dbt group: {uv_group}")
 
-    version_info = DBT_VERSION_MAP[dbt_version]
-    session.install("--group", version_info["uv_group"])
+    session.install(".", "--group", uv_group)
     print(f"BIN_PATH={session.bin}")
 
 @nox.session(python=PYTHON_VERSIONS)

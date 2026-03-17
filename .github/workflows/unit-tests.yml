@@ -44,11 +44,7 @@ jobs:
         id: run_unit_tests
         working-directory: "integration_tests"
         run: |
-          # Extract '1.10' from 'dbt-core-1-10'
-          GROUP="${{ matrix.dbt-group }}"
-          VERSION="${GROUP#dbt-core-}"
-          VERSION="${VERSION/-/.}"
-          uv run nox -s "unit_tests-${{ matrix.python-version }}(dbt_version='${VERSION}')"
+          uvx nox -s "unit_tests-${{ matrix.python-version }}(uv_group='${{ matrix.dbt-group }}')"
 
       - name: Save logs and artifacts if failed
         if: always()

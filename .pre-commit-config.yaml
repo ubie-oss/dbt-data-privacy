@@ -11,6 +11,7 @@ repos:
       - id: check-json
       - id: check-yaml
       - id: detect-private-key
+        # exclude: .github/workflows/test-action.yml
       - id: debug-statements
   - repo: https://github.com/rhysd/actionlint
     rev: v1.7.11
