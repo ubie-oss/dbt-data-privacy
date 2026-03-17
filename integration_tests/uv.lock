@@ -2,12 +2,22 @@ version = 1
 revision = 3
 requires-python = ">=3.10"
 resolution-markers = [
-    "python_full_version >= '3.14'",
-    "python_full_version == '3.13.*'",
-    "python_full_version == '3.12.*'",
-    "python_full_version == '3.11.*'",
-    "python_full_version < '3.11'",
+    "python_full_version >= '3.14' and extra != 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11'",
+    "python_full_version == '3.13.*' and extra != 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11'",
+    "python_full_version == '3.12.*' and extra != 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11'",
+    "python_full_version == '3.11.*' and extra != 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11'",
+    "python_full_version < '3.11' and extra != 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11'",
+    "python_full_version >= '3.14' and extra == 'group-17-integration-tests-dbt-core-1-10' and extra != 'group-17-integration-tests-dbt-core-1-11'",
+    "python_full_version == '3.13.*' and extra == 'group-17-integration-tests-dbt-core-1-10' and extra != 'group-17-integration-tests-dbt-core-1-11'",
+    "python_full_version == '3.12.*' and extra == 'group-17-integration-tests-dbt-core-1-10' and extra != 'group-17-integration-tests-dbt-core-1-11'",
+    "python_full_version == '3.11.*' and extra == 'group-17-integration-tests-dbt-core-1-10' and extra != 'group-17-integration-tests-dbt-core-1-11'",
+    "python_full_version < '3.11' and extra == 'group-17-integration-tests-dbt-core-1-10' and extra != 'group-17-integration-tests-dbt-core-1-11'",
+    "extra != 'group-17-integration-tests-dbt-core-1-10' and extra != 'group-17-integration-tests-dbt-core-1-11'",
 ]
+conflicts = [[
+    { package = "integration-tests", group = "dbt-core-1-10" },
+    { package = "integration-tests", group = "dbt-core-1-11" },
+]]
 
 [[package]]
 name = "agate"
@@ -299,7 +309,7 @@ name = "colorlog"
 version = "6.10.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/a2/61/f083b5ac52e505dfc1c624eafbf8c7589a0d7f32daa398d2e7590efa5fda/colorlog-6.10.1.tar.gz", hash = "sha256:eb4ae5cb65fe7fec7773c2306061a8e63e02efc2c72eba9d27b0fa23c94f1321", size = 17162, upload-time = "2025-10-16T16:14:11.978Z" }
 wheels = [
@@ -380,8 +390,8 @@ name = "db-dtypes"
 version = "1.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "numpy", version = "2.4.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.11' and extra == 'group-17-integration-tests-dbt-core-1-10') or (python_full_version < '3.11' and extra == 'group-17-integration-tests-dbt-core-1-11') or (extra == 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11')" },
+    { name = "numpy", version = "2.4.3", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.11' and extra == 'group-17-integration-tests-dbt-core-1-10') or (python_full_version >= '3.11' and extra == 'group-17-integration-tests-dbt-core-1-11') or (extra == 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11')" },
     { name = "packaging" },
     { name = "pandas" },
     { name = "pyarrow" },
@@ -399,7 +409,7 @@ dependencies = [
     { name = "agate" },
     { name = "dbt-common" },
     { name = "dbt-protos" },
-    { name = "mashumaro", extra = ["msgpack"] },
+    { name = "mashumaro", extra = ["msgpack"], marker = "extra == 'group-17-integration-tests-dbt-core-1-10' or extra == 'group-17-integration-tests-dbt-core-1-11'" },
     { name = "protobuf" },
     { name = "pytz" },
     { name = "typing-extensions" },
@@ -411,16 +421,51 @@ wheels = [
 
 [[package]]
 name = "dbt-bigquery"
-version = "1.11.1"
+version = "1.10.3"
 source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.14'",
+    "python_full_version == '3.13.*'",
+    "python_full_version == '3.12.*'",
+    "python_full_version == '3.11.*'",
+    "python_full_version < '3.11'",
+]
 dependencies = [
     { name = "dbt-adapters" },
     { name = "dbt-common" },
-    { name = "dbt-core" },
+    { name = "dbt-core", version = "1.10.20", source = { registry = "https://pypi.org/simple" } },
     { name = "google-api-core" },
     { name = "google-auth" },
     { name = "google-cloud-aiplatform" },
-    { name = "google-cloud-bigquery", extra = ["pandas"] },
+    { name = "google-cloud-bigquery", extra = ["pandas"], marker = "extra == 'group-17-integration-tests-dbt-core-1-10'" },
+    { name = "google-cloud-dataproc" },
+    { name = "google-cloud-storage" },
+    { name = "nbformat" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ba/37/1dc78a01f8ee899690f6c885ec2a2a65bcb10148dc290c2c52d7e05ea810/dbt_bigquery-1.10.3.tar.gz", hash = "sha256:6d3dfa1c541aaf4efd73d4508e36d89173ea000262936be1e9abbb5cd9a7bb4b", size = 146559, upload-time = "2025-11-05T16:32:01.596Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/18/dc/5a288d946151849d78f5236cb147c458b8e6a7ff57fa50195e5c0882c308/dbt_bigquery-1.10.3-py3-none-any.whl", hash = "sha256:d58ca4ab34c403136f3a7e102acc41e2d254a689be81070d013daa6ce34179ed", size = 92188, upload-time = "2025-11-05T16:31:59.914Z" },
+]
+
+[[package]]
+name = "dbt-bigquery"
+version = "1.11.1"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.14'",
+    "python_full_version == '3.13.*'",
+    "python_full_version == '3.12.*'",
+    "python_full_version == '3.11.*'",
+    "python_full_version < '3.11'",
+]
+dependencies = [
+    { name = "dbt-adapters" },
+    { name = "dbt-common" },
+    { name = "dbt-core", version = "1.11.7", source = { registry = "https://pypi.org/simple" } },
+    { name = "google-api-core" },
+    { name = "google-auth" },
+    { name = "google-cloud-aiplatform" },
+    { name = "google-cloud-bigquery", extra = ["pandas"], marker = "extra == 'group-17-integration-tests-dbt-core-1-11'" },
     { name = "google-cloud-dataproc" },
     { name = "google-cloud-storage" },
     { name = "nbformat" },
@@ -442,7 +487,7 @@ dependencies = [
     { name = "isodate" },
     { name = "jinja2" },
     { name = "jsonschema" },
-    { name = "mashumaro", extra = ["msgpack"] },
+    { name = "mashumaro", extra = ["msgpack"], marker = "extra == 'group-17-integration-tests-dbt-core-1-10' or extra == 'group-17-integration-tests-dbt-core-1-11'" },
     { name = "pathspec" },
     { name = "protobuf" },
     { name = "python-dateutil" },
@@ -456,8 +501,15 @@ wheels = [
 
 [[package]]
 name = "dbt-core"
-version = "1.11.7"
+version = "1.10.20"
 source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.14'",
+    "python_full_version == '3.13.*'",
+    "python_full_version == '3.12.*'",
+    "python_full_version == '3.11.*'",
+    "python_full_version < '3.11'",
+]
 dependencies = [
     { name = "agate" },
     { name = "click" },
@@ -469,9 +521,50 @@ dependencies = [
     { name = "dbt-semantic-interfaces" },
     { name = "jinja2" },
     { name = "jsonschema" },
-    { name = "mashumaro", extra = ["msgpack"] },
-    { name = "networkx", version = "3.4.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "networkx", version = "3.6.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "mashumaro", extra = ["msgpack"], marker = "extra == 'group-17-integration-tests-dbt-core-1-10'" },
+    { name = "networkx", version = "3.4.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.11' and extra == 'group-17-integration-tests-dbt-core-1-10') or (extra == 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11')" },
+    { name = "networkx", version = "3.6.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.11' and extra == 'group-17-integration-tests-dbt-core-1-10') or (extra == 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11')" },
+    { name = "packaging" },
+    { name = "pathspec" },
+    { name = "protobuf" },
+    { name = "pydantic" },
+    { name = "pytz" },
+    { name = "pyyaml" },
+    { name = "requests" },
+    { name = "snowplow-tracker" },
+    { name = "sqlparse" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/aa/d7/c2668baa1b75859f47df85b7800b175a2a852dc7073dfa717cd50b1726fa/dbt_core-1.10.20.tar.gz", hash = "sha256:023bf4fe5012460498686a0c03cf183747b39937a64cadfa5d6a1650a436b16f", size = 900816, upload-time = "2026-03-03T20:26:06.25Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/eb/6b/80eed8dc0c88d4798e8c1def8c1d62c8ad273f7c1f06a7a90def1f42fda3/dbt_core-1.10.20-py3-none-any.whl", hash = "sha256:1ddb350cbb7cbffe3db6ecaf409f90341941eabf2fae2e70d141e979ef0e6ffe", size = 987258, upload-time = "2026-03-03T20:26:03.213Z" },
+]
+
+[[package]]
+name = "dbt-core"
+version = "1.11.7"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.14'",
+    "python_full_version == '3.13.*'",
+    "python_full_version == '3.12.*'",
+    "python_full_version == '3.11.*'",
+    "python_full_version < '3.11'",
+]
+dependencies = [
+    { name = "agate" },
+    { name = "click" },
+    { name = "daff" },
+    { name = "dbt-adapters" },
+    { name = "dbt-common" },
+    { name = "dbt-extractor" },
+    { name = "dbt-protos" },
+    { name = "dbt-semantic-interfaces" },
+    { name = "jinja2" },
+    { name = "jsonschema" },
+    { name = "mashumaro", extra = ["msgpack"], marker = "extra == 'group-17-integration-tests-dbt-core-1-11'" },
+    { name = "networkx", version = "3.4.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.11' and extra == 'group-17-integration-tests-dbt-core-1-11') or (extra == 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11')" },
+    { name = "networkx", version = "3.6.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.11' and extra == 'group-17-integration-tests-dbt-core-1-11') or (extra == 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11')" },
     { name = "packaging" },
     { name = "pathspec" },
     { name = "protobuf" },
@@ -561,7 +654,7 @@ version = "1.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "packaging" },
-    { name = "tomli", marker = "python_full_version < '3.11'" },
+    { name = "tomli", marker = "python_full_version < '3.11' or (extra == 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/62/55/f054de99871e7beb81935dea8a10b90cd5ce42122b1c3081d5282fdb3621/dependency_groups-1.3.1.tar.gz", hash = "sha256:78078301090517fd938c19f64a53ce98c32834dfe0dee6b88004a569a6adfefd", size = 10093, upload-time = "2025-05-02T00:34:29.452Z" }
 wheels = [
@@ -684,7 +777,7 @@ version = "1.141.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "docstring-parser" },
-    { name = "google-api-core", extra = ["grpc"] },
+    { name = "google-api-core", extra = ["grpc"], marker = "extra == 'group-17-integration-tests-dbt-core-1-10' or extra == 'group-17-integration-tests-dbt-core-1-11'" },
     { name = "google-auth" },
     { name = "google-cloud-bigquery" },
     { name = "google-cloud-resource-manager" },
@@ -706,7 +799,7 @@ name = "google-cloud-bigquery"
 version = "3.40.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "google-api-core", extra = ["grpc"] },
+    { name = "google-api-core", extra = ["grpc"], marker = "extra == 'group-17-integration-tests-dbt-core-1-10' or extra == 'group-17-integration-tests-dbt-core-1-11'" },
     { name = "google-auth" },
     { name = "google-cloud-core" },
     { name = "google-resumable-media" },
@@ -746,7 +839,7 @@ name = "google-cloud-dataproc"
 version = "5.25.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "google-api-core", extra = ["grpc"] },
+    { name = "google-api-core", extra = ["grpc"], marker = "extra == 'group-17-integration-tests-dbt-core-1-10' or extra == 'group-17-integration-tests-dbt-core-1-11'" },
     { name = "google-auth" },
     { name = "grpc-google-iam-v1" },
     { name = "grpcio" },
@@ -763,7 +856,7 @@ name = "google-cloud-resource-manager"
 version = "1.16.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "google-api-core", extra = ["grpc"] },
+    { name = "google-api-core", extra = ["grpc"], marker = "extra == 'group-17-integration-tests-dbt-core-1-10' or extra == 'group-17-integration-tests-dbt-core-1-11'" },
     { name = "google-auth" },
     { name = "grpc-google-iam-v1" },
     { name = "grpcio" },
@@ -834,7 +927,7 @@ source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
     { name = "distro" },
-    { name = "google-auth", extra = ["requests"] },
+    { name = "google-auth", extra = ["requests"], marker = "extra == 'group-17-integration-tests-dbt-core-1-10' or extra == 'group-17-integration-tests-dbt-core-1-11'" },
     { name = "httpx" },
     { name = "pydantic" },
     { name = "requests" },
@@ -882,7 +975,7 @@ name = "grpc-google-iam-v1"
 version = "0.14.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "googleapis-common-protos", extra = ["grpc"] },
+    { name = "googleapis-common-protos", extra = ["grpc"], marker = "extra == 'group-17-integration-tests-dbt-core-1-10' or extra == 'group-17-integration-tests-dbt-core-1-11'" },
     { name = "grpcio" },
     { name = "protobuf" },
 ]
@@ -1043,9 +1136,13 @@ dependencies = [
 ]
 
 [package.dev-dependencies]
+dbt-core-1-10 = [
+    { name = "dbt-bigquery", version = "1.10.3", source = { registry = "https://pypi.org/simple" } },
+    { name = "dbt-core", version = "1.10.20", source = { registry = "https://pypi.org/simple" } },
+]
 dbt-core-1-11 = [
-    { name = "dbt-bigquery" },
-    { name = "dbt-core" },
+    { name = "dbt-bigquery", version = "1.11.1", source = { registry = "https://pypi.org/simple" } },
+    { name = "dbt-core", version = "1.11.7", source = { registry = "https://pypi.org/simple" } },
 ]
 
 [package.metadata]
@@ -1055,6 +1152,10 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
+dbt-core-1-10 = [
+    { name = "dbt-bigquery", specifier = ">=1.10,<1.11" },
+    { name = "dbt-core", specifier = ">=1.10,<1.11" },
+]
 dbt-core-1-11 = [
     { name = "dbt-bigquery", specifier = ">=1.11,<1.12" },
     { name = "dbt-core", specifier = ">=1.11,<1.12" },
@@ -1355,7 +1456,7 @@ dependencies = [
     { name = "dependency-groups" },
     { name = "humanize" },
     { name = "packaging" },
-    { name = "tomli", marker = "python_full_version < '3.11'" },
+    { name = "tomli", marker = "python_full_version < '3.11' or (extra == 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11')" },
     { name = "virtualenv" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/6e/8e/55a9679b31f1efc48facedd2448eb53c7f1e647fb592aa1403c9dd7a4590/nox-2026.2.9.tar.gz", hash = "sha256:1bc8a202ee8cd69be7aaada63b2a7019126899a06fc930a7aee75585bf8ee41b", size = 4031165, upload-time = "2026-02-10T04:38:58.878Z" }
@@ -1545,8 +1646,8 @@ name = "pandas"
 version = "2.3.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "numpy", version = "2.4.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.11' and extra == 'group-17-integration-tests-dbt-core-1-10') or (python_full_version < '3.11' and extra == 'group-17-integration-tests-dbt-core-1-11') or (extra == 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11')" },
+    { name = "numpy", version = "2.4.3", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.11' and extra == 'group-17-integration-tests-dbt-core-1-10') or (python_full_version >= '3.11' and extra == 'group-17-integration-tests-dbt-core-1-11') or (extra == 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11')" },
     { name = "python-dateutil" },
     { name = "pytz" },
     { name = "tzdata" },
@@ -1612,8 +1713,8 @@ dependencies = [
     { name = "google-auth" },
     { name = "google-auth-oauthlib" },
     { name = "google-cloud-bigquery" },
-    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "numpy", version = "2.4.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.11' and extra == 'group-17-integration-tests-dbt-core-1-10') or (python_full_version < '3.11' and extra == 'group-17-integration-tests-dbt-core-1-11') or (extra == 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11')" },
+    { name = "numpy", version = "2.4.3", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.11' and extra == 'group-17-integration-tests-dbt-core-1-10') or (python_full_version >= '3.11' and extra == 'group-17-integration-tests-dbt-core-1-11') or (extra == 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11')" },
     { name = "packaging" },
     { name = "pandas" },
     { name = "psutil" },
@@ -2403,7 +2504,7 @@ dependencies = [
     { name = "filelock" },
     { name = "platformdirs" },
     { name = "python-discovery" },
-    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11' or (extra == 'group-17-integration-tests-dbt-core-1-10' and extra == 'group-17-integration-tests-dbt-core-1-11')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/aa/92/58199fe10049f9703c2666e809c4f686c54ef0a68b0f6afccf518c0b1eb9/virtualenv-21.2.0.tar.gz", hash = "sha256:1720dc3a62ef5b443092e3f499228599045d7fea4c79199770499df8becf9098", size = 5840618, upload-time = "2026-03-09T17:24:38.013Z" }
 wheels = [

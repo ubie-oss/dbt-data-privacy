@@ -18,3 +18,15 @@ dbt-core-1-11 = [
     "dbt-core>=1.11,<1.12",
     "dbt-bigquery>=1.11,<1.12",
 ]
+
+[tool.uv]
+conflicts = [
+    [
+        { group = "dbt-core-1-10" },
+        { group = "dbt-core-1-11" },
+    ],
+]
+
+[tool.setuptools]
+# Prevent setuptools from trying to build dbt folders as Python packages
+packages = []
