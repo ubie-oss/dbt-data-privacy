@@ -1,7 +1,9 @@
 .PHONY: setup clean test test-integration generate generate-legacy run-unit-tests run-integration-tests run-integration-tests-legacy compile
 
+DBT_GROUP ?= dbt-core-1-11
+
 setup:
-	uv sync
+	uv sync --group $(DBT_GROUP)
 	uv run dbt deps --profiles-dir profiles --target bigquery
 
 clean:

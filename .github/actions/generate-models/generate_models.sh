@@ -1,11 +1,10 @@
 #!/bin/bash
-set -x
 
 # Arguments
 dbt_profile="default"
 default_tag="dbt_data_privacy"
 delete_before="1"
-verbose="1"
+verbose="0"
 while (($# > 0)); do
 	if [[ $1 == "--dbt-models-dir" ]]; then
 		dbt_models_dir="${2}"
@@ -34,9 +33,9 @@ while (($# > 0)); do
 	fi
 done
 
-# Turn off verbose
-if [[ $verbose != "1" ]]; then
-	set +x
+# Enable verbose (xtrace) only when explicitly requested
+if [[ $verbose == "1" ]]; then
+	set -x
 fi
 
 #
@@ -59,13 +58,12 @@ if [[ $delete_before == "1" ]]; then
 	if [[ -n ${dbt_profile+x} ]]; then dbt_ls_options+=("--profile" "${dbt_profile:?}"); fi
 	if [[ -n ${dbt_target+x} ]]; then dbt_ls_options+=("--target" "${dbt_target:?}"); fi
 	if [[ -n ${dbt_vars_path+x} ]]; then dbt_ls_options+=("--vars" "$(cat "${dbt_vars_path:?}")"); fi
-	# shellcheck disable=SC2046
-	deleted_files="$(dbt --quiet ls \
+	mapfile -t deleted_files < <(dbt --quiet ls \
 		--select "\"tag:${default_tag:?}\"" \
 		--output path \
-		"${dbt_ls_options[@]}")"
-	for deleted_file in $deleted_files; do
-		if [[ -e $deleted_file ]]; then
+		"${dbt_ls_options[@]}")
+	for deleted_file in "${deleted_files[@]}"; do
+		if [[ -e "$deleted_file" ]]; then
 			rm -f "$deleted_file"
 			echo "delete ${deleted_file}"
 		fi
