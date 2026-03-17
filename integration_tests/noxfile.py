@@ -6,12 +6,10 @@ nox.options.sessions = ["dev_unit_tests"]
 nox.options.default_venv_backend = "uv"
 
 PYTHON_VERSIONS = ["3.10", "3.11", "3.12"]
-DBT_CORE_VERSIONS = ["1.8", "1.9", "1.10", "1.11"]
+DBT_CORE_VERSIONS = ["1.10", "1.11"]
 
 # Mapping of dbt versions to their specific dependencies
 DBT_DEPENDENCIES = {
-    "1.8": ["dbt-core>=1.8,<1.9", "dbt-bigquery>=1.8,<1.9"],
-    "1.9": ["dbt-core>=1.9,<1.10", "dbt-bigquery>=1.9,<1.10"],
     "1.10": ["dbt-core>=1.10,<1.11", "dbt-bigquery>=1.10,<1.11"],
     "1.11": ["dbt-core>=1.11,<1.12", "dbt-bigquery>=1.11,<1.12"],
 }

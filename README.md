@@ -25,7 +25,7 @@ COMING SOON
 
 ## Requirements
 
-- dbt-core: 1.7 or later
+- dbt-core: 1.10 or later
 
 ## Supported warehouses
 

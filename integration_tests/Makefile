@@ -30,4 +30,4 @@ generate-legacy: clean
 compile: clean setup
 	uv run dbt compile --profiles-dir ./profiles \
 		--target bigquery \
-		--vars "$$(cat "./resources/vars/vars-bigquery.basic.yml")"
+		--vars "$$(cat "./resources/vars/vars-bigquery.basic.json")"

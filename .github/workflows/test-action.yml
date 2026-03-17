@@ -30,14 +30,13 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      id-token: write
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
       fail-fast: true
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
-        dbt-version: ["1.8", "1.9", "1.10", "1.11"]
+        dbt-version: ["1.10", "1.11"]
     defaults:
       run:
         shell: bash
@@ -54,40 +53,69 @@ jobs:
           cache-dependency-path: "integration_tests/pyproject.toml"
           python-version: ${{ matrix.python-version }}
 
-      - uses: google-github-actions/auth@v3
-        with:
-          workload_identity_provider: projects/131500153501/locations/global/workloadIdentityPools/github-oidc-pool/providers/github-oidc-provider
-          service_account: dbt-data-privacy@ubie-oss-data-engineering.iam.gserviceaccount.com
-      - name: Run integration tests
-        working-directory: "integration_tests"
-        env:
-          PYTHON_VERSION: ${{ matrix.python-version }}
-          DBT_VERSION: ${{ matrix.dbt-version }}
+      - name: Install dbt
         run: |
-          uv run nox -s "integration_tests-${PYTHON_VERSION}(dbt_version='${DBT_VERSION}')"
+          uv pip install "dbt-core~=${{ matrix.dbt-version }}.0" "dbt-bigquery~=${{ matrix.dbt-version }}.0"
+
+      - name: Install dbt packages
+        working-directory: "integration_tests"
+        run: |
+          dbt deps
+
+      - name: Create dummy dbt profile
+        run: |
+          mkdir -p integration_tests/dummy_profiles
+          cat <<EOF > integration_tests/dummy_profiles/profiles.yml
+          default:
+            outputs:
+              bigquery:
+                type: bigquery
+                method: service-account
+                project: dummy-project
+                dataset: dummy_dataset
+                location: US
+                keyfile_json: '{"type": "service_account", "project_id": "dummy-project", "private_key_id": "dummy", "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCl\n-----END PRIVATE KEY-----\n", "client_email": "dummy@dummy.iam.gserviceaccount.com", "client_id": "dummy", "auth_uri": "https://accounts.google.com/o/oauth2/auth", "token_uri": "https://oauth2.googleapis.com/token", "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs", "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dummy%40dummy.iam.gserviceaccount.com"}'
+            target: bigquery
+          EOF
+
+      - name: Test the action
+        id: test-action
+        uses: ./.github/actions/generate-models
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          working_directory: "integration_tests"
+          dbt_profiles_dir: "${{ github.workspace }}/integration_tests/dummy_profiles"
+          dbt_models_dir: "${{ github.workspace }}/integration_tests/models"
+          dbt_profile: "default"
+          dbt_target: "bigquery"
+          dbt_vars_path: "${{ github.workspace }}/integration_tests/resources/vars/vars-bigquery.basic.yml"
+          delete_before: "1"
+          verbose: "1"
 
       - name: Delete .gitignore for the generated models
-        shell: bash
         run: |
           rm -f "${{ github.workspace }}/integration_tests/models/.gitignore"
+
       - name: Push and revert the generated models
-        shell: bash
         env:
           HEAD_REF: ${{ github.head_ref }}
         run: |
-          # Confiture the git account
+          # Configure the git account
           git remote set-url origin "https://github-actions:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
           # Check if there are changes in models
           if [[ -n $(git status --porcelain "${{ github.workspace }}/integration_tests/models") ]]; then
+            echo "Changes detected in models. Pushing and reverting for preview..."
+
             # Push the generated models
             git add "${{ github.workspace }}/integration_tests/models"
-            git commit --signoff -m 'Generate dbt models by dbt-data-privacy'
+            git commit --signoff -m 'chore: preview generated dbt models'
             git push --set-upstream origin "HEAD:${HEAD_REF}"
-            # Revert the commit
-            git revert HEAD
+
+            # Revert the commit immediately to keep the branch clean
+            git revert HEAD --no-edit
             git push --force --set-upstream origin "HEAD:${HEAD_REF}"
           else
             echo "No changes in models to push."
