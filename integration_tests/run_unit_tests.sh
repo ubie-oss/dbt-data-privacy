@@ -28,4 +28,4 @@ dbt deps --profiles-dir "${INTEGRATION_TESTS_DIR}/profiles" --target "${dbt_targ
 dbt run-operation test_macros \
     --profiles-dir "${dbt_profiles_dir}" \
     --target "${dbt_target:?}" \
-    --vars "$(cat "${vars_path:?}")"
+    --vars "$(if [[ "${vars_path:?}" == *.json ]]; then cat "${vars_path}" | jq -c .; else cat "${vars_path}"; fi)"

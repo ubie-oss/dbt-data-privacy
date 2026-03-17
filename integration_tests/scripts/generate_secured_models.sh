@@ -34,7 +34,7 @@ done
 generated_models=$(dbt --quiet run-operation generate_privacy_protected_models \
     --profiles-dir "${dbt_profiles_dir:?}" \
     --target "${dbt_target:?}" \
-    --vars "$(cat "${vars_path:?}")" \
+    --vars "$(if [[ "${vars_path:?}" == *.json ]]; then cat "${vars_path}" | jq -c .; else cat "${vars_path}"; fi)" \
     --args "{legacy_schema: ${legacy_schema}}")
 
 echo "${generated_models}" |

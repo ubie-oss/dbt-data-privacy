@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
-        dbt-group: ["dbt-core-1-10", "dbt-core-1-11"]
+        dbt-group: ["dbt-fusion", "dbt-core-1-10", "dbt-core-1-11"]
     defaults:
       run:
         shell: bash

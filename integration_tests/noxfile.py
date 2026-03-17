@@ -1,5 +1,6 @@
 import nox
 import os
+import json
 from contextlib import contextmanager
 
 # Nox options
@@ -8,6 +9,10 @@ nox.options.default_venv_backend = "uv"
 
 PYTHON_VERSIONS = ["3.10", "3.11", "3.12"]
 DBT_GROUP_MAP = {
+    "dbt-fusion": {
+        "version": "fusion",
+        "description": "dbt Fusion",
+    },
     "dbt-core-1-10": {
         "version": "1.10",
         "description": "dbt-core v1.10",
@@ -44,7 +49,10 @@ def run_cleanup(session, dataset_name, vars_path):
     session.log(f"Cleaning up dataset: {dataset_name}")
 
     with open(vars_path, "r", encoding="utf-8") as f:
-        vars_content = f.read()
+        if vars_path.endswith(".json"):
+            vars_content = json.dumps(json.load(f))
+        else:
+            vars_content = f.read()
 
     session.run(
         "dbt", "run-operation", "drop_dataset",
@@ -67,12 +75,20 @@ def dbt_test_env(session, uv_group):
     # Install the project and the requested group
     session.install(".", "--group", uv_group)
 
+    if uv_group == "dbt-fusion":
+        session.log("Installing dbt Fusion binary")
+        session.run(
+            "bash", "-c",
+            f"curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | bash -s -- --to {session.bin} --update",
+            external=True
+        )
+
     dataset_name = get_dataset_name(session, dbt_version)
     env = {"DBT_DATASET": dataset_name}
 
     run_deps(session, env)
 
-    vars_path = "resources/vars/vars-bigquery.basic.yml"
+    vars_path = "resources/vars/vars-bigquery.basic.json"
     try:
         yield {"env": env, "vars_path": vars_path}
     finally:
@@ -111,7 +127,6 @@ def integration_tests(session, uv_group):
         env = test_env["env"]
         vars_path = test_env["vars_path"]
 
-        # Modern generation and build
         session.run(
             "bash", "scripts/generate_secured_models.sh",
             "--target", "bigquery",
@@ -128,19 +143,17 @@ def integration_tests(session, uv_group):
             external=True
         )
 
-        # Legacy generation and build
+@nox.session(python=PYTHON_VERSIONS)
+@nox.parametrize("uv_group", list(DBT_GROUP_MAP.keys()))
+def generate_models(session, uv_group):
+    """Generate dbt models with specified dbt version group."""
+    with dbt_test_env(session, uv_group) as test_env:
         session.run(
             "bash", "scripts/generate_secured_models.sh",
             "--target", "bigquery",
-            "--vars-path", vars_path,
-            env=env,
-            external=True
-        )
-        session.run(
-            "bash", "run_integration_tests.sh",
-            "--target", "bigquery",
-            "--vars-path", vars_path,
-            env=env,
+            "--vars-path", test_env["vars_path"],
+            "--modern-schema",
+            env=test_env["env"],
             external=True
         )
 
@@ -152,9 +165,18 @@ def setup_dbt_env(session, uv_group):
         session.error(f"Unsupported dbt group: {uv_group}")
 
     session.install(".", "--group", uv_group)
+
+    if uv_group == "dbt-fusion":
+        session.log("Installing dbt Fusion binary")
+        session.run(
+            "bash", "-c",
+            f"curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | bash -s -- --to {session.bin} --update",
+            external=True
+        )
+
     print(f"BIN_PATH={session.bin}")
 
 @nox.session(python=PYTHON_VERSIONS)
 def dbt_fusion_tests(session):
-    """Placeholder for future dbt Fusion tests."""
-    session.log("dbt Fusion tests are not yet implemented.")
+    """Run unit tests with dbt Fusion."""
+    unit_tests(session, "dbt-fusion")

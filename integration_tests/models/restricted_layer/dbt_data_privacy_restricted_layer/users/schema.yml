@@ -56,13 +56,15 @@ models:
               data_analysis_layer__dbt_data_privacy_data_analysis_layer__users:
                 tests:
                   - relationships:
-                      to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents")
-                      field: "customer_id"
+                      arguments:
+                        to: ref("data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents")
+                        field: "customer_id"
         tests:
           - not_null
           - relationships:
-              to: ref("restricted_layer__dbt_data_privacy_seed__users")
-              field: "user_id"
+              arguments:
+                to: ref("restricted_layer__dbt_data_privacy_seed__users")
+                field: "user_id"
       - name: name
         description: |
           User's name
