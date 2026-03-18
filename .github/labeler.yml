@@ -1,30 +1,42 @@
-# SEE ./github/workflows/labeler.yml
+# SEE .github/workflows/labeler.yml
 # SEE https://github.com/actions/labeler
 
 # Related to CI
 CI:
-  - .github/*
-  - .github/**/*
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/*'
+          - '.github/**/*'
 
 # Related to dbt analysis
 integration-tests:
-  - integration_tests/*
-  - integration_tests/**/*
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'integration_tests/*'
+          - 'integration_tests/**/*'
 
 # Related to dbt models
 macros:
-  - macros/*
-  - macros/**/*
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'macros/*'
+          - 'macros/**/*'
+
 # Foundational changes
 core:
-  - dbt_project.yml
+  - changed-files:
+      - any-glob-to-any-file: 'dbt_project.yml'
 
 # Related to documentations
 docs:
-  - docs/*.md
-  - docs/**/*.md
-  - README.md
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'docs/*.md'
+          - 'docs/**/*.md'
+          - 'README.md'
 
 action:
-  - .github/actions/generate-models/*
-  - .github/actions/generate-models/**/*
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/actions/generate-models/*'
+          - '.github/actions/generate-models/**/*'
