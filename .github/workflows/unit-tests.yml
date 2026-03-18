@@ -50,7 +50,7 @@ jobs:
 
       - name: Save logs and artifacts if failed
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: save-logs-and-target-${{ matrix.python-version }}-${{ matrix.dbt-group }}
           retention-days: 3
