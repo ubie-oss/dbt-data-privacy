@@ -5,3 +5,8 @@
 ./dbt_packages/
 ./logs/
 ./target/
+
+*.egg-info/
+
+# Claude
+.claude/settings.local.json

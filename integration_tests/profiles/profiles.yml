@@ -1,10 +1,11 @@
 default:
+  target: bigquery
   outputs:
     bigquery:
       type: bigquery
       method: oauth
       project: "ubie-oss-data-engineering"
-      dataset: "dbt_data_privacy"
+      dataset: "{{ env_var('DBT_DATASET', 'dbt_data_privacy') }}"
       priority: "{{ env_var('DBT_BIGQUERY_PRIORITY', 'interactive') }}"
       threads: |
         {{ env_var("DBT_THREADS", 10) | as_number }}

@@ -21,6 +21,9 @@ while (($# > 0)); do
   elif [[ "$1" == "--vars-path" ]]; then
     vars_path="${2}"
     shift 2
+  elif [[ "$1" == "--dbt-models-dir" ]]; then
+    dbt_models_dir="${2}"
+    shift 2
   elif [[ "$1" == "--modern-schema" ]]; then
     legacy_schema="false"
     shift 1
@@ -31,7 +34,7 @@ done
 generated_models=$(dbt --quiet run-operation generate_privacy_protected_models \
     --profiles-dir "${dbt_profiles_dir:?}" \
     --target "${dbt_target:?}" \
-    --vars "$(cat "${vars_path:?}")" \
+    --vars "$(if [[ "${vars_path:?}" == *.json ]]; then cat "${vars_path}" | jq -c .; else cat "${vars_path}"; fi)" \
     --args "{legacy_schema: ${legacy_schema}}")
 
 echo "${generated_models}" |
@@ -40,7 +43,6 @@ echo "${generated_models}" |
 		# Get generated features
 		# shellcheck disable=SC2034
 		name="$(echo "${generated_model}" | jq -r '.meta.name')"
-		database="$(echo "${generated_model}" | jq -r '.meta.config.database')"
 		database_alias="$(echo "${generated_model}" | jq -r '.meta.extra_meta.database_alias')"
 		schema="$(echo "${generated_model}" | jq -r '.meta.config.schema')"
 		alias="$(echo "${generated_model}" | jq -r '.meta.config.alias')"

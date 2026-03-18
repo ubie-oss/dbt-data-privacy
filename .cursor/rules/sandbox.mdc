@@ -1,0 +1,13 @@
+---
+description: Enforce parity between Claude Code and Cursor sandbox settings
+globs: .claude/settings.json, .cursor/sandbox.json
+---
+
+# Sandbox Sync Rule
+
+To ensure consistent security boundaries, always keep `.cursor/sandbox.json` in sync with the `sandbox` section of `.claude/settings.json`.
+
+## Guidelines
+
+- If `sandbox.network.allowedDomains` is updated in `.claude/settings.json`, update `networkPolicy.allow` in `.cursor/sandbox.json`.
+- Ensure `.cursor/sandbox.json` remains the source of truth for Cursor Agent sessions.

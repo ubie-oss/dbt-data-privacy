@@ -38,7 +38,7 @@
   {% if is_array is sameas true and is_struct is sameas true %}
     {# ARRAY of STRUCT #}
     {% set sub_expressions = [] %}
-    {%- for sub_field_key, sub_field_info in restructured_column.fields.items() %}
+    {%- for sub_field_key, sub_field_info in restructured_column.fields | dictsort %}
       {%- set expression = dbt_data_privacy.convert_restructured_column_to_expression(sub_field_key, sub_field_info, depth=depth+1) %}
       {%- if expression is not none %}
         {% do sub_expressions.append(expression) %}
@@ -61,7 +61,7 @@ ARRAY(
   {% elif is_struct is sameas true %}
     {# STRUCT #}
     {% set sub_expressions = [] %}
-    {%- for sub_field_key, sub_field_info in restructured_column.fields.items() %}
+    {%- for sub_field_key, sub_field_info in restructured_column.fields | dictsort %}
       {%- set expression = dbt_data_privacy.convert_restructured_column_to_expression(sub_field_key, sub_field_info, depth=depth+1) %}
       {%- if expression is not none %}
         {% do sub_expressions.append(expression) %}
@@ -79,7 +79,7 @@ STRUCT(
     {%- endset %}
   {% else %}
     {# scalar #}
-    {% if not dbt_data_privacy.has_data_privacy_meta(restructured_column.original_info) %}
+    {% if dbt_data_privacy.get_column_data_security_level(restructured_column.original_info) is none %}
       {{ return(none) }}
     {% endif %}
 

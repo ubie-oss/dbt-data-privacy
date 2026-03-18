@@ -1,6 +1,6 @@
 {% macro validate_relationships(relationships) %}
-  {% if relationships is not sequence %}
-    {% do exceptions.raise_compiler_error("Invalid relationships: it must be a sequence" ~ relationships) %}
+  {% if relationships is none or relationships | length == 0 %}
+    {{ return(false) }}
   {% endif %}
 
   {% for i in range(relationships | length) %}

@@ -1,39 +1,42 @@
-setup:
-	pip install --force-reinstall -r requirements/requirements-1.10.txt
-	dbt deps --profiles-dir profiles --target bigquery
+.PHONY: setup clean test test-integration generate run-unit-tests run-integration-tests run-integration-tests-legacy compile \
+	run-unit-tests-core run-unit-tests-fusion run-integration-tests-core run-integration-tests-fusion \
+	generate-core generate-fusion
 
+setup:
+	uv sync
+	uv run dbt deps --profiles-dir profiles --target bigquery
 
 clean:
 	rm -fr ./models/data_analysis_layer/dbt_data_privacy_data_analysis_layer
-	rm -fr ./models/data_analysis_layer/dbt_data_privacy_data_analysis_layer_legacy
+	rm -fr ./target ./logs ./dbt_packages
 
-test: clean compile run-unit-tests test-integration compile
+test: run-unit-tests run-integration-tests
 
-test-integration: run-integration-tests run-integration-tests-legacy
+run-unit-tests: run-unit-tests-core run-unit-tests-fusion
 
-generate: clean
-	bash -x scripts/generate_secured_models.sh --vars-path ./resources/vars/vars-bigquery.basic.yml --target bigquery --modern-schema
+run-unit-tests-core: clean
+	uv run nox -s "unit_tests-3.12(uv_group='dbt-core-1-11')"
 
-generate-legacy: clean
-	bash -x scripts/generate_secured_models.sh --vars-path ./resources/vars/vars-bigquery.basic.yml --target bigquery
+run-unit-tests-fusion: clean
+	uv run nox -s "unit_tests-3.12(uv_group='dbt-fusion')"
 
-run-unit-tests: clean
-	bash run_unit_tests.sh --target bigquery --vars-path resources/vars/vars-bigquery.basic.yml
+run-integration-tests: run-integration-tests-core run-integration-tests-fusion
 
-run-integration-tests: generate
-	bash run_integration_tests.sh --target bigquery --vars-path ./resources/vars/vars-bigquery.basic.yml
+run-integration-tests-core: clean
+	uv run nox -s "integration_tests-3.12(uv_group='dbt-core-1-11')"
 
-run-integration-tests-legacy: generate-legacy
-	bash run_integration_tests.sh --target bigquery --vars-path ./resources/vars/vars-bigquery.basic.yml
+run-integration-tests-fusion: clean
+	uv run nox -s "integration_tests-3.12(uv_group='dbt-fusion')"
 
-test-get_tags_by_original_file_paths: clean setup
-	dbt run-operation --profiles-dir ./profiles \
-		--target bigquery \
-		--vars "$$(cat "./resources/vars/vars-bigquery.basic.yml")" \
-		--args '{"original_file_paths":["models/restricted_layer/dbt_data_privacy_restricted_layer/consents/restricted_layer__dbt_data_privacy_restricted_layer__consents.sql"]}' \
-		get_tags_by_original_file_paths
+generate: generate-core generate-fusion
+
+generate-core: clean
+	uv run nox -s "generate_models-3.12(uv_group='dbt-core-1-11')"
+
+generate-fusion: clean
+	uv run nox -s "generate_models-3.12(uv_group='dbt-fusion')"
 
 compile: clean setup
-	dbt compile --profiles-dir ./profiles \
+	uv run dbt compile --profiles-dir ./profiles \
 		--target bigquery \
-		--vars "$$(cat "./resources/vars/vars-bigquery.basic.yml")"
+		--vars "$$(cat "./resources/vars/vars-bigquery.basic.json")"

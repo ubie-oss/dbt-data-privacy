@@ -3,7 +3,7 @@ on:
   pull_request:
     paths:
       - .github/workflows/test-action.yml
-      - action/**/*
+      - .github/actions/generate-models/**
       - integration_tests/models/**/schema.yml
 
 jobs:
@@ -30,33 +30,14 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      id-token: write
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
       fail-fast: true
       matrix:
-        include:
-          # Python 3.10
-          - python-version: "3.10"
-            pip-requirements: "requirements-1.8.txt"
-          - python-version: "3.10"
-            pip-requirements: "requirements-1.9.txt"
-          - python-version: "3.10"
-            pip-requirements: "requirements-1.10.txt"
-          # Python 3.11
-          - python-version: "3.11"
-            pip-requirements: "requirements-1.8.txt"
-          - python-version: "3.11"
-            pip-requirements: "requirements-1.9.txt"
-          - python-version: "3.11"
-            pip-requirements: "requirements-1.10.txt"
-          # Python 3.12
-          - python-version: "3.12"
-            pip-requirements: "requirements-1.8.txt"
-          - python-version: "3.12"
-            pip-requirements: "requirements-1.9.txt"
-          - python-version: "3.12"
-            pip-requirements: "requirements-1.10.txt"
+        python-version: ["3.10", "3.11", "3.12"]
+        dbt-group: ["dbt-fusion", "dbt-core-1-10", "dbt-core-1-11"]
     defaults:
       run:
         shell: bash
@@ -64,52 +45,65 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          ref: "${{ github.head_ref }}"
-      - uses: actions/setup-python@v5
+          ref: ${{ github.head_ref }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
         with:
+          enable-cache: true
+          cache-dependency-glob: "integration_tests/pyproject.toml"
           python-version: ${{ matrix.python-version }}
-          cache: 'pip'
-          cache-dependency-path: '**/${{ matrix.pip-requirements }}'
-      - name: Install dbt
-        working-directory: "${{ github.workspace }}/integration_tests"
-        run: |
-          pip install -r "requirements/${{ matrix.pip-requirements }}"
-      - name: Install dbt Packages
-        working-directory: "${{ github.workspace }}/integration_tests"
-        run: |
-          dbt deps --target bigquery
+
+      # dbt-bigquery 1.9 required the application default credentials
+      # SEE https://github.com/dbt-labs/dbt-bigquery/issues/1438
+      - uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: projects/131500153501/locations/global/workloadIdentityPools/github-oidc-pool/providers/github-oidc-provider
+          service_account: dbt-data-privacy-gha@ubie-oss-data-engineering.iam.gserviceaccount.com
+
       - name: Test the action
         id: test-action
-        uses: ./action
+        uses: ./.github/actions/generate-models
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
-          working_directory: "${{ github.workspace }}/integration_tests"
+          working_directory: "integration_tests"
           dbt_profiles_dir: "${{ github.workspace }}/integration_tests/profiles"
           dbt_models_dir: "${{ github.workspace }}/integration_tests/models"
           dbt_profile: "default"
           dbt_target: "bigquery"
           dbt_vars_path: "${{ github.workspace }}/integration_tests/resources/vars/vars-bigquery.basic.yml"
+          uv_group: "${{ matrix.dbt-group }}"
           delete_before: "1"
           verbose: "1"
+
       - name: Delete .gitignore for the generated models
-        shell: bash
         run: |
           rm -f "${{ github.workspace }}/integration_tests/models/.gitignore"
+
       - name: Push and revert the generated models
-        shell: bash
-        if: ${{ steps.test-action.generated-models-count }} != '0'
+        env:
+          HEAD_REF: ${{ github.head_ref }}
         run: |
-          # Confiture the git account
+          # Configure the git account
           git remote set-url origin "https://github-actions:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          # Push the generated models
-          git add "${{ github.workspace }}/integration_tests/models"
-          git commit --signoff -m 'Generate dbt models by dbt-data-privacy'
-          git push --set-upstream origin "HEAD:${{ github.head_ref }}"
-          # Revert the commit
-          git revert HEAD
-          git push --force --set-upstream origin "HEAD:${{ github.head_ref }}"
+
+          # Check if there are changes in models
+          if [[ -n $(git status --porcelain "${{ github.workspace }}/integration_tests/models") ]]; then
+            echo "Changes detected in models. Pushing and reverting for preview..."
+
+            # Push the generated models
+            git add "${{ github.workspace }}/integration_tests/models"
+            git commit --signoff -m 'chore: preview generated dbt models'
+            git push --set-upstream origin "HEAD:${HEAD_REF}"
+
+            # Revert the commit immediately to keep the branch clean
+            git revert HEAD --no-edit
+            git push --force --set-upstream origin "HEAD:${HEAD_REF}"
+          else
+            echo "No changes in models to push."
+          fi
 
   report-result:
     permissions:
@@ -124,12 +118,12 @@ jobs:
         run: |
           gh pr comment "${{ github.event.pull_request.number }}" \
             --body "❌ One or more matrix jobs failed. Please check the workflow run for more details." \
-            --repo "${{ github.repository }}" \
-      - name: Comment on PR failure
+            --repo "${{ github.repository }}"
+      - name: Comment on PR success
         if: ${{ needs.test-action.result == 'success' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr comment "${{ github.event.pull_request.number }}" \
             --body "✅ All matrix jobs passed. Please check the workflow run for more details." \
-            --repo "${{ github.repository }}" \
+            --repo "${{ github.repository }}"

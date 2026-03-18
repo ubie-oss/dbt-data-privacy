@@ -78,9 +78,15 @@
 {{'{{'}}
   config(
     materialized={{- dbt_data_privacy.safe_quote(materialized) -}},
+    {%- if database is not none %}
     database={{- dbt_data_privacy.safe_quote(database) -}},
+    {%- endif %}
+    {%- if schema is not none %}
     schema={{- dbt_data_privacy.safe_quote(schema) -}},
+    {%- endif %}
+    {%- if alias is not none %}
     alias={{- dbt_data_privacy.safe_quote(alias) -}},
+    {%- endif %}
     {% if "grant_access_to" in adapter_config -%}
     grant_access_to=[
       {%- for x in adapter_config["grant_access_to"] %}
@@ -140,7 +146,7 @@ WITH privacy_protected_model AS (
     {%- else %}
     {{ reference }} AS __original_table
     {%- endif %}
-  {%- if where is not none %}
+  {%- if where is not none and where | trim | length > 0 %}
   WHERE
     {{ where }}
   {%- endif %}
@@ -150,7 +156,7 @@ WITH privacy_protected_model AS (
 , __relationships_{{ i }} AS (
   SELECT *
   FROM {{ '{{ ' ~ relationships[i]["to"] ~ ' }}' }} AS __relationships_{{ i }}
-  {%- if "where" in relationships[i] %}
+  {%- if "where" in relationships[i] and relationships[i]["where"] | trim | length > 0 %}
   WHERE
     {{ relationships[i]["where"] }}
   {%- endif %}
