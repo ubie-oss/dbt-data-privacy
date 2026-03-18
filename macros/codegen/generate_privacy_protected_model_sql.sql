@@ -1,11 +1,11 @@
 {% macro generate_privacy_protected_model_sql(
     objective,
     materialized,
-    database,
-    schema,
-    alias,
     reference,
     columns,
+    database=none,
+    schema=none,
+    alias=none,
     adapter_config={},
     unknown_config={},
     where=none,
@@ -42,11 +42,11 @@
 {% macro bigquery__generate_privacy_protected_model_sql(
     objective,
     materialized,
-    database,
-    schema,
-    alias,
     reference,
     columns,
+    database=none,
+    schema=none,
+    alias=none,
     adapter_config={},
     unknown_config={},
     where=none,
@@ -78,13 +78,13 @@
 {{'{{'}}
   config(
     materialized={{- dbt_data_privacy.safe_quote(materialized) -}},
-    {%- if database is not none %}
+    {%- if database is not none and database | trim | length > 0 %}
     database={{- dbt_data_privacy.safe_quote(database) -}},
     {%- endif %}
-    {%- if schema is not none %}
+    {%- if schema is not none and schema | trim | length > 0 %}
     schema={{- dbt_data_privacy.safe_quote(schema) -}},
     {%- endif %}
-    {%- if alias is not none %}
+    {%- if alias is not none and alias | trim | length > 0 %}
     alias={{- dbt_data_privacy.safe_quote(alias) -}},
     {%- endif %}
     {% if "grant_access_to" in adapter_config -%}

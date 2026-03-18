@@ -1,8 +1,8 @@
 {% macro format_model_config(
     materialized,
-    database,
-    schema,
-    alias,
+    database=none,
+    schema=none,
+    alias=none,
     tags=[],
     labels={},
     persist_docs={"relation": true, "columns": true},
