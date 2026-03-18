@@ -1,0 +1,20 @@
+# Shared Codex defaults for this repository.
+model = "gpt-5.4"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+file_opener = "cursor"
+
+[sandbox_workspace_write]
+network_access = false
+
+[agents]
+max_threads = 6
+max_depth = 2
+
+[profiles.fast]
+model = "gpt-5.4"
+model_reasoning_effort = "low"
+
+[profiles.deep]
+model = "gpt-5.4"
+model_reasoning_effort = "high"
