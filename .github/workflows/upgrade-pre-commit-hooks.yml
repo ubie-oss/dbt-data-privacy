@@ -39,6 +39,7 @@ jobs:
           branch: pre-commit-autoupdate
           delete-branch: true
           draft: ${{ steps.pre_commit.outcome == 'failure' }}
+          signoff: true
           commit-message: "chore: pre-commit autoupdate"
           title: "chore: pre-commit autoupdate"
           body: |
