@@ -15,6 +15,7 @@
 
 ## Testing
 
+- For custom **generic data tests** (test blocks, dispatch, integration fixtures), follow [`.claude/skills/dbt-custom-generic-test/SKILL.md`](.claude/skills/dbt-custom-generic-test/SKILL.md).
 - Run tests from the `integration_tests` directory.
 - For most code changes, run `make run-unit-tests`.
 - When behavior changes affect generated SQL or dbt execution flows, also run `make run-integration-tests` when the environment is available.

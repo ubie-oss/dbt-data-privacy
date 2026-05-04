@@ -1,0 +1,13 @@
+---
+version: 2
+
+models:
+  - name: example_k_anonymous_release
+    description: |
+      Fixture for the k_anonymity generic test. Each (qi_a, qi_b) tuple appears exactly 5 times.
+    data_tests:
+      - dbt_data_privacy.k_anonymity:
+          arguments:
+            quasi_identifiers: [qi_a, qi_b]
+            k: 5
+            sample_limit: 10

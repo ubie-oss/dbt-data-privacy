@@ -5,17 +5,13 @@ This dbt package enables us to protect out customers' privacy on warehouse.
 <!-- toc -->
 
 - [Installation Instructions](#installation-instructions)
+- [Codex](#codex)
 - [Requirements](#requirements)
 - [Supported warehouses](#supported-warehouses)
 - [Generic tests](#generic-tests)
-  - [Data Loss Prevention](#data-loss-prevention)
 - [Macros](#macros)
-  - [Pseudonymization](#pseudonymization)
-    - [`sha256`](#sha256)
-    - [`sha512`](#sha512)
-    - [`extract_email_domain`](#extract_email_domain)
-  - [Code generation](#code-generation)
-    - [`generate_privacy_protected_models`](#generate_privacy_protected_models)
+  * [Pseudonymization](#pseudonymization)
+  * [Code generation](#code-generation)
 
 <!-- tocstop -->
 
@@ -61,46 +57,13 @@ But, the implementation can be extended to other warehouses by following the man
 
 ## Generic tests
 
-### Data Loss Prevention
-
-COMING SOON
+Custom generic data tests (for example **k_anonymity**), semantics, arguments, and YAML examples are documented in [docs/references/generic_tests.md](docs/references/generic_tests.md).
 
 ## Macros
 
 ### Pseudonymization
 
-#### `sha256`
-
-Computes the hash of the input using the SHA-256 algorithm.
-
-**Usage:**
-
-```yaml
-SELECT
-  {{ dbt_data_privacy.sha256("column_a") }} AS column_a,
-```
-
-#### `sha512`
-
-Computes the hash of the input using the SHA-512 algorithm.
-
-**Usage:**
-
-```yaml
-SELECT
-  {{ dbt_data_privacy.sha512("column_a") }} AS column_a,
-```
-
-#### `extract_email_domain`
-
-Computes the hash of the input using the SHA-512 algorithm.
-
-**Usage:**
-
-```yaml
-SELECT
-  {{ dbt_data_privacy.extract_email_domain("email_column") }} AS email_column,
-```
+Hashing and related helpers (`sha256`, `sha512`, `extract_email_domain`) are documented in [docs/references/pseudonymization.md](docs/references/pseudonymization.md).
 
 ### Code generation
 
