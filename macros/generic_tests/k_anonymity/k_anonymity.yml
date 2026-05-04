@@ -1,0 +1,73 @@
+---
+version: 2
+
+macros:
+  - name: test_k_anonymity
+    description: |
+      Generic data test for [k-anonymity](https://en.wikipedia.org/wiki/K-anonymity): every distinct tuple of
+      `quasi_identifiers` must appear on at least `k` rows. Uses an exact `GROUP BY` / `COUNT(*)` check on BigQuery only
+      (no `default__` implementation). Passes when the compiled query returns zero rows; on failure, returns up to
+      `sample_limit` violating groups (smallest `group_size` first) with `total_violating_groups` on each row.
+      NULLs follow standard SQL `GROUP BY` behavior.
+
+      When this package is installed as a dependency, reference the test in YAML as `dbt_data_privacy.k_anonymity`
+      so dbt resolves this macro from the package.
+    arguments:
+      - name: model
+        type: relation
+        description: The relation under test (`ref()` / `source()`).
+      - name: column_name
+        type: column
+        description: |
+          Optional; ignored by the implementation. Present so the test can be declared at column or model level
+          like other generic tests.
+      - name: quasi_identifiers
+        type: string
+        description: |
+          Non-empty list of column names on the model (YAML list of strings). No duplicate names. Defines equivalence
+          classes for the k-anonymity check.
+      - name: k
+        type: integer
+        description: Minimum class size; must be ≥ 1. Each distinct quasi-identifier tuple must appear on at least this many rows.
+      - name: sample_limit
+        type: integer
+        description: |
+          Maximum number of violating groups returned when the test fails (default `50` on the generic test).
+          Smaller groups are listed first.
+
+  - name: k_anonymity_test_query_sql
+    description: |
+      Returns the same SQL string the `k_anonymity` generic test executes at runtime (after argument validation),
+      for macro unit tests, debugging, or documentation. Dispatches to `bigquery__k_anonymity_query_sql_impl` only;
+      there is no cross-adapter fallback.
+    arguments:
+      - name: model
+        type: relation
+        description: Target relation (`ref()` / `source()`) whose rows are grouped by `quasi_identifiers`.
+      - name: quasi_identifiers
+        type: string
+        description: Non-empty list of column names defining the quasi-identifier tuple (YAML list of strings).
+      - name: k
+        type: integer
+        description: Minimum required row count per distinct tuple; must be ≥ 1.
+      - name: sample_limit
+        type: integer
+        description: Row cap on the outer `QUALIFY` when violations exist (same semantics as the generic test).
+
+  - name: k_anonymity_validate_arguments
+    description: |
+      Validates `quasi_identifiers`, `k`, and `sample_limit` for the k-anonymity test and SQL builder. Raises
+      `compiler_error` with a clear message if any argument is missing, the wrong type, or invalid (e.g. empty list,
+      duplicate column names, `k` or `sample_limit` less than 1). Does not render SQL; call `k_anonymity_test_query_sql` or
+      the generic test for executable output.
+    arguments:
+      - name: quasi_identifiers
+        type: string
+        description: |
+          Required. Must be a non-empty list of unique string column names (not a single string).
+      - name: k
+        type: integer
+        description: Required. Coerced to integer; must be ≥ 1.
+      - name: sample_limit
+        type: integer
+        description: Required. Coerced to integer; must be ≥ 1.

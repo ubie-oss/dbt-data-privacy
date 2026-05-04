@@ -64,4 +64,9 @@
   {% do test_generate_privacy_protected_models() %}
   {% do test_get_tags_by_original_file_paths() %}
 
+  {#
+    generic_tests
+  #}
+  {% do test_k_anonymity_sql_fragments() %}
+
 {% endmacro %}
