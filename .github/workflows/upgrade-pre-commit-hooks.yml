@@ -1,0 +1,58 @@
+name: Upgrade pre-commit hooks
+
+on:
+  schedule:
+    # First day of each month, 08:00 UTC (aligned with Dependabot monthly cadence)
+    - cron: "0 8 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  autoupdate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - name: Autoupdate hook revisions
+        run: pre-commit autoupdate
+
+      - name: Run all hooks (apply autofixes)
+        id: pre_commit
+        continue-on-error: true
+        run: pre-commit run --all-files
+
+      - name: Create or update pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: pre-commit-autoupdate
+          delete-branch: true
+          draft: ${{ steps.pre_commit.outcome == 'failure' }}
+          commit-message: "chore: pre-commit autoupdate"
+          title: "chore: pre-commit autoupdate"
+          body: |
+            Automated PR from the [Upgrade pre-commit hooks](.github/workflows/upgrade-pre-commit-hooks.yml) workflow.
+
+            - Bumps `rev` pins via `pre-commit autoupdate`
+            - Runs `pre-commit run --all-files` (autofixes included when hooks apply them)
+
+            ${{ steps.pre_commit.outcome == 'failure' && '**Status:** `pre-commit run --all-files` still reported violations. This PR is opened as a **draft**; fix or adjust hooks, or revert a specific `rev` in `.pre-commit-config.yaml`.' || '**Status:** all hooks passed locally in this workflow.' }}
+
+            **CI:** [Lint resources](.github/workflows/lint.yml) must pass before merge.
+
+      - name: Fail if hooks reported violations
+        if: steps.pre_commit.outcome == 'failure'
+        run: |
+          echo "::warning::Pre-commit still reported violations after autoupdate; see draft PR or fix forward."
+          exit 1
