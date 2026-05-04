@@ -1,0 +1,14 @@
+---
+version: 2
+
+models:
+  - name: example_l_diverse_release
+    description: |
+      Fixture for the l_diversity generic test. Each (qi_a, qi_b) tuple has five rows with three distinct sensitive values.
+    data_tests:
+      - dbt_data_privacy.l_diversity:
+          arguments:
+            quasi_identifiers: [qi_a, qi_b]
+            sensitive_column: sensitive
+            l: 3
+            sample_limit: 10

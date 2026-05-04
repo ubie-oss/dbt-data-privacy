@@ -68,5 +68,6 @@
     generic_tests
   #}
   {% do test_k_anonymity_sql_fragments() %}
+  {% do test_l_diversity_sql_fragments() %}
 
 {% endmacro %}

@@ -34,11 +34,13 @@ This skill keeps **SKILL.md** short for discovery and puts procedural detail in 
 
 | Concern | Example in repo |
 |--------|-------------------|
-| Generic test + `bigquery__test_*` | [`macros/generic_tests/k_anonymity/k_anonymity.sql`](../../../macros/generic_tests/k_anonymity/k_anonymity.sql) |
+| Generic test + `bigquery__test_*` (k-anonymity) | [`macros/generic_tests/k_anonymity/k_anonymity.sql`](../../../macros/generic_tests/k_anonymity/k_anonymity.sql) |
+| Generic test + `bigquery__test_*` (l-diversity) | [`macros/generic_tests/l_diversity/l_diversity.sql`](../../../macros/generic_tests/l_diversity/l_diversity.sql) |
 | Validation + query SQL | [`k_anonymity_validate_arguments.sql`](../../../macros/generic_tests/k_anonymity/k_anonymity_validate_arguments.sql), [`k_anonymity_query_sql_impl.sql`](../../../macros/generic_tests/k_anonymity/k_anonymity_query_sql_impl.sql) |
 | Macro property docs | [`k_anonymity.yml`](../../../macros/generic_tests/k_anonymity/k_anonymity.yml) (`name: test_k_anonymity`) |
 | Integration fixture + qualified test | [`schema.yml`](../../../integration_tests/models/generic_tests/k_anonymity/schema.yml) (`dbt_data_privacy.k_anonymity`) |
 | Macro unit test (name must not shadow generic test) | [`test_k_anonymity.sql`](../../../integration_tests/macros/tests/generic_tests/test_k_anonymity.sql) |
+| Macro unit test (l-diversity) | [`test_l_diversity.sql`](../../../integration_tests/macros/tests/generic_tests/test_l_diversity.sql) |
 
 ## Constraints specific to dbt-data-privacy
 

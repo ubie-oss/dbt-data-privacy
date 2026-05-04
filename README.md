@@ -57,7 +57,7 @@ But, the implementation can be extended to other warehouses by following the man
 
 ## Generic tests
 
-Custom generic data tests (for example **k_anonymity**), semantics, arguments, and YAML examples are documented in [docs/references/generic_tests.md](docs/references/generic_tests.md).
+Custom generic data tests (**k_anonymity**, **l_diversity**), semantics, arguments, and YAML examples are documented in [docs/references/generic_tests.md](docs/references/generic_tests.md).
 
 ## Macros
 

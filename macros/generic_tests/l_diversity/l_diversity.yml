@@ -1,0 +1,92 @@
+---
+version: 2
+
+macros:
+  - name: test_l_diversity
+    description: |
+      Generic data test for distinct l-diversity (see l-diversity with k-anonymity, e.g. Wikipedia k-anonymity see-also):
+      within each distinct tuple of quasi_identifiers, the sensitive column must take at least l distinct values
+      (exact COUNT(DISTINCT) on BigQuery only; no default__ implementation). Passes when the compiled query returns
+      zero rows; on failure, returns up to sample_limit violating groups (smallest distinct_sensitive_count first) with
+      total_violating_groups on each row. NULL quasi-identifiers follow standard SQL GROUP BY behavior. NULL sensitive
+      values are excluded from COUNT(DISTINCT), so groups with only NULL sensitives yield distinct_sensitive_count 0
+      and fail for any l >= 1.
+
+      When this package is installed as a dependency, reference the test in YAML as dbt_data_privacy.l_diversity
+      so dbt resolves this macro from the package.
+
+      Use together with k_anonymity when releasing microdata-style tables: k limits re-identification by tuple count;
+      l limits homogeneity of the sensitive attribute within each tuple class.
+    arguments:
+      - name: model
+        type: relation
+        description: The relation under test (ref() / source()).
+      - name: column_name
+        type: column
+        description: |
+          When sensitive_column is omitted, the sensitive attribute defaults to this column name (dbt sets it when the
+          test is declared under columns). Otherwise ignored if sensitive_column is set.
+      - name: quasi_identifiers
+        type: string
+        description: |
+          Non-empty list of column names on the model (YAML list of strings). No duplicate names. Defines equivalence
+          classes for the l-diversity check. Must not include the sensitive column.
+      - name: sensitive_column
+        type: string
+        description: |
+          Optional model column name for the sensitive attribute. If omitted, column_name must be set (column-level
+          test declaration).
+      - name: l
+        type: integer
+        description: |
+          Minimum number of distinct sensitive values per quasi-identifier tuple; must be >= 1. Practice often uses
+          l >= 2.
+      - name: sample_limit
+        type: integer
+        description: |
+          Maximum number of violating groups returned when the test fails (default 50 on the generic test).
+          Smallest distinct_sensitive_count groups are listed first.
+
+  - name: l_diversity_test_query_sql
+    description: |
+      Returns the same SQL string the l_diversity generic test executes at runtime (after argument validation),
+      for macro unit tests, debugging, or documentation. The sensitive_column argument must be the resolved column
+      name on the model (same string that would be used in SQL). Dispatches to bigquery__l_diversity_query_sql_impl only;
+      there is no cross-adapter fallback.
+    arguments:
+      - name: model
+        type: relation
+        description: Target relation (ref() / source()) whose rows are grouped by quasi_identifiers.
+      - name: quasi_identifiers
+        type: string
+        description: Non-empty list of column names defining the quasi-identifier tuple (YAML list of strings).
+      - name: sensitive_column
+        type: string
+        description: Resolved sensitive column name on the model (must not be in quasi_identifiers).
+      - name: l
+        type: integer
+        description: Minimum required COUNT(DISTINCT sensitive) per distinct tuple; must be >= 1.
+      - name: sample_limit
+        type: integer
+        description: Row cap on the outer QUALIFY when violations exist (same semantics as the generic test).
+
+  - name: l_diversity_validate_arguments
+    description: |
+      Validates quasi_identifiers, resolved sensitive column name, l, and sample_limit for the l-diversity test and
+      SQL builder. Raises compiler_error with a clear message if any argument is missing, the wrong type, or invalid
+      (e.g. empty list, duplicate quasi_identifiers, sensitive column listed as a quasi_identifier, l or sample_limit
+      less than 1). Does not render SQL; call l_diversity_test_query_sql or the generic test for executable output.
+    arguments:
+      - name: quasi_identifiers
+        type: string
+        description: |
+          Required. Must be a non-empty list of unique string column names (not a single string).
+      - name: resolved_sensitive
+        type: string
+        description: Required. Non-empty trimmed column name for the sensitive attribute; must not appear in quasi_identifiers.
+      - name: l
+        type: integer
+        description: Required. Coerced to integer; must be >= 1.
+      - name: sample_limit
+        type: integer
+        description: Required. Coerced to integer; must be >= 1.
