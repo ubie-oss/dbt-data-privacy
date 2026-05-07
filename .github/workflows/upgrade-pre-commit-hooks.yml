@@ -34,7 +34,7 @@ jobs:
         run: |
           pre-commit run --all-files
       - name: Create or update pull request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           branch: pre-commit-autoupdate
           delete-branch: true
