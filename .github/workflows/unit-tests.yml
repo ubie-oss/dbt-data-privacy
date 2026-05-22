@@ -26,10 +26,10 @@ jobs:
         shell: bash
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # ratchet:actions/checkout@v6
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # ratchet:astral-sh/setup-uv@v7
         with:
           enable-cache: true
           cache-dependency-glob: "integration_tests/pyproject.toml"
@@ -37,7 +37,7 @@ jobs:
 
       # dbt-bigquery 1.9 required the application default credentials
       # SEE https://github.com/dbt-labs/dbt-bigquery/issues/1438
-      - uses: google-github-actions/auth@v3
+      - uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # ratchet:google-github-actions/auth@v3
         with:
           workload_identity_provider: projects/131500153501/locations/global/workloadIdentityPools/github-oidc-pool/providers/github-oidc-provider
           service_account: dbt-data-privacy-gha@ubie-oss-data-engineering.iam.gserviceaccount.com
@@ -50,7 +50,7 @@ jobs:
 
       - name: Save logs and artifacts if failed
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # ratchet:actions/upload-artifact@v6
         with:
           name: save-logs-and-target-${{ matrix.python-version }}-${{ matrix.dbt-group }}
           retention-days: 3
