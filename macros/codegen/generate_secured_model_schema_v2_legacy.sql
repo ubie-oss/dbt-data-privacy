@@ -88,7 +88,7 @@ models:
         {%- set data_tests = column_meta.data_privacy[name].get('data_tests', [])
             + column_meta.data_privacy[name].get('tests', []) %}
         data_tests: {%- for data_test in data_tests %}
-          - {{ data_test }}
+          - {{ dbt_data_privacy.format_data_test_for_schema_v2(data_test) }}
         {%- endfor %}
         {%- endif %}
     {%- endfor %}
