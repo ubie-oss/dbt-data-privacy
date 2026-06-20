@@ -352,6 +352,15 @@ Therefore, it would be good to implement a script like [`integration_tests/scrip
 dbt --quiet run-operation dbt_data_privacy.generate_privacy_protected_models
 ```
 
+The format of generated column `data_tests` depends on the dbt version used to run the macro:
+
+- **dbt 1.10.5 or later**: test parameters are nested under `arguments`, and test options such as `tags`, `severity`, and `where` are nested under `config`. See the [dbt data tests property reference](https://docs.getdbt.com/reference/resource-properties/data-tests).
+- **dbt 1.10.0 through 1.10.4**: test parameters are written at the top level of the test definition, while `tags`, `severity`, and `where` remain under `config`.
+
+When annotating column `data_tests` in source metadata, prefer nesting test options under a `config` block (for example `config: { tags: [...] }`) rather than placing them at the top level alongside macro arguments. The formatter recognizes `tags`, `severity`, and `where` at the top level, but other dbt test config keys should be written under `config` to avoid being emitted as test arguments.
+
+Run the macro with the same dbt version (or newer) as the project that will consume the generated schema YAML, so the output matches what that project expects.
+
 [The pull request](https://github.com/ubie-oss/dbt-data-privacy/pull/49) demonstrates how to generate dbt models.
 We examine the generated `consents` and `users` in the data analysis project.
 
