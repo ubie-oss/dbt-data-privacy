@@ -13,6 +13,7 @@
     utils
   #}
   {% do test_deep_copy_dict() %}
+  {% do test_is_dbt_at_least() %}
   {% do test_get_data_privacy_configs() %}
   {% do test_get_data_privacy_objectives() %}
   {% do test_get_data_privacy_config_by_objective() %}
@@ -55,6 +56,8 @@
     codegen
   #}
   {% do test_format_model_config() %}
+  {% do test_format_data_test_for_schema_v2() %}
+  {% do test_generate_secured_model_schema_v2_data_tests() %}
   {% do test_generate_secured_model_schema_v2() %}
   {% do test_generate_privacy_protected_model_sql() %}
 

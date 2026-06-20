@@ -30,6 +30,14 @@
   {% endif %}
 {% endmacro %}
 
+{% macro assert_str_not_in_value(str, value) %}
+  {% if str in value %}
+    {% do exceptions.raise_compiler_error("FAILED: the string " ~ str ~ " was found in " ~ value) %}
+  {% else %}
+    {% do log("SUCCESS") %}
+  {% endif %}
+{% endmacro %}
+
 {% macro assert_element_in_list(element, list_values) %}
   {% if element not in list_values %}
     {% do exceptions.raise_compiler_error("FAILED: the element " ~ element ~ " was not found in " ~ list_values) %}
