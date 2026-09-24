@@ -13,6 +13,10 @@ DBT_GROUP_MAP = {
         "version": "fusion",
         "description": "dbt Fusion",
     },
+    "dbt-v2": {
+        "version": "2.0",
+        "description": "dbt v2",
+    },
     "dbt-core-1-10": {
         "version": "1.10",
         "description": "dbt-core v1.10",
@@ -20,6 +24,10 @@ DBT_GROUP_MAP = {
     "dbt-core-1-11": {
         "version": "1.11",
         "description": "dbt-core v1.11",
+    },
+    "dbt-core-1-12": {
+        "version": "1.12",
+        "description": "dbt-core v1.12",
     },
 }
 
@@ -71,6 +79,9 @@ def dbt_test_env(session, uv_group):
 
     version_info = DBT_GROUP_MAP[uv_group]
     dbt_version = version_info["version"]
+
+    if uv_group == "dbt-v2" and session.python.startswith("3.10"):
+        session.skip("dbt v2 requires Python >=3.11")
 
     # Install the project and the requested group
     session.install(".", "--group", uv_group)
@@ -163,6 +174,9 @@ def setup_dbt_env(session, uv_group):
     """Setup a virtual environment for a specific dbt version group and output its bin path."""
     if uv_group not in DBT_GROUP_MAP:
         session.error(f"Unsupported dbt group: {uv_group}")
+
+    if uv_group == "dbt-v2" and session.python.startswith("3.10"):
+        session.skip("dbt v2 requires Python >=3.11")
 
     session.install(".", "--group", uv_group)
 

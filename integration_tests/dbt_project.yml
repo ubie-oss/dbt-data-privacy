@@ -2,7 +2,7 @@ name: 'dbt_data_privacy_integration_tests'
 version: '0.0.1'
 config-version: 2
 
-require-dbt-version: [">=1.10.0"]
+require-dbt-version: [">=1.10.0", "<3.0.0"]
 
 profile: 'default'
 
@@ -21,10 +21,5 @@ clean-targets:  # directories to be removed by `dbt clean`
 flags:
   send_anonymous_usage_stats: false
   use_colors: true
-  warn_error_options:
-    silence:
-      - ProjectFlagsMovedDeprecation
-
-
   require_generic_test_arguments_property: true
 models:
