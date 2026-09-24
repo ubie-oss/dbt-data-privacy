@@ -1,6 +1,7 @@
 .PHONY: setup clean test test-integration generate run-unit-tests run-integration-tests run-integration-tests-legacy compile \
-	run-unit-tests-core run-unit-tests-fusion run-integration-tests-core run-integration-tests-fusion \
-	generate-core generate-fusion
+	run-unit-tests-core run-unit-tests-v2 run-unit-tests-fusion \
+	run-integration-tests-core run-integration-tests-v2 run-integration-tests-fusion \
+	generate-core generate-v2 generate-fusion
 
 setup:
 	uv sync
@@ -12,27 +13,36 @@ clean:
 
 test: run-unit-tests run-integration-tests
 
-run-unit-tests: run-unit-tests-core run-unit-tests-fusion
+run-unit-tests: run-unit-tests-core run-unit-tests-v2 run-unit-tests-fusion
 
 # Unset NO_COLOR so nox is not passed both --no-color and --force-color (e.g. in CI).
 run-unit-tests-core: clean
-	env -u NO_COLOR uv run nox -s "unit_tests-3.12(uv_group='dbt-core-1-11')"
+	env -u NO_COLOR uv run nox -s "unit_tests-3.12(uv_group='dbt-core-1-12')"
+
+run-unit-tests-v2: clean
+	env -u NO_COLOR uv run nox -s "unit_tests-3.12(uv_group='dbt-v2')"
 
 run-unit-tests-fusion: clean
 	env -u NO_COLOR uv run nox -s "unit_tests-3.12(uv_group='dbt-fusion')"
 
-run-integration-tests: run-integration-tests-core run-integration-tests-fusion
+run-integration-tests: run-integration-tests-core run-integration-tests-v2 run-integration-tests-fusion
 
 run-integration-tests-core: clean
-	env -u NO_COLOR uv run nox -s "integration_tests-3.12(uv_group='dbt-core-1-11')"
+	env -u NO_COLOR uv run nox -s "integration_tests-3.12(uv_group='dbt-core-1-12')"
+
+run-integration-tests-v2: clean
+	env -u NO_COLOR uv run nox -s "integration_tests-3.12(uv_group='dbt-v2')"
 
 run-integration-tests-fusion: clean
 	env -u NO_COLOR uv run nox -s "integration_tests-3.12(uv_group='dbt-fusion')"
 
-generate: generate-core generate-fusion
+generate: generate-core generate-v2 generate-fusion
 
 generate-core: clean
-	env -u NO_COLOR uv run nox -s "generate_models-3.12(uv_group='dbt-core-1-11')"
+	env -u NO_COLOR uv run nox -s "generate_models-3.12(uv_group='dbt-core-1-12')"
+
+generate-v2: clean
+	env -u NO_COLOR uv run nox -s "generate_models-3.12(uv_group='dbt-v2')"
 
 generate-fusion: clean
 	env -u NO_COLOR uv run nox -s "generate_models-3.12(uv_group='dbt-fusion')"
