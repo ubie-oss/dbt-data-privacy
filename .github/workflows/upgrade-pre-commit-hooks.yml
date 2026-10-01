@@ -23,8 +23,7 @@ jobs:
         with:
           python-version: "3.13"
       - name: Install pre-commit
-        run: |
-          pip install pre-commit
+        run: pip install -r requirements.dev.txt
       - name: Autoupdate hook revisions
         run: |
           pre-commit autoupdate
