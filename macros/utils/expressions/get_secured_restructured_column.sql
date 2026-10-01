@@ -42,7 +42,7 @@
 
   {% if is_array is sameas true and is_struct is sameas true %}
     {# ARRAY of STRUCT #}
-    {% for field_key, field_info in restructured_column.fields.items() %}
+    {% for field_key, field_info in dbt_data_privacy.mapping_items(restructured_column.fields) %}
       {# Reset relative_path from the array #}
       {% set secured_restructured_column = dbt_data_privacy.get_secured_restructured_column(
           data_handling_standards=data_handling_standards,
@@ -56,7 +56,7 @@
     {{ return(copied_restructured_column) }}
   {% elif is_struct is sameas true %}
     {# STRUCT #}
-    {% for field_key, field_info in restructured_column.fields.items() %}
+    {% for field_key, field_info in dbt_data_privacy.mapping_items(restructured_column.fields) %}
       {% set secured_restructured_column = dbt_data_privacy.get_secured_restructured_column(
           data_handling_standards=data_handling_standards,
           column_conditions=column_conditions,
@@ -82,7 +82,9 @@
           column_name=column_alias,
           level=level,
           data_type=data_type,
-          column_conditions=column_conditions) %}
+          column_conditions=dbt_data_privacy.column_conditions_for_column(
+            column_conditions,
+            restructured_column.get('original_info', {}))) %}
 
       {# Downgrade the data security level if secured #}
       {% set method, with, converted_level = dbt_data_privacy.get_data_handling_standard_by_level(

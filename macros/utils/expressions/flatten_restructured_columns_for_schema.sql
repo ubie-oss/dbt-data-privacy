@@ -6,11 +6,11 @@
 {% macro bigquery__flatten_restructured_columns_for_schema(restructured_columns) %}
   {% set flatten_columns = {} %}
 
-  {% for top_level_column_name, top_level_restructured_column in restructured_columns.items() %}
+  {% for top_level_column_name, top_level_restructured_column in dbt_data_privacy.mapping_items(restructured_columns) %}
     {% set sub_flatten_columns = dbt_data_privacy.flatten_restructured_column_for_schema(
       restructured_column=top_level_restructured_column, path=[top_level_column_name], aliased_path=[]) %}
     {% if sub_flatten_columns | length > 0 %}
-      {% for sub_column_name, sub_column_info in sub_flatten_columns.items() %}
+      {% for sub_column_name, sub_column_info in dbt_data_privacy.mapping_items(sub_flatten_columns) %}
         {% do flatten_columns.update({sub_column_name: sub_column_info}) %}
       {% endfor %}
     {% endif %}

@@ -188,12 +188,17 @@ data_privacy:
 For example, under the California Consumer Privacy Act (CCPA), if IP addresses aren't tied with any unique identifiers such as customer IDs, IP addresses aren't considered personal identifiable information (PII).
 However, if IP addresses are tied with unique identifiers, they become PII.
 The method enables us to deal with conditional pseudonymization.
-We currently have only one condition: `contains_pseudonymized_unique_identifiers`.
-If unique identifiers tied with something like an IP address are appropriately pseudonymized, such data can be made available with the condition.
+The column stays raw only when every name in `conditions` is true. If any name is false, `default_method` runs.
+
+`contains_pseudonymized_unique_identifiers` is true when any column tagged `unique_identifier` uses `SHA256`, `SHA512`, or `DROPPED`. `CONDITIONAL_HASH` does not count.
+
+`is_column_exposable` is true for the column being secured when that column's `config.meta.data_privacy.policy_tags` contains `column_exposable`. A column without the tag is hashed. A tag on a parent struct does not apply to a nested field.
+
+List `is_column_exposable` only on an objective that should split `restricted` columns. An objective that lists only `contains_pseudonymized_unique_identifiers` ignores the tag.
 
 ```yaml
 data_privacy:
-  DATA_OBJECTIVE:
+  data_analysis:
     data_handling_standards:
       restricted:
         method: CONDITIONAL_HASH
@@ -201,6 +206,16 @@ data_privacy:
         with:
           default_method: SHA256
           conditions: ["contains_pseudonymized_unique_identifiers"]
+  column_exposure:
+    data_handling_standards:
+      restricted:
+        method: CONDITIONAL_HASH
+        converted_level: internal
+        with:
+          default_method: SHA256
+          conditions:
+            - contains_pseudonymized_unique_identifiers
+            - is_column_exposable
 ```
 
 ### 2. Implement table-level and column-level metadata in dbt schema YAML files to generate privacy-protected models
@@ -251,7 +266,7 @@ We can annotate metadata for column-level data classification.
 For example, the data classification level of the `user_id` column can be set to `confidential` so that the data is pseudonymized in the environment for data analysis.
 
 - `level` specifies a column-level data classification level.
-- `policy_tags` annotate policy tags of the column. If we use the `CONDITIONAL_HASH` method, columns with the corresponding data classification level and `unique_identifier` are pseudonymized.
+- `policy_tags` is a list under `config.meta.data_privacy`. It is not the dbt-BigQuery column property `policy_tags`. `unique_identifier` marks a column that `contains_pseudonymized_unique_identifiers` checks. `column_exposable` marks a `restricted` column that may stay raw when `is_column_exposable` is listed.
 
 Additionally, we can specify column-level generic tests with a corresponding dbt model.
 In this case, we would like to test the uniqueness of the pseudonymized `user_id` under `data_analysis_layer__dbt_data_privacy_data_analysis_layer__consents`.
