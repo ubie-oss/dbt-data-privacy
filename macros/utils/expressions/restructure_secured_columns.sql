@@ -1,7 +1,7 @@
 {% macro restructure_secured_columns(secured_columns) %}
   {% set restructured_secured_columns = {} %}
 
-  {% for column_name, secured_info in secured_columns.items() %}
+  {% for column_name, secured_info in dbt_data_privacy.mapping_items(secured_columns) %}
     {% set column_name_elements = column_name.split(".") %}
     {% set part_of_restructured_secured_columns = dbt_data_privacy.create_deep_dict(column_name_elements, secured_info) %}
     {% set restructured_secured_columns = dbt_data_privacy.deep_merge_dicts(

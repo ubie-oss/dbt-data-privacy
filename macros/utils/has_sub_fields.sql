@@ -1,7 +1,7 @@
 {% macro has_sub_fields(column_name, columns) %}
   {% set search_column_elements = dbt_data_privacy.split_column_elements(column_name) %}
 
-  {% for _column_name, _column_info in columns.items() %}
+  {% for _column_name, _column_info in dbt_data_privacy.mapping_items(columns) %}
     {% set _column_elements = dbt_data_privacy.split_column_elements(_column_name) %}
     {% if _column_elements | length > search_column_elements | length %}
       {% set comparisons = [] %}
