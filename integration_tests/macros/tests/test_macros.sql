@@ -34,6 +34,8 @@
   {% do test_restructure_secured_columns() %}
   {% do test_get_columns_by_policy_tag() %}
   {% do test_contains_pseudonymized_unique_identifiers() %}
+  {% do test_is_column_exposable() %}
+  {% do test_column_exposable_secured_columns() %}
   {% do test_get_column_meta_block() %}
 
   {# graph #}

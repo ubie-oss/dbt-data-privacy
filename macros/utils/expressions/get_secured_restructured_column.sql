@@ -82,7 +82,9 @@
           column_name=column_alias,
           level=level,
           data_type=data_type,
-          column_conditions=column_conditions) %}
+          column_conditions=dbt_data_privacy.column_conditions_for_column(
+            column_conditions,
+            restructured_column.get('original_info', {}))) %}
 
       {# Downgrade the data security level if secured #}
       {% set method, with, converted_level = dbt_data_privacy.get_data_handling_standard_by_level(

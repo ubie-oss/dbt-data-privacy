@@ -44,4 +44,54 @@
         data_type="ARRAY") %}
   {% set expected = "ARRAY(SELECT SHA256(CAST(e AS STRING)) FROM UNNEST(column1) AS e)" %}
   {{ assert_equals(result, expected) }}
+
+  {% set both_conditions = ["contains_pseudonymized_unique_identifiers", "is_column_exposable"] %}
+
+  {% set column_conditions = {
+      "contains_pseudonymized_unique_identifiers": true,
+      "is_column_exposable": true
+    } %}
+  {% set result = dbt_data_privacy.conditional_hash(
+        column_conditions=column_conditions,
+        expression="ip",
+        default_method=default_method,
+        conditions=both_conditions,
+        data_type=none) %}
+  {{ assert_equals(result, "ip") }}
+
+  {% set column_conditions = {
+      "contains_pseudonymized_unique_identifiers": true,
+      "is_column_exposable": false
+    } %}
+  {% set result = dbt_data_privacy.conditional_hash(
+        column_conditions=column_conditions,
+        expression="diagnosis",
+        default_method=default_method,
+        conditions=both_conditions,
+        data_type=none) %}
+  {{ assert_equals(result, "SHA256(CAST(diagnosis AS STRING))") }}
+
+  {% set column_conditions = {
+      "contains_pseudonymized_unique_identifiers": false,
+      "is_column_exposable": true
+    } %}
+  {% set result = dbt_data_privacy.conditional_hash(
+        column_conditions=column_conditions,
+        expression="ip",
+        default_method=default_method,
+        conditions=both_conditions,
+        data_type=none) %}
+  {{ assert_equals(result, "SHA256(CAST(ip AS STRING))") }}
+
+  {% set column_conditions = {
+      "contains_pseudonymized_unique_identifiers": true,
+      "is_column_exposable": false
+    } %}
+  {% set result = dbt_data_privacy.conditional_hash(
+        column_conditions=column_conditions,
+        expression="diagnosis",
+        default_method=default_method,
+        conditions=["contains_pseudonymized_unique_identifiers"],
+        data_type=none) %}
+  {{ assert_equals(result, "diagnosis") }}
 {% endmacro %}

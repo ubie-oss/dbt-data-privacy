@@ -13,7 +13,7 @@
           column_name,
           data_security_level,
           data_type=data_type,
-          column_conditions=column_conditions) %}
+          column_conditions=dbt_data_privacy.column_conditions_for_column(column_conditions, column_info)) %}
 
       {% set level = data_security_level %}
       {# Downgrade the data security level if secured #}
