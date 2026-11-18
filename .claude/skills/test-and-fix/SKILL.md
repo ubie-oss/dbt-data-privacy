@@ -13,12 +13,12 @@ This skill provides an autonomous loop to identify, analyze, and fix test failur
 
 1. **Identify**: Run tests from the `integration_tests` directory.
     - Agent must make sure what type of test the user wants to run (unit or integration), becaues it takes a long time to run all tests.
-    - `make test`: Runs all unit and integration tests (both dbt-core and dbt-fusion). This is the standard command for a full verification.
-    - `make run-unit-tests`: Runs all unit tests (both core and fusion).
-    - `make run-integration-tests`: Runs all integration tests (both core and fusion).
+    - `make test`: Runs all unit and integration tests (dbt-core and dbt v2). This is the standard command for a full verification.
+    - `make run-unit-tests`: Runs all unit tests (dbt-core and dbt v2).
+    - `make run-integration-tests`: Runs all integration tests (dbt-core and dbt v2).
     - For targeted debugging, use granular sub-targets:
-        - `make run-unit-tests-core` / `make run-unit-tests-fusion`
-        - `make run-integration-tests-core` / `make run-integration-tests-fusion`
+        - `make run-unit-tests-core` / `make run-unit-tests-v2`
+        - `make run-integration-tests-core` / `make run-integration-tests-v2`
 2. **Analyze**: Examine the test output and logs to understand which tests are failing.
     - Check the `logs/dbt.log` in `integration_tests/` for detailed dbt execution logs.
     - For macro failures, inspect the generated SQL and compare it with expected BigQuery syntax.
