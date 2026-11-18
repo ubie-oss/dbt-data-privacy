@@ -84,6 +84,7 @@ jobs:
           rm -f "${{ github.workspace }}/integration_tests/models/.gitignore"
 
       - name: Push and revert the generated models
+        if: github.event_name != 'pull_request'
         env:
           HEAD_REF: ${{ github.head_ref }}
         run: |
