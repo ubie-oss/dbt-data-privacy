@@ -191,6 +191,8 @@ The method enables us to deal with conditional pseudonymization.
 We currently have only one condition: `contains_pseudonymized_unique_identifiers`.
 If unique identifiers tied with something like an IP address are appropriately pseudonymized, such data can be made available with the condition.
 
+The raw value is kept only when `conditions` is non-empty and every listed condition is explicitly `true` for the column. Otherwise, including an empty `conditions` list or a condition that is `false`, missing, or `none`, the value is hashed with `default_method`.
+
 ```yaml
 data_privacy:
   DATA_OBJECTIVE:
@@ -201,6 +203,20 @@ data_privacy:
         with:
           default_method: SHA256
           conditions: ["contains_pseudonymized_unique_identifiers"]
+```
+
+##### `UDF_HASH`
+
+`UDF_HASH` hashes the value with a user-defined function that you provide. The function name goes in `with.function`, and the function receives `CAST(value AS STRING)`. Arrays are mapped element by element. Without `with.function`, the macro fails with `udf_function is not defined`.
+
+```yaml
+data_privacy:
+  DATA_OBJECTIVE:
+    data_handling_standards:
+      restricted:
+        method: UDF_HASH
+        with:
+          function: MY_UDF
 ```
 
 ### 2. Implement table-level and column-level metadata in dbt schema YAML files to generate privacy-protected models

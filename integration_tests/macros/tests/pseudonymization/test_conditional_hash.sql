@@ -44,4 +44,26 @@
         data_type="ARRAY") %}
   {% set expected = "ARRAY(SELECT SHA256(CAST(e AS STRING)) FROM UNNEST(column1) AS e)" %}
   {{ assert_equals(result, expected) }}
+
+  {# An empty condition list must never leave the value raw #}
+  {% set result = dbt_data_privacy.conditional_hash(
+        column_conditions={"contains_pseudonymized_unique_identifiers": true},
+        expression=expression,
+        default_method=default_method,
+        conditions=[],
+        data_type=none) %}
+  {% set expected = "SHA256(CAST(column1 AS STRING))" %}
+  {{ assert_equals(result, expected) }}
+
+  {# A condition that is not an explicit boolean true must hash #}
+  {% for non_true_value in [none, "false", 1] %}
+    {% set result = dbt_data_privacy.conditional_hash(
+          column_conditions={"contains_pseudonymized_unique_identifiers": non_true_value},
+          expression=expression,
+          default_method=default_method,
+          conditions=conditions,
+          data_type=none) %}
+    {% set expected = "SHA256(CAST(column1 AS STRING))" %}
+    {{ assert_equals(result, expected) }}
+  {% endfor %}
 {% endmacro %}

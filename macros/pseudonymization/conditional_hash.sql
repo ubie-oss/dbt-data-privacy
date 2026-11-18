@@ -18,14 +18,18 @@
 {%- endmacro %}
 
 {% macro bigquery__conditional_hash(column_conditions, expression, default_method, conditions, data_type=none) -%}
-  {% set condition_values = [] %}
+  {#
+    Raw output only when the list is non-empty and every listed condition is explicitly true.
+    An empty list, or a value that is not a boolean, hashes with the default method.
+  #}
+  {% set ns = namespace(raw_allowed=(conditions | length > 0)) %}
   {% for condition in conditions %}
-    {% if condition in column_conditions and column_conditions.get(condition) is sameas false %}
-      {% do condition_values.append(false) %}
+    {% if column_conditions.get(condition) is not sameas true %}
+      {% set ns.raw_allowed = false %}
     {% endif %}
   {% endfor %}
 
-  {% if false not in condition_values %}
+  {% if ns.raw_allowed %}
     {%- do return(expression) -%}
   {% else %}
     {%- set secured_expression = dbt_data_privacy.get_secured_expression_by_method(expression, default_method, data_type=data_type) -%}
