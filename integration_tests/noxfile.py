@@ -9,10 +9,6 @@ nox.options.default_venv_backend = "uv"
 
 PYTHON_VERSIONS = ["3.10", "3.11", "3.12"]
 DBT_GROUP_MAP = {
-    "dbt-fusion": {
-        "version": "fusion",
-        "description": "dbt Fusion",
-    },
     "dbt-v2": {
         "version": "2.0",
         "description": "dbt v2",
@@ -85,14 +81,6 @@ def dbt_test_env(session, uv_group):
 
     # Install the project and the requested group
     session.install(".", "--group", uv_group)
-
-    if uv_group == "dbt-fusion":
-        session.log("Installing dbt Fusion binary")
-        session.run(
-            "bash", "-c",
-            f"curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | bash -s -- --to {session.bin} --update",
-            external=True
-        )
 
     dataset_name = get_dataset_name(session, dbt_version)
     env = {"DBT_DATASET": dataset_name}
@@ -180,17 +168,4 @@ def setup_dbt_env(session, uv_group):
 
     session.install(".", "--group", uv_group)
 
-    if uv_group == "dbt-fusion":
-        session.log("Installing dbt Fusion binary")
-        session.run(
-            "bash", "-c",
-            f"curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | bash -s -- --to {session.bin} --update",
-            external=True
-        )
-
     print(f"BIN_PATH={session.bin}")
-
-@nox.session(python=PYTHON_VERSIONS)
-def dbt_fusion_tests(session):
-    """Run unit tests with dbt Fusion."""
-    unit_tests(session, "dbt-fusion")
