@@ -10,7 +10,6 @@
 
 {% macro bigquery__get_secured_expression_by_method(expression, method, data_type=none, column_conditions=none, with_params=none) %}
   {% set secured_expression = none %}
-  {% set is_secured = none %}
 
   {% set uppercase_method = method | upper %}
 
@@ -39,7 +38,7 @@
         and with_params.function is defined %}
       {% set udf_function = with_params.function %}
     {% endif %}
-    {% set secured_expression = dbt_data_privacy.udf(expression, udf_function=udf_function, data_type=data_type) %}
+    {% set secured_expression = dbt_data_privacy.udf_hash(expression, udf_function=udf_function, data_type=data_type) %}
   {% elif uppercase_method == "DROPPED" %}
     {# do nothing #}
   {% else %}

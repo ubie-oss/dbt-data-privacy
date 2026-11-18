@@ -64,6 +64,12 @@ jobs:
           workload_identity_provider: projects/131500153501/locations/global/workloadIdentityPools/github-oidc-pool/providers/github-oidc-provider
           service_account: dbt-data-privacy-gha@ubie-oss-data-engineering.iam.gserviceaccount.com
 
+      - name: Install dbt packages
+        working-directory: integration_tests
+        run: |
+          uv run --group "${{ matrix.dbt-group }}" dbt deps \
+            --profiles-dir profiles --target bigquery
+
       - name: Test the action
         id: test-action
         uses: ./.github/actions/generate-models

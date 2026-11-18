@@ -27,4 +27,12 @@
   {%- set result = dbt_data_privacy.get_secured_expression_by_method("column_a", "DROPPED") -%}
   {%- set expected = None -%}
   {{ assert_equals(result, expected) }}
+
+  {%- set result = dbt_data_privacy.get_secured_expression_by_method("column_a", "UDF_HASH", with_params={"function": "MY_UDF"}) -%}
+  {%- set expected = 'MY_UDF(CAST(column_a AS STRING))' -%}
+  {{ assert_equals(result, expected) }}
+
+  {%- set result = dbt_data_privacy.get_secured_expression_by_method("column_a", "CONDITIONAL_HASH", column_conditions={"has_pid": false}, with_params={"default_method": "SHA256", "conditions": ["has_pid"]}) -%}
+  {%- set expected = 'SHA256(CAST(column_a AS STRING))' -%}
+  {{ assert_equals(result, expected) }}
 {% endmacro %}

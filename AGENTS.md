@@ -10,6 +10,7 @@
 
 - Read the nearest `README.md`, relevant macro files, and existing tests before editing behavior.
 - Keep changes aligned with existing dbt and SQL style in the repository.
+- Macro files: each file has one public macro, and the file is named after it. A private helper (called only from its own file) starts with `_` and may share that file. An adapter dispatch hook and its adapter variants (`bigquery__<name>`) share one file named after the hook. Generic test macros follow the `k_anonymity` layout.
 - Do not modify unrelated generated or fixture data unless the task requires it.
 - If public behavior changes, update the relevant documentation in `README.md` or `docs/`.
 

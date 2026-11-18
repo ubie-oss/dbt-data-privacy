@@ -84,7 +84,7 @@ flowchart TB
 - [ ] Thin `{% test %}` body: `adapter.dispatch("test_<name>", "<package_name>")(...)` returning the dispatched macro result.
 - [ ] Implement `bigquery__test_<name>(...)` when BigQuery is the only supported adapter (omit `default__` intentionally if that is the product decision).
 - [ ] Qualify internal macros from the same package with `dbt_data_privacy.<macro>` when called from dispatched code so dependent projects resolve symbols correctly.
-- [ ] Split optional logic into named macros (e.g. `<name>_validate_arguments`, query builder + `bigquery__<name>_query_sql_impl`); prefer **one file per macro name**, except macros sharing the same `adapter.dispatch` hook may live in one file named after that hook—follow existing `k_anonymity` layout.
+- [ ] Split optional logic into named macros (e.g. `<name>_validate_arguments`, query builder + `bigquery__<name>_query_sql_impl`); prefer **one file per public macro**, named after it. A private helper (called only from its own file) starts with `_` and may share that file. Macros sharing the same `adapter.dispatch` hook may live in one file named after that hook—follow existing `k_anonymity` layout.
 
 ### Example A — test block + dispatch + BigQuery implementation (pattern)
 
