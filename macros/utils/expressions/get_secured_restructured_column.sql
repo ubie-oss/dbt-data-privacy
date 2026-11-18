@@ -6,7 +6,6 @@
       relative_path=relative_path,
       depth=depth)) }}
 {% endmacro %}
-
 {% macro bigquery__get_secured_restructured_column(data_handling_standards, column_conditions, restructured_column, relative_path=none, depth=0) %}
   {% set copied_restructured_column = dbt_data_privacy.deep_copy_dict(restructured_column) %}
 
@@ -102,24 +101,4 @@
     {% endif %}
     {{ return(copied_restructured_column) }}
   {% endif %}
-{% endmacro %}
-
-{% macro get_secured_expression_from_restructured_column(restructured_column) %}
-  {% if restructured_column.additional_info is defined
-        and restructured_column.additional_info.secured_expression is defined
-        and restructured_column.additional_info.secured_expression is not none %}
-    {{ return(restructured_column.additional_info.secured_expression) }}
-  {% endif %}
-
-  {{ return(none) }}
-{% endmacro %}
-
-{% macro get_converted_level_from_restructured_column(restructured_column) %}
-  {% if restructured_column.additional_info is defined
-        and restructured_column.additional_info.level is defined
-        and restructured_column.additional_info.level is not none %}
-    {{ return(restructured_column.additional_info.level) }}
-  {% endif %}
-
-  {{ return(none) }}
 {% endmacro %}

@@ -10,7 +10,7 @@
     P4 level truth: the level of a kept leaf is the converted level its expression provides.
 #}
 
-{% macro privacy_invariant_leaves() %}
+{% macro _privacy_invariant_leaves() %}
   {{ return([
     {'name': 'c_one', 'data_type': none, 'path': ['c_one'], 'alias': 'c_one', 'token': 'c_one'},
     {'name': 's.s_x', 'data_type': none, 'path': ['s', 'fields', 's_x'], 'alias': 's_x', 'token': 's.s_x'},
@@ -22,14 +22,14 @@
 {% endmacro %}
 
 {# The hash the oracle expects for a confidential leaf. Written here, not taken from sha256(), so the check does not compare the product with itself. #}
-{% macro privacy_hash_expression(leaf) %}
+{% macro _privacy_hash_expression(leaf) %}
   {% if leaf.data_type == 'ARRAY' %}
     {{ return('ARRAY(SELECT SHA256(CAST(e AS STRING)) FROM UNNEST(' ~ leaf.token ~ ') AS e)') }}
   {% endif %}
   {{ return('SHA256(CAST(' ~ leaf.token ~ ' AS STRING))') }}
 {% endmacro %}
 
-{% macro privacy_invariant_columns(levels, leaves) %}
+{% macro _privacy_invariant_columns(levels, leaves) %}
   {% set columns = {
     's': {'name': 's', 'description': '', 'config': {'meta': {}}, 'data_type': none, 'quote': none, 'tags': []},
     'arr': {'name': 'arr', 'description': '', 'config': {'meta': {}}, 'data_type': 'ARRAY', 'quote': none, 'tags': []},
@@ -56,7 +56,7 @@
   Each case is {method, with_params, column_conditions, expected}. Raw output
   (expected == column name) is allowed only when a condition is explicitly true.
 #}
-{% macro verify_privacy_method_cases() %}
+{% macro _verify_privacy_method_cases() %}
   {% set cases = [
     {'method': 'SHA512', 'with_params': none, 'column_conditions': none, 'expected': 'SHA512(CAST(c AS STRING))'},
     {'method': 'UDF_HASH', 'with_params': {'function': 'MY_UDF'}, 'column_conditions': none, 'expected': 'MY_UDF(CAST(c AS STRING))'},
@@ -74,9 +74,9 @@
 {% endmacro %}
 
 {% macro verify_privacy_invariants() %}
-  {% do verify_privacy_method_cases() %}
+  {% do _verify_privacy_method_cases() %}
   {% set standards = get_test_data_handling_standards() %}
-  {% set leaves = privacy_invariant_leaves() %}
+  {% set leaves = _privacy_invariant_leaves() %}
   {% set choices = ['public', 'confidential', 'restricted', none] %}
   {% set total = (choices | length) ** (leaves | length) %}
 
@@ -88,7 +88,7 @@
       {% set ns.rest = ns.rest // (choices | length) %}
     {% endfor %}
 
-    {% set columns = privacy_invariant_columns(levels, leaves) %}
+    {% set columns = _privacy_invariant_columns(levels, leaves) %}
     {% set restructured = dbt_data_privacy.get_secured_columns_v2(standards, columns) %}
 
     {# P4 and expression-level P1, per leaf #}
@@ -100,7 +100,7 @@
       {% endfor %}
       {% set info = nav.node.get('additional_info', {}) %}
       {% set secured = info.get('secured_expression') %}
-      {% set hash_fn = privacy_hash_expression(leaf) %}
+      {% set hash_fn = _privacy_hash_expression(leaf) %}
 
       {% if level == 'public' %}
         {% if secured != leaf.token %}
@@ -136,7 +136,7 @@
     {% for leaf in leaves %}
       {% set level = levels[loop.index0] %}
       {% if level == 'confidential' %}
-        {% set hash_fn = privacy_hash_expression(leaf) %}
+        {% set hash_fn = _privacy_hash_expression(leaf) %}
         {% set remainder = sql_text.replace(hash_fn, '').replace('AS `' ~ leaf.alias ~ '`', '') %}
         {% if leaf.token in remainder %}
           {% do exceptions.raise_compiler_error("FAILED P1/sql: raw " ~ leaf.token ~ " leaks outside its hash in SQL for levels " ~ levels ~ "\n" ~ sql_text) %}
