@@ -5,7 +5,8 @@ Model of the generate-models lifecycle in
 
 One generated model, written to one path, with one email column.
 A run does, in order:
-  1. delete the generated file (dbt ls, then rm). Only delete_before on is modeled.
+  1. delete the generated file (dbt ls, then rm). The script rejects delete_before
+     values other than 1, so only the delete-first run is modeled.
   2. run generate_privacy_protected_models and write the file for the current config
   3. exit
 
@@ -13,18 +14,18 @@ Each step can fail. A run has four outcomes: delete ok or failed, crossed with
 generation ok or failed. A config commit never happens during a run, so a run is
 one atomic step here.
 
-Mode = "silent"    the current script. Failures are swallowed (set +e), and the script
-                   always exits 0, so every run reports "ok".
-Mode = "failfast"  a reference variant, not the current code. Any failure stops the run
-                   and it reports "failed". It is not applied to the repo; it shows what
-                   the check accepts.
+Mode = "silent"    the script before the fix. Failures were swallowed (set +e), and the
+                   script always exited 0, so every run reported "ok". Kept as the record
+                   of the bug, in before-fix.cfg.
+Mode = "failfast"  the script after the fix. Any failure stops the run and it reports
+                   "failed". This is the config for the current code, in current.cfg.
 
 Scope and simplifications:
 - A config change that moves the model to another path is not modeled. A move leaves
   the old file behind exactly as turning the model off does, so the same rules apply.
 - A file holds either the raw email ("Raw") or no email ("Dropped"). Hashed levels are
   not modeled.
-- The two faults are independent, which is conservative for the "silent" mode.
+- The two faults are independent.
 *)
 EXTENDS TLC
 

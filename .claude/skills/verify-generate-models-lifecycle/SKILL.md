@@ -7,7 +7,7 @@ description: TLA+ model and real-script replay for the generate-models lifecycle
 
 ## What it checks
 
-The generate-models action deletes the generated model files, then regenerates them from the current config. The script always exits 0, because it runs its delete and generate steps under `set +Eeuo pipefail`. So a failure in either step is hidden, and the run reports success.
+The generate-models action deletes the generated model files, then regenerates them from the current config. Before the fix, the script ran its delete and generate steps under `set +Eeuo pipefail`, so a failure in either step was hidden and the run exited 0. The fix removes those wrappers, so any failure fails the run. The script also rejects `delete_before` values other than `1` before it changes any file.
 
 The model in `formal/generate_models/GenerateModels.tla` covers one generated model, one path, and one email column. A run has four outcomes: delete ok or failed, crossed with generation ok or failed. A config commit can turn the model on or off, or change the email level.
 
@@ -16,26 +16,26 @@ Rules, in plain words:
 - **NoRawEmailAfterSuccess.** A run that reports success never leaves a file that holds the raw email when the config drops the email.
 - **NoOrphanAfterSuccess.** A run that reports success never leaves a file the current config does not produce.
 
-Scope: a config change that moves the model to another path is not modeled. A move leaves the old file behind the same way that turning the model off does. Hashed levels are not modeled. `delete_before` off is not modeled: the model always deletes first. The two faults are independent.
+Scope: a config change that moves the model to another path is not modeled. A move leaves the old file behind the same way that turning the model off does. Hashed levels are not modeled. The script rejects `delete_before` values other than `1`, so the model always deletes first. The two faults are independent.
 
 ## Files
 
 - Model: `formal/generate_models/GenerateModels.tla`
-- Current script config: `formal/generate_models/current.cfg`. Mode `silent`, which matches `generate_models.sh` today.
-- Reference config: `formal/generate_models/failfast.cfg`. Mode `failfast`. This is a reference, not the current code. It shows what the rules accept when a failure stops the run.
+- Current script config: `formal/generate_models/current.cfg`. Mode `failfast`, which matches `generate_models.sh` after the fix.
+- Pre-fix config: `formal/generate_models/before-fix.cfg`. Mode `silent`, the script before the fix. It stays as the record of the bug.
 - Reader labels: `formal/generate_models/view.mjs`
 - Real-script replay: `formal/generate_models/replay_silent_failure.sh`
 
 ## Run it
 
-1. Run the model with `/statechart`. Use `GenerateModels.tla`, the config file for the mode you want to check, and `view.mjs`. Write the output to a new folder outside the repo. Use `current.cfg` for the current script and `failfast.cfg` for the reference. The first run installs TLC and Java with mise, which needs the network.
-2. Run the replay from the repo root: `formal/generate_models/replay_silent_failure.sh`. It runs the real `generate_models.sh` with a fake `dbt`. `dbt ls` fails, and generation returns no models. It exits 1 with `RESULT: bug reproduced` while the silent failure is present, and exit 0 once it is fixed.
+1. Run the model with `/statechart`. Use `GenerateModels.tla`, the config file for the mode you want to check, and `view.mjs`. Write the output to a new folder outside the repo. Use `current.cfg` for the current script, and `before-fix.cfg` to show the bug before the fix. The first run installs TLC and Java with mise, which needs the network.
+2. Run the replay from the repo root: `formal/generate_models/replay_silent_failure.sh`. It runs the real `generate_models.sh` with a fake `dbt`. `dbt ls` fails, and generation returns no models. It exits 0 with `RESULT: no silent stale model on this path` on the fixed script. It exits 1 with `RESULT: bug reproduced` only if the silent failure comes back.
 
-Expected results today:
+Expected results now:
 
-- `current.cfg`: both rules break. The shortest path for each rule is three steps. First, a run whose `dbt ls` fails writes the raw email, and reports ok. Second, the config turns the model off or drops the email. Third, a run whose `dbt ls` fails and whose generation fails reports ok, and the old raw file stays.
-- `failfast.cfg`: both rules hold. `TypeOK` holds, and the statechart tool also reports `NoDeadlock`.
-- The replay: exit 1, `RESULT: bug reproduced`.
+- `current.cfg`: both rules hold. `TypeOK` holds, and the statechart tool also reports `NoDeadlock`.
+- `before-fix.cfg`: both rules break. The shortest path for each rule is three steps. First, a run whose `dbt ls` fails writes the raw email, and reports ok. Second, the config turns the model off or drops the email. Third, a run whose `dbt ls` fails and whose generation fails reports ok, and the old raw file stays.
+- The replay on the fixed script: exit 0, `RESULT: no silent stale model on this path`.
 
 ## Read a failure
 
@@ -45,14 +45,14 @@ A broken rule shows a shortest path in the report. Read it as steps of the real 
 2. If the model's path has a step that the script cannot take, the model is wrong. Fix the model, and say so.
 3. If the script can take every step, the bug is real. Report it with the path in these words, and do not change the rule to make it pass.
 
-Use the replay to confirm the real code, as a live repro. A replay that exits 0 with `no silent stale model` on the current script means the replay no longer matches the bug. Investigate before you change the model or the script.
+Use the replay to confirm the real code, as a live repro. On the fixed script, exit 0 with `no silent stale model` is expected. If the replay exits 1 with `bug reproduced`, the silent failure is back. Investigate the script before you change the model.
 
 ## Keep it in step with the code
 
 Covered code:
 
 - `.github/actions/generate-models/generate_models.sh`, in the delete step and the generate loop. Their exit handling is the part the model describes.
-- `.github/actions/generate-models/action.yml`, for the inputs that reach the script. Only `delete_before` on is modeled.
+- `.github/actions/generate-models/action.yml`, for the inputs that reach the script. The script accepts only `delete_before` set to `1`.
 - `macros/public/generate_privacy_protected_models.sql`, which produces the models the script writes.
 
 After a change to any covered file, rerun the model and the replay.
