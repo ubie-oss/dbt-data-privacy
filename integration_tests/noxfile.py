@@ -9,7 +9,7 @@ nox.options.default_venv_backend = "uv"
 
 PYTHON_VERSIONS = ["3.10", "3.11", "3.12"]
 DBT_GROUP_MAP = {
-    "dbt-v2": {
+    "dbt-v2-0": {
         "version": "2.0",
         "description": "dbt v2",
     },
@@ -76,7 +76,7 @@ def dbt_test_env(session, uv_group):
     version_info = DBT_GROUP_MAP[uv_group]
     dbt_version = version_info["version"]
 
-    if uv_group == "dbt-v2" and session.python.startswith("3.10"):
+    if uv_group == "dbt-v2-0" and session.python.startswith("3.10"):
         session.skip("dbt v2 requires Python >=3.11")
 
     # Install the project and the requested group
@@ -163,7 +163,7 @@ def setup_dbt_env(session, uv_group):
     if uv_group not in DBT_GROUP_MAP:
         session.error(f"Unsupported dbt group: {uv_group}")
 
-    if uv_group == "dbt-v2" and session.python.startswith("3.10"):
+    if uv_group == "dbt-v2-0" and session.python.startswith("3.10"):
         session.skip("dbt v2 requires Python >=3.11")
 
     session.install(".", "--group", uv_group)
