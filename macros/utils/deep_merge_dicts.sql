@@ -6,7 +6,7 @@
   {% endif %}
 
   {% set merged_dict = base_dict %}
-  {% for k, v in updating_dict.items() %}
+  {% for k, v in dbt_data_privacy.mapping_items(updating_dict) %}
     {% if k in base_dict and base_dict.get(k) is mapping and v is mapping %}
       {% set merged_dict = dbt_data_privacy.deep_merge_dicts(base_dict.get(k), v) %}
       {% do merged_dict.update(merged_dict) %}

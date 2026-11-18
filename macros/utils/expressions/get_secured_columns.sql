@@ -2,7 +2,7 @@
   {% set secured_columns = {} %}
   {% set column_conditions = dbt_data_privacy.analyze_column_conditions(data_handling_standards, columns) %}
 
-  {% for column_name, column_info in columns.items() %}
+  {% for column_name, column_info in dbt_data_privacy.mapping_items(columns) %}
     {% set data_security_level = dbt_data_privacy.get_column_data_security_level(column_info) %}
 
     {% if data_security_level is not none %}
@@ -13,7 +13,7 @@
           column_name,
           data_security_level,
           data_type=data_type,
-          column_conditions=column_conditions) %}
+          column_conditions=dbt_data_privacy.column_conditions_for_column(column_conditions, column_info)) %}
 
       {% set level = data_security_level %}
       {# Downgrade the data security level if secured #}

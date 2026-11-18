@@ -134,7 +134,7 @@
 
 WITH privacy_protected_model AS (
   SELECT
-    {%- for top_level_column_name, top_level_restructured_column in restructured_columns.items() %}
+    {%- for top_level_column_name, top_level_restructured_column in dbt_data_privacy.mapping_items(restructured_columns) %}
     {%- set expression = dbt_data_privacy.convert_restructured_column_to_expression(top_level_column_name, top_level_restructured_column) %}
     {%- if expression is not none %}
     {{ expression }},
@@ -170,7 +170,7 @@ FROM privacy_protected_model AS __source
 {%- if relationships is not none and dbt_data_privacy.validate_relationships(relationships)  -%}
 {%- for i in range(relationships | length) %}
 JOIN __relationships_{{ i }}
-  ON {% for k, v in relationships[i]["fields"].items() -%}
+  ON {% for k, v in dbt_data_privacy.mapping_items(relationships[i]["fields"]) -%}
     {%- if not loop.first -%}AND {% endif -%}
     {%- set column = restructured_columns.get(k) -%}
     {%- if column and column.additional_info and column.additional_info.alias -%}

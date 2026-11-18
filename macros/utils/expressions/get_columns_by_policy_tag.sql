@@ -1,7 +1,7 @@
 {% macro get_columns_by_policy_tag(columns, policy_tag) %}
   {% set columns_with_target_policy_tag = {} %}
 
-  {% for column_name, column_info in columns.items() %}
+  {% for column_name, column_info in dbt_data_privacy.mapping_items(columns) %}
     {% set has_policy_tag = false %}
 
     {# Try new dbt 1.10+ format first (config.meta) #}
