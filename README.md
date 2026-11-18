@@ -48,7 +48,6 @@ codex --profile deep
 
 - dbt Core 1.10, 1.11, and 1.12 (`dbt-core` on PyPI)
 - dbt v2 (the `dbt` package on PyPI, Python 3.11 or newer)
-- dbt Fusion (the `dbt` binary from the Fusion CDN)
 
 ## Supported warehouses
 

@@ -9,11 +9,7 @@ nox.options.default_venv_backend = "uv"
 
 PYTHON_VERSIONS = ["3.10", "3.11", "3.12"]
 DBT_GROUP_MAP = {
-    "dbt-fusion": {
-        "version": "fusion",
-        "description": "dbt Fusion",
-    },
-    "dbt-v2": {
+    "dbt-v2-0": {
         "version": "2.0",
         "description": "dbt v2",
     },
@@ -80,19 +76,11 @@ def dbt_test_env(session, uv_group):
     version_info = DBT_GROUP_MAP[uv_group]
     dbt_version = version_info["version"]
 
-    if uv_group == "dbt-v2" and session.python.startswith("3.10"):
+    if uv_group == "dbt-v2-0" and session.python.startswith("3.10"):
         session.skip("dbt v2 requires Python >=3.11")
 
     # Install the project and the requested group
     session.install(".", "--group", uv_group)
-
-    if uv_group == "dbt-fusion":
-        session.log("Installing dbt Fusion binary")
-        session.run(
-            "bash", "-c",
-            f"curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | bash -s -- --to {session.bin} --update",
-            external=True
-        )
 
     dataset_name = get_dataset_name(session, dbt_version)
     env = {"DBT_DATASET": dataset_name}
@@ -175,22 +163,9 @@ def setup_dbt_env(session, uv_group):
     if uv_group not in DBT_GROUP_MAP:
         session.error(f"Unsupported dbt group: {uv_group}")
 
-    if uv_group == "dbt-v2" and session.python.startswith("3.10"):
+    if uv_group == "dbt-v2-0" and session.python.startswith("3.10"):
         session.skip("dbt v2 requires Python >=3.11")
 
     session.install(".", "--group", uv_group)
 
-    if uv_group == "dbt-fusion":
-        session.log("Installing dbt Fusion binary")
-        session.run(
-            "bash", "-c",
-            f"curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | bash -s -- --to {session.bin} --update",
-            external=True
-        )
-
     print(f"BIN_PATH={session.bin}")
-
-@nox.session(python=PYTHON_VERSIONS)
-def dbt_fusion_tests(session):
-    """Run unit tests with dbt Fusion."""
-    unit_tests(session, "dbt-fusion")
